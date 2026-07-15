@@ -27,3 +27,4 @@ Fixture card: team badges either side, combined xG shown between them, a horizon
 ## Conventions
 - Build/test commands: none yet — add here once the codebase exists.
 - Stay scoped to exactly what the task prompt asks. Bigger feature ideas live in the Claude Project's roadmap doc, not here — don't build them speculatively just because they're mentioned somewhere.
+To run sanity check: python3 src/verify.py
