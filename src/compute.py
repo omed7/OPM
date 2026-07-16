@@ -1,3 +1,5 @@
+SAMPLE_SIZE = 4
+
 def calculate_expected_xg(team_a_matches, team_b_matches):
     if not team_a_matches or not team_b_matches:
         raise ValueError("Match data for both teams is required.")

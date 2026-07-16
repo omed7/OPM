@@ -1,11 +1,12 @@
 import time
+import os
+from datetime import datetime, timedelta
 from understatapi import UnderstatClient
 
 def get_current_season():
     # Simplistic season logic: Understat uses the starting year of the season.
     # In August 2024, the season is 2024. In May 2025, the season is still 2024.
-    import datetime
-    now = datetime.datetime.now()
+    now = datetime.now()
     if now.month >= 7:
         return str(now.year)
     else:
@@ -86,3 +87,67 @@ def get_team_matches(team_name, total_matches=4, season=None):
         print(f"Warning: Could not find enough matches for {team_name}. Found {home_count} home and {away_count} away.")
 
     return selected_matches
+
+def get_upcoming_fixtures(season=None):
+    if season is None:
+        season = get_current_season()
+
+    client = UnderstatClient()
+    # Be a polite scraper
+    time.sleep(2)
+
+    try:
+        league_matches = client.league(league='EPL').get_match_data(season)
+    except Exception as e:
+        print(f"Error fetching league matches: {e}")
+        return []
+
+    upcoming = [m for m in league_matches if not m.get('isResult')]
+
+    if not upcoming:
+        # For testing purposes in environments where no upcoming matches exist
+        if os.environ.get('MOCK_UPCOMING') == '1':
+            print("MOCK_UPCOMING is set. Returning mock upcoming fixtures.")
+            # Use the last few matches as "upcoming" for demonstration if none are actually upcoming
+            played = [m for m in league_matches if m.get('isResult')]
+            if played:
+                played.sort(key=lambda x: x['datetime'], reverse=True)
+                mock_matches = played[:5]
+                return [{
+                    'home_team': m['h']['title'],
+                    'away_team': m['a']['title'],
+                    'date': m['datetime']
+                } for m in mock_matches]
+
+        return []
+
+    # Sort by datetime
+    upcoming.sort(key=lambda x: x['datetime'])
+
+    # Get the datetime of the first upcoming match
+    try:
+        first_match_dt = datetime.strptime(upcoming[0]['datetime'], '%Y-%m-%d %H:%M:%S')
+    except ValueError:
+        # Fallback if format is different
+        first_match_dt = datetime.strptime(upcoming[0]['datetime'].split(' ')[0], '%Y-%m-%d')
+
+    # Define "next gameweek" as all matches within 7 days of the first one
+    end_date = first_match_dt + timedelta(days=7)
+
+    next_gameweek_matches = []
+    for m in upcoming:
+        try:
+            match_dt = datetime.strptime(m['datetime'], '%Y-%m-%d %H:%M:%S')
+        except ValueError:
+            match_dt = datetime.strptime(m['datetime'].split(' ')[0], '%Y-%m-%d')
+
+        if match_dt <= end_date:
+            next_gameweek_matches.append({
+                'home_team': m['h']['title'],
+                'away_team': m['a']['title'],
+                'date': m['datetime']
+            })
+        else:
+            break
+
+    return next_gameweek_matches
