@@ -56,6 +56,7 @@ def main():
             output_fixtures.append({
                 "home_team": home_team,
                 "away_team": away_team,
+                "date": fixture['date'],
                 "combined_expected_xg": round(stats['team_a_expected_xg'] + stats['team_b_expected_xg'], 2),
                 "home_expected_xg": round(stats['team_a_expected_xg'], 2),
                 "away_expected_xg": round(stats['team_b_expected_xg'], 2),

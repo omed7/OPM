@@ -1,7 +1,348 @@
 {
   "meta": {
-    "version": "ca0de59",
-    "generated_at": "2026-07-16T02:01:59Z"
+    "version": "aa998a0",
+    "generated_at": "2026-07-16T04:07:53Z"
   },
-  "fixtures": []
+  "fixtures": [
+    {
+      "home_team": "Nottingham Forest",
+      "away_team": "Chelsea",
+      "date": "2025-05-25 15:00:00",
+      "combined_expected_xg": 2.96,
+      "home_expected_xg": 1.39,
+      "away_expected_xg": 1.56,
+      "home_last_4_matches": [
+        {
+          "opponent": "Chelsea",
+          "date": "2025-05-25",
+          "venue": "home",
+          "xg_for": 1.58014,
+          "xg_against": 1.30874
+        },
+        {
+          "opponent": "West Ham",
+          "date": "2025-05-18",
+          "venue": "away",
+          "xg_for": 2.14756,
+          "xg_against": 0.850457
+        },
+        {
+          "opponent": "Leicester",
+          "date": "2025-05-11",
+          "venue": "home",
+          "xg_for": 1.76909,
+          "xg_against": 1.22949
+        },
+        {
+          "opponent": "Crystal Palace",
+          "date": "2025-05-05",
+          "venue": "away",
+          "xg_for": 0.63684,
+          "xg_against": 2.34037
+        }
+      ],
+      "away_last_4_matches": [
+        {
+          "opponent": "Nottingham Forest",
+          "date": "2025-05-25",
+          "venue": "away",
+          "xg_for": 1.30874,
+          "xg_against": 1.58014
+        },
+        {
+          "opponent": "Manchester United",
+          "date": "2025-05-16",
+          "venue": "home",
+          "xg_for": 1.29571,
+          "xg_against": 0.337632
+        },
+        {
+          "opponent": "Newcastle United",
+          "date": "2025-05-11",
+          "venue": "away",
+          "xg_for": 0.646426,
+          "xg_against": 1.6703
+        },
+        {
+          "opponent": "Liverpool",
+          "date": "2025-05-04",
+          "venue": "home",
+          "xg_for": 3.51944,
+          "xg_against": 1.4267
+        }
+      ]
+    },
+    {
+      "home_team": "Newcastle United",
+      "away_team": "Everton",
+      "date": "2025-05-25 15:00:00",
+      "combined_expected_xg": 2.59,
+      "home_expected_xg": 1.41,
+      "away_expected_xg": 1.18,
+      "home_last_4_matches": [
+        {
+          "opponent": "Everton",
+          "date": "2025-05-25",
+          "venue": "home",
+          "xg_for": 1.1591,
+          "xg_against": 1.07279
+        },
+        {
+          "opponent": "Arsenal",
+          "date": "2025-05-18",
+          "venue": "away",
+          "xg_for": 2.24634,
+          "xg_against": 1.15958
+        },
+        {
+          "opponent": "Chelsea",
+          "date": "2025-05-11",
+          "venue": "home",
+          "xg_for": 1.6703,
+          "xg_against": 0.646426
+        },
+        {
+          "opponent": "Brighton",
+          "date": "2025-05-04",
+          "venue": "away",
+          "xg_for": 1.63777,
+          "xg_against": 0.687863
+        }
+      ],
+      "away_last_4_matches": [
+        {
+          "opponent": "Newcastle United",
+          "date": "2025-05-25",
+          "venue": "away",
+          "xg_for": 1.07279,
+          "xg_against": 1.1591
+        },
+        {
+          "opponent": "Southampton",
+          "date": "2025-05-18",
+          "venue": "home",
+          "xg_for": 2.67793,
+          "xg_against": 1.05025
+        },
+        {
+          "opponent": "Fulham",
+          "date": "2025-05-10",
+          "venue": "away",
+          "xg_for": 1.32604,
+          "xg_against": 1.20869
+        },
+        {
+          "opponent": "Ipswich",
+          "date": "2025-05-03",
+          "venue": "home",
+          "xg_for": 0.808481,
+          "xg_against": 1.14351
+        }
+      ]
+    },
+    {
+      "home_team": "Manchester United",
+      "away_team": "Aston Villa",
+      "date": "2025-05-25 15:00:00",
+      "combined_expected_xg": 2.97,
+      "home_expected_xg": 1.49,
+      "away_expected_xg": 1.48,
+      "home_last_4_matches": [
+        {
+          "opponent": "Aston Villa",
+          "date": "2025-05-25",
+          "venue": "home",
+          "xg_for": 2.96259,
+          "xg_against": 0.335222
+        },
+        {
+          "opponent": "Chelsea",
+          "date": "2025-05-16",
+          "venue": "away",
+          "xg_for": 0.337632,
+          "xg_against": 1.29571
+        },
+        {
+          "opponent": "West Ham",
+          "date": "2025-05-11",
+          "venue": "home",
+          "xg_for": 2.31287,
+          "xg_against": 2.15985
+        },
+        {
+          "opponent": "Brentford",
+          "date": "2025-05-04",
+          "venue": "away",
+          "xg_for": 1.13404,
+          "xg_against": 3.58737
+        }
+      ],
+      "away_last_4_matches": [
+        {
+          "opponent": "Manchester United",
+          "date": "2025-05-25",
+          "venue": "away",
+          "xg_for": 0.335222,
+          "xg_against": 2.96259
+        },
+        {
+          "opponent": "Tottenham",
+          "date": "2025-05-16",
+          "venue": "home",
+          "xg_for": 1.69061,
+          "xg_against": 0.523016
+        },
+        {
+          "opponent": "Bournemouth",
+          "date": "2025-05-10",
+          "venue": "away",
+          "xg_for": 1.12376,
+          "xg_against": 1.02272
+        },
+        {
+          "opponent": "Fulham",
+          "date": "2025-05-03",
+          "venue": "home",
+          "xg_for": 1.29013,
+          "xg_against": 0.702787
+        }
+      ]
+    },
+    {
+      "home_team": "Liverpool",
+      "away_team": "Crystal Palace",
+      "date": "2025-05-25 15:00:00",
+      "combined_expected_xg": 4.08,
+      "home_expected_xg": 1.74,
+      "away_expected_xg": 2.34,
+      "home_last_4_matches": [
+        {
+          "opponent": "Crystal Palace",
+          "date": "2025-05-25",
+          "venue": "home",
+          "xg_for": 1.92122,
+          "xg_against": 1.4144
+        },
+        {
+          "opponent": "Brighton",
+          "date": "2025-05-19",
+          "venue": "away",
+          "xg_for": 3.065,
+          "xg_against": 2.17789
+        },
+        {
+          "opponent": "Arsenal",
+          "date": "2025-05-11",
+          "venue": "home",
+          "xg_for": 2.74682,
+          "xg_against": 2.18795
+        },
+        {
+          "opponent": "Chelsea",
+          "date": "2025-05-04",
+          "venue": "away",
+          "xg_for": 1.4267,
+          "xg_against": 3.51944
+        }
+      ],
+      "away_last_4_matches": [
+        {
+          "opponent": "Liverpool",
+          "date": "2025-05-25",
+          "venue": "away",
+          "xg_for": 1.4144,
+          "xg_against": 1.92122
+        },
+        {
+          "opponent": "Wolverhampton Wanderers",
+          "date": "2025-05-20",
+          "venue": "home",
+          "xg_for": 1.68451,
+          "xg_against": 1.42886
+        },
+        {
+          "opponent": "Tottenham",
+          "date": "2025-05-11",
+          "venue": "away",
+          "xg_for": 3.98546,
+          "xg_against": 0.806792
+        },
+        {
+          "opponent": "Nottingham Forest",
+          "date": "2025-05-05",
+          "venue": "home",
+          "xg_for": 2.34037,
+          "xg_against": 0.63684
+        }
+      ]
+    },
+    {
+      "home_team": "Tottenham",
+      "away_team": "Brighton",
+      "date": "2025-05-25 15:00:00",
+      "combined_expected_xg": 3.58,
+      "home_expected_xg": 1.41,
+      "away_expected_xg": 2.17,
+      "home_last_4_matches": [
+        {
+          "opponent": "Brighton",
+          "date": "2025-05-25",
+          "venue": "home",
+          "xg_for": 1.85265,
+          "xg_against": 3.11624
+        },
+        {
+          "opponent": "Aston Villa",
+          "date": "2025-05-16",
+          "venue": "away",
+          "xg_for": 0.523016,
+          "xg_against": 1.69061
+        },
+        {
+          "opponent": "Crystal Palace",
+          "date": "2025-05-11",
+          "venue": "home",
+          "xg_for": 0.806792,
+          "xg_against": 3.98546
+        },
+        {
+          "opponent": "West Ham",
+          "date": "2025-05-04",
+          "venue": "away",
+          "xg_for": 0.847022,
+          "xg_against": 1.15166
+        }
+      ],
+      "away_last_4_matches": [
+        {
+          "opponent": "Tottenham",
+          "date": "2025-05-25",
+          "venue": "away",
+          "xg_for": 3.11624,
+          "xg_against": 1.85265
+        },
+        {
+          "opponent": "Liverpool",
+          "date": "2025-05-19",
+          "venue": "home",
+          "xg_for": 2.17789,
+          "xg_against": 3.065
+        },
+        {
+          "opponent": "Wolverhampton Wanderers",
+          "date": "2025-05-10",
+          "venue": "away",
+          "xg_for": 1.41254,
+          "xg_against": 0.73395
+        },
+        {
+          "opponent": "Newcastle United",
+          "date": "2025-05-04",
+          "venue": "home",
+          "xg_for": 0.687863,
+          "xg_against": 1.63777
+        }
+      ]
+    }
+  ]
 }
