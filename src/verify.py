@@ -1,5 +1,5 @@
-from fetch import get_team_matches
-from compute import calculate_expected_xg
+from fetch.premier_league import get_team_matches
+from compute.xg_formula import calculate_expected_xg
 
 def verify():
     print("Fetching matches for Arsenal...")
@@ -24,3 +24,22 @@ def verify():
 
 if __name__ == "__main__":
     verify()
+
+from fetch.besta_deild import get_besta_deild_data
+from compute.goals_formula import calculate_expected_goals
+print("\nVerifying Besta deild karla...")
+bd_data = get_besta_deild_data('2024')
+if bd_data:
+    fixture = bd_data[0]
+    print(f"Fixture: {fixture['home_team']} vs {fixture['away_team']}")
+    print("Home History:")
+    for match in fixture['home_history']:
+        print(f"  {match['date']} ({match['venue']}) vs {match['opponent']}: Goals For: {match['goals_for']}, Goals Against: {match['goals_against']}")
+    print("Away History:")
+    for match in fixture['away_history']:
+        print(f"  {match['date']} ({match['venue']}) vs {match['opponent']}: Goals For: {match['goals_for']}, Goals Against: {match['goals_against']}")
+
+    expected = calculate_expected_goals(fixture['home_history'], fixture['away_history'])
+    print(f"\nResults:")
+    print(f"{fixture['home_team']} Expected Goals: {expected['team_a_expected_goals']}")
+    print(f"{fixture['away_team']} Expected Goals: {expected['team_b_expected_goals']}")

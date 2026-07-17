@@ -14,8 +14,12 @@ def main():
             old_data = json.load(f1)
             new_data = json.load(f2)
 
-            # Compare only the fixtures. Ignore metadata like generated_at
-            if old_data.get('fixtures') == new_data.get('fixtures'):
+            # Check if old data has 'fixtures' (old schema) while new data has 'leagues' (new schema)
+            if 'fixtures' in old_data and 'leagues' in new_data:
+                sys.exit(1) # Schema changed, so data changed
+
+            # Both should now be on 'leagues' schema, compare only the leagues
+            if old_data.get('leagues') == new_data.get('leagues'):
                 # No significant change
                 sys.exit(0)
             else:
