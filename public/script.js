@@ -7,10 +7,15 @@ async function init() {
         if (!response.ok) throw new Error('Failed to fetch data');
         const data = await response.json();
 
-        // Update version tag
-        if (data.meta) {
-            const date = new Date(data.meta.generated_at).toLocaleString();
-            versionTag.textContent = `Version: ${data.meta.version} | Generated at: ${date}`;
+                // Update version tag
+        try {
+            const versionResponse = await fetch('version.json');
+            if (versionResponse.ok) {
+                const versionData = await versionResponse.json();
+                versionTag.textContent = `v${versionData.version}`;
+            }
+        } catch (e) {
+            console.error('Failed to load version info', e);
         }
 
         if (!data.fixtures || data.fixtures.length === 0) {
