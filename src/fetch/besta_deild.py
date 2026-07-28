@@ -31,6 +31,14 @@ def get_besta_deild_data(season="2026", total_matches=4):
 
     fixtures = data['response']
 
+    status_counts = {}
+    for item in fixtures:
+        status = item.get('fixture', {}).get('status', {}).get('short', 'UNKNOWN')
+        status_counts[status] = status_counts.get(status, 0) + 1
+
+    print(f"Total fixtures returned: {len(fixtures)}")
+    print(f"Fixture status breakdown: {status_counts}")
+
     played_matches = []
     upcoming_matches = []
 

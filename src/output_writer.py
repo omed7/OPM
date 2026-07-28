@@ -77,7 +77,7 @@ def process_premier_league():
 
 def process_besta_deild():
     print("Fetching Besta deild karla fixtures...")
-    season = "2026"  # Per requirements
+    season = os.environ.get('SEASON', "2026")
 
     try:
         fixtures = get_besta_deild_data(season=season, total_matches=GOALS_SAMPLE_SIZE)
