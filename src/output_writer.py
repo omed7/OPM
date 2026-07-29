@@ -8,14 +8,18 @@ from compute.xg_formula import calculate_expected_xg, SAMPLE_SIZE as XG_SAMPLE_S
 from fetch.besta_deild import get_besta_deild_data
 from compute.goals_formula import calculate_expected_goals, SAMPLE_SIZE as GOALS_SAMPLE_SIZE
 from fetch.api_football_common import fetch_api_football_league
+from fetch.thesportsdb_common import fetch_thesportsdb_league
 
 OTHER_LEAGUES = [
+    {"id": 179, "name": "Scotland Premiership", "output_id": "scotland_premiership", "default_season": "2026"},
+    {"id": 119, "name": "Denmark Superliga", "output_id": "denmark_superliga", "default_season": "2026"},
+]
+
+THESPORTSDB_LEAGUES = [
     {"id": 253, "name": "MLS", "output_id": "mls", "default_season": "2026"},
     {"id": 479, "name": "Canadian Premier League", "output_id": "canadian_premier_league", "default_season": "2026"},
     {"id": 103, "name": "Norway Eliteserien", "output_id": "norway_eliteserien", "default_season": "2026"},
-    {"id": 179, "name": "Scotland Premiership", "output_id": "scotland_premiership", "default_season": "2026"},
     {"id": 244, "name": "Finland Veikkausliiga", "output_id": "finland_veikkausliiga", "default_season": "2026"},
-    {"id": 119, "name": "Denmark Superliga", "output_id": "denmark_superliga", "default_season": "2026"},
 ]
 
 def get_version():
@@ -166,7 +170,7 @@ def main():
     except Exception as e:
         print(f"Failed to process Brazilian Serie A: {e}")
 
-    # Process all other 6 API-Football leagues
+    # Process all other API-Football leagues
     for league in OTHER_LEAGUES:
         try:
             fetch_fn = lambda season, total_matches, lid=league["id"], lname=league["name"]: fetch_api_football_league(
@@ -182,6 +186,22 @@ def main():
             leagues_data.append(data)
         except Exception as e:
             print(f"Failed to process league {league['name']}: {e}")
+
+    # Process all experimental TheSportsDB leagues
+    for league in THESPORTSDB_LEAGUES:
+        try:
+            fetch_fn = lambda season, total_matches, lname=league["name"]: fetch_thesportsdb_league(
+                league_name=lname,
+                season=season,
+                total_matches=total_matches
+            )
+            data = process_api_football_league(
+                league["id"], league["name"], league["output_id"], league["default_season"],
+                fetch_fn=fetch_fn
+            )
+            leagues_data.append(data)
+        except Exception as e:
+            print(f"Failed to process league {league['name']} via TheSportsDB: {e}")
 
     # Prepare final output structure
     output = {
