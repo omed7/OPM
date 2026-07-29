@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "84b19c5",
-    "generated_at": "2026-07-29T01:13:33Z"
+    "version": "328eaae",
+    "generated_at": "2026-07-29T02:13:57Z"
   },
   "leagues": [
     {
@@ -19,6 +19,18 @@
     {
       "id": "brazilian_serie_a",
       "name": "Brazilian Serie A",
+      "metric": "goals",
+      "fixtures": []
+    },
+    {
+      "id": "scotland_premiership",
+      "name": "Scotland Premiership",
+      "metric": "goals",
+      "fixtures": []
+    },
+    {
+      "id": "denmark_superliga",
+      "name": "Denmark Superliga",
       "metric": "goals",
       "fixtures": []
     },
@@ -41,20 +53,8 @@
       "fixtures": []
     },
     {
-      "id": "scotland_premiership",
-      "name": "Scotland Premiership",
-      "metric": "goals",
-      "fixtures": []
-    },
-    {
       "id": "finland_veikkausliiga",
       "name": "Finland Veikkausliiga",
-      "metric": "goals",
-      "fixtures": []
-    },
-    {
-      "id": "denmark_superliga",
-      "name": "Denmark Superliga",
       "metric": "goals",
       "fixtures": []
     }
