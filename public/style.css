@@ -6,6 +6,21 @@
     --accent-color: #3498db;
     --xg-bar-height: 8px;
     --xg-bar-bg: #e0e0e0;
+    --card-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --btn-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    --btn-active-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-primary: #f0f0f0;
+    --text-secondary: #aaaaaa;
+    --accent-color: #3498db;
+    --xg-bar-bg: #333333;
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    --btn-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    --btn-active-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
 
 body {
@@ -18,10 +33,38 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 header {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+
+.theme-toggle-btn {
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: var(--btn-shadow);
+    transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.05);
 }
 
 h1 {
@@ -37,11 +80,12 @@ h1 {
 .fixture-card {
     background-color: var(--card-bg);
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: var(--card-shadow);
     padding: 16px;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .fixture-header {
@@ -147,20 +191,26 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    max-width: 48%; /* limit to prevent home/away lists overlapping */
 }
 
 .history-list.home {
     align-items: flex-end;
     padding-right: 6px;
+    text-align: right;
 }
 
 .history-list.away {
     align-items: flex-start;
     padding-left: 6px;
+    text-align: left;
 }
 
 .history-item {
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 footer {
@@ -179,24 +229,35 @@ footer {
 
 .tab-container {
     display: flex;
-    justify-content: center;
-    gap: 12px;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 8px;
     margin-bottom: 20px;
     width: 100%;
     max-width: 500px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 12px;
+    box-sizing: border-box;
+    scrollbar-width: none; /* Firefox */
+}
+
+.tab-container::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
 }
 
 .tab-button {
+    flex-shrink: 0;
     background-color: var(--card-bg);
     color: var(--text-secondary);
     border: none;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 20px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    box-shadow: var(--btn-shadow);
 }
 
 .tab-button:hover {
@@ -206,7 +267,7 @@ footer {
 .tab-button.active {
     background-color: var(--accent-color);
     color: #ffffff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: var(--btn-active-shadow);
 }
 
 @media (max-width: 400px) {

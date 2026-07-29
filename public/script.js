@@ -1,3 +1,17 @@
+const FIXTURE_LIMIT = 10;
+
+const LEAGUE_FLAGS = {
+    'premier_league': '🏴\u200d󠁢\u200d󠁥\u200d󠁢\u200d󠁧\u200d󠁿',
+    'besta_deild_karla': '🇮🇸',
+    'brazilian_serie_a': '🇧🇷',
+    'scotland_premiership': '🏴\u200d󠁢\u200d󠁳\u200d󠁣\u200d󠁴\u200d󠁿',
+    'denmark_superliga': '🇩🇰',
+    'mls': '🇺🇸',
+    'canadian_premier_league': '🇨🇦',
+    'norway_eliteserien': '🇳🇴',
+    'finland_veikkausliiga': '🇫🇮'
+};
+
 async function init() {
     const container = document.getElementById('fixtures-container');
     const versionTag = document.getElementById('version-tag');
@@ -38,14 +52,15 @@ async function init() {
                 if (league.id === activeLeagueId) {
                     btn.classList.add('active');
                 }
-                btn.textContent = league.name;
+                const flag = LEAGUE_FLAGS[league.id] || '';
+                btn.textContent = flag ? `${flag} ${league.name}` : league.name;
                 btn.addEventListener('click', () => {
                     if (activeLeagueId === league.id) return;
                     activeLeagueId = league.id;
 
                     // Update active class on buttons
                     tabContainer.querySelectorAll('.tab-button').forEach(b => {
-                        b.classList.toggle('active', b.textContent === league.name);
+                        b.classList.toggle('active', b === btn);
                     });
 
                     // Render fixtures for active league
@@ -63,8 +78,10 @@ async function init() {
                 return;
             }
 
-            // Copy and sort chronologically per league
-            const sortedFixtures = [...league.fixtures].sort((a, b) => new Date(a.date) - new Date(b.date));
+            // Copy, sort chronologically per league, and cap at FIXTURE_LIMIT
+            const sortedFixtures = [...league.fixtures]
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, FIXTURE_LIMIT);
 
             const metric = league.metric || 'xg';
 
@@ -192,4 +209,24 @@ function getColor(name) {
     return `hsl(${hue}, 60%, 40%)`;
 }
 
-document.addEventListener('DOMContentLoaded', init);
+// Theme toggle functionality
+function setupTheme() {
+    const toggleBtn = document.getElementById('theme-toggle');
+    if (!toggleBtn) return;
+
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    toggleBtn.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+
+    toggleBtn.addEventListener('click', () => {
+        const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    init();
+    setupTheme();
+});
