@@ -7,6 +7,17 @@ from fetch.premier_league import get_upcoming_fixtures, get_team_matches, get_cu
 from compute.xg_formula import calculate_expected_xg, SAMPLE_SIZE as XG_SAMPLE_SIZE
 from fetch.besta_deild import get_besta_deild_data
 from compute.goals_formula import calculate_expected_goals, SAMPLE_SIZE as GOALS_SAMPLE_SIZE
+from fetch.api_football_common import fetch_api_football_league
+
+OTHER_LEAGUES = [
+    {"id": 71, "name": "Brazilian Serie A", "output_id": "brazilian_serie_a", "default_season": "2026"},
+    {"id": 253, "name": "MLS", "output_id": "mls", "default_season": "2026"},
+    {"id": 479, "name": "Canadian Premier League", "output_id": "canadian_premier_league", "default_season": "2026"},
+    {"id": 103, "name": "Norway Eliteserien", "output_id": "norway_eliteserien", "default_season": "2026"},
+    {"id": 179, "name": "Scotland Premiership", "output_id": "scotland_premiership", "default_season": "2026"},
+    {"id": 244, "name": "Finland Veikkausliiga", "output_id": "finland_veikkausliiga", "default_season": "2026"},
+    {"id": 119, "name": "Denmark Superliga", "output_id": "denmark_superliga", "default_season": "2026"},
+]
 
 def get_version():
     sha = os.environ.get('GITHUB_SHA')
@@ -75,37 +86,31 @@ def process_premier_league():
         "fixtures": output_fixtures
     }
 
-def process_besta_deild():
-    print("Fetching Besta deild karla fixtures...")
-    season = os.environ.get('SEASON', "2026")
+def process_api_football_league(league_id, league_name, output_id, default_season, fetch_fn):
+    print(f"Fetching {league_name} fixtures...")
+    season = os.environ.get('SEASON', default_season)
 
     try:
-        fixtures = get_besta_deild_data(season=season, total_matches=GOALS_SAMPLE_SIZE)
+        fixtures = fetch_fn(season=season, total_matches=GOALS_SAMPLE_SIZE)
     except Exception as e:
-        print(f"Error fetching Besta deild karla fixtures: {e}")
+        print(f"Error fetching {league_name} fixtures: {e}")
         fixtures = []
 
     if not fixtures:
-        print("No upcoming Besta deild karla fixtures found.")
+        print(f"No upcoming {league_name} fixtures found.")
 
     output_fixtures = []
 
     for fixture in fixtures:
         home_team = fixture['home_team']
         away_team = fixture['away_team']
-        print(f"Processing Besta deild: {home_team} vs {away_team}...")
+        print(f"Processing {league_name}: {home_team} vs {away_team}...")
 
         try:
             home_matches = fixture['home_history']
             away_matches = fixture['away_history']
 
             stats = calculate_expected_goals(home_matches, away_matches)
-
-            # Use identical variable names as the old `xg` schema for the frontend (the prompt said we can optionally keep it if we want less diff)
-            # Actually, the prompt says:
-            # "generalize the xg-specific field names to metric-neutral ones ... if that keeps things clean, otherwise keep xg/goals-specific names per league, whichever keeps the diff smaller — your call."
-            # We will use expected_xg to not break the frontend immediately, or expected_goals but then frontend breaks.
-            # I will use expected_goals to make the JSON semantically correct, as the task says "don't touch the frontend... separate follow-up".
 
             output_fixtures.append({
                 "home_team": home_team,
@@ -118,18 +123,49 @@ def process_besta_deild():
                 f"away_last_{GOALS_SAMPLE_SIZE}_matches": away_matches
             })
         except Exception as e:
-            print(f"Error processing Besta deild fixture {home_team} vs {away_team}: {e}")
+            print(f"Error processing {league_name} fixture {home_team} vs {away_team}: {e}")
 
     return {
-        "id": "besta_deild_karla",
-        "name": "Besta deild karla",
+        "id": output_id,
+        "name": league_name,
         "metric": "goals",
         "fixtures": output_fixtures
     }
 
+def process_besta_deild():
+    return process_api_football_league(
+        164, "Besta deild karla", "besta_deild_karla", "2026",
+        fetch_fn=get_besta_deild_data
+    )
+
 def main():
     pl_data = process_premier_league()
-    bd_data = process_besta_deild()
+
+    leagues_data = [pl_data]
+
+    # Process Besta deild karla
+    try:
+        bd_data = process_besta_deild()
+        leagues_data.append(bd_data)
+    except Exception as e:
+        print(f"Failed to process Besta deild karla: {e}")
+
+    # Process all other 7 API-Football leagues
+    for league in OTHER_LEAGUES:
+        try:
+            fetch_fn = lambda season, total_matches, lid=league["id"], lname=league["name"]: fetch_api_football_league(
+                league_id=lid,
+                league_name=lname,
+                season=season,
+                total_matches=total_matches
+            )
+            data = process_api_football_league(
+                league["id"], league["name"], league["output_id"], league["default_season"],
+                fetch_fn=fetch_fn
+            )
+            leagues_data.append(data)
+        except Exception as e:
+            print(f"Failed to process league {league['name']}: {e}")
 
     # Prepare final output structure
     output = {
@@ -137,10 +173,7 @@ def main():
             "version": get_version(),
             "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
         },
-        "leagues": [
-            pl_data,
-            bd_data
-        ]
+        "leagues": leagues_data
     }
 
     # Ensure public directory exists
@@ -150,7 +183,7 @@ def main():
     with open('public/data.json', 'w') as f:
         json.dump(output, f, indent=2)
 
-    total_fixtures = len(pl_data['fixtures']) + len(bd_data['fixtures'])
+    total_fixtures = sum(len(l['fixtures']) for l in leagues_data)
     print(f"Successfully wrote {total_fixtures} total fixtures to public/data.json")
 
 if __name__ == "__main__":
