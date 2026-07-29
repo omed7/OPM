@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "9adcf02",
-    "generated_at": "2026-07-17T22:45:39Z"
+    "version": "84b19c5",
+    "generated_at": "2026-07-29T01:13:33Z"
   },
   "leagues": [
     {
@@ -13,6 +13,48 @@
     {
       "id": "besta_deild_karla",
       "name": "Besta deild karla",
+      "metric": "goals",
+      "fixtures": []
+    },
+    {
+      "id": "brazilian_serie_a",
+      "name": "Brazilian Serie A",
+      "metric": "goals",
+      "fixtures": []
+    },
+    {
+      "id": "mls",
+      "name": "MLS",
+      "metric": "goals",
+      "fixtures": []
+    },
+    {
+      "id": "canadian_premier_league",
+      "name": "Canadian Premier League",
+      "metric": "goals",
+      "fixtures": []
+    },
+    {
+      "id": "norway_eliteserien",
+      "name": "Norway Eliteserien",
+      "metric": "goals",
+      "fixtures": []
+    },
+    {
+      "id": "scotland_premiership",
+      "name": "Scotland Premiership",
+      "metric": "goals",
+      "fixtures": []
+    },
+    {
+      "id": "finland_veikkausliiga",
+      "name": "Finland Veikkausliiga",
+      "metric": "goals",
+      "fixtures": []
+    },
+    {
+      "id": "denmark_superliga",
+      "name": "Denmark Superliga",
       "metric": "goals",
       "fixtures": []
     }
