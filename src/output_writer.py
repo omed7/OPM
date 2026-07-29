@@ -10,9 +10,9 @@ from compute.goals_formula import calculate_expected_goals, SAMPLE_SIZE as GOALS
 from fetch.api_football_common import fetch_api_football_league
 from fetch.thesportsdb_common import fetch_thesportsdb_league
 
-OTHER_LEAGUES = [
-    {"id": 179, "name": "Scotland Premiership", "output_id": "scotland_premiership", "default_season": "2026"},
-    {"id": 119, "name": "Denmark Superliga", "output_id": "denmark_superliga", "default_season": "2026"},
+SPORTMONKS_LEAGUES = [
+    {"id": 501, "name": "Scotland Premiership", "output_id": "scotland_premiership", "default_season": "2026"},
+    {"id": 271, "name": "Denmark Superliga", "output_id": "denmark_superliga", "default_season": "2026"},
 ]
 
 THESPORTSDB_LEAGUES = [
@@ -170,10 +170,11 @@ def main():
     except Exception as e:
         print(f"Failed to process Brazilian Serie A: {e}")
 
-    # Process all other API-Football leagues
-    for league in OTHER_LEAGUES:
+    # Process all Sportmonks leagues
+    for league in SPORTMONKS_LEAGUES:
         try:
-            fetch_fn = lambda season, total_matches, lid=league["id"], lname=league["name"]: fetch_api_football_league(
+            from fetch.sportmonks_common import fetch_sportmonks_league
+            fetch_fn = lambda season, total_matches, lid=league["id"], lname=league["name"]: fetch_sportmonks_league(
                 league_id=lid,
                 league_name=lname,
                 season=season,
@@ -185,7 +186,7 @@ def main():
             )
             leagues_data.append(data)
         except Exception as e:
-            print(f"Failed to process league {league['name']}: {e}")
+            print(f"Failed to process league {league['name']} via Sportmonks: {e}")
 
     # Process all experimental TheSportsDB leagues
     for league in THESPORTSDB_LEAGUES:
