@@ -1,5 +1,6 @@
 import os
 import requests
+from datetime import datetime, timedelta
 
 API_URL_TEMPLATE = "https://api.football-data.org/v4/competitions/{competition_code}/matches"
 
@@ -72,6 +73,27 @@ def fetch_football_data_league(competition_code, league_name, season, total_matc
 
     # Sort upcoming matches by utcDate ascending
     upcoming_matches.sort(key=lambda x: x['utcDate'])
+
+    if upcoming_matches:
+        try:
+            first_match_dt = datetime.strptime(upcoming_matches[0]['utcDate'], '%Y-%m-%dT%H:%M:%SZ')
+        except ValueError:
+            try:
+                first_match_dt = datetime.strptime(upcoming_matches[0]['utcDate'], '%Y-%m-%d %H:%M:%S')
+            except ValueError:
+                first_match_dt = datetime.strptime(upcoming_matches[0]['utcDate'].split('T')[0], '%Y-%m-%d')
+
+        # Filter to fixtures sharing the same date as the earliest one
+        earliest_date_str = first_match_dt.strftime('%Y-%m-%d')
+
+        filtered_upcoming = []
+        for m in upcoming_matches:
+            m_date = m['utcDate'].split('T')[0]
+            if m_date == earliest_date_str:
+                filtered_upcoming.append(m)
+            else:
+                break
+        upcoming_matches = filtered_upcoming
 
     team_histories = {}
 

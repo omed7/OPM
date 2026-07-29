@@ -151,14 +151,10 @@ class TestFootballData(unittest.TestCase):
         results = fetch_football_data_league("BSA", "Brazilian Serie A", "2026", total_matches=2)
 
         # Assert: since MOCK_UPCOMING is 1 and upcoming_matches was empty, the last matches should be mocked as upcoming.
-        # We expect up to 5 mocked matches. In this case, 3 matches are available, so they should all be shifted.
-        # Actually, played_matches is split: upcoming_matches takes the last (most recent) 5 matches, which are all 3.
-        # So we have 3 mocked upcoming matches, and 0 played matches.
-        self.assertEqual(len(results), 3)
+        # Since we added filtering to the same date as the earliest, only fixtures sharing the earliest date (2026-04-10) are kept.
+        self.assertEqual(len(results), 1)
         # Chronological order of mocked upcoming matches:
         self.assertEqual(results[0]['date'], "2026-04-10")
-        self.assertEqual(results[1]['date'], "2026-04-11")
-        self.assertEqual(results[2]['date'], "2026-04-12")
 
 if __name__ == "__main__":
     unittest.main()
