@@ -10,7 +10,6 @@ from compute.goals_formula import calculate_expected_goals, SAMPLE_SIZE as GOALS
 from fetch.api_football_common import fetch_api_football_league
 
 OTHER_LEAGUES = [
-    {"id": 71, "name": "Brazilian Serie A", "output_id": "brazilian_serie_a", "default_season": "2026"},
     {"id": 253, "name": "MLS", "output_id": "mls", "default_season": "2026"},
     {"id": 479, "name": "Canadian Premier League", "output_id": "canadian_premier_league", "default_season": "2026"},
     {"id": 103, "name": "Norway Eliteserien", "output_id": "norway_eliteserien", "default_season": "2026"},
@@ -150,7 +149,24 @@ def main():
     except Exception as e:
         print(f"Failed to process Besta deild karla: {e}")
 
-    # Process all other 7 API-Football leagues
+    # Process Brazilian Serie A (from football-data.org)
+    try:
+        from fetch.football_data_common import fetch_football_data_league
+        fetch_fn = lambda season, total_matches: fetch_football_data_league(
+            competition_code="BSA",
+            league_name="Brazilian Serie A",
+            season=season,
+            total_matches=total_matches
+        )
+        bsa_data = process_api_football_league(
+            71, "Brazilian Serie A", "brazilian_serie_a", "2026",
+            fetch_fn=fetch_fn
+        )
+        leagues_data.append(bsa_data)
+    except Exception as e:
+        print(f"Failed to process Brazilian Serie A: {e}")
+
+    # Process all other 6 API-Football leagues
     for league in OTHER_LEAGUES:
         try:
             fetch_fn = lambda season, total_matches, lid=league["id"], lname=league["name"]: fetch_api_football_league(
