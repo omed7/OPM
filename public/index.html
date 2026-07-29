@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Football xG Predictions</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        // Set theme immediately to avoid flash of light mode
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
 </head>
 <body>
     <header>
         <h1>Upcoming Fixtures</h1>
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">🌙</button>
     </header>
     <main id="fixtures-container">
         <!-- Fixtures will be loaded here -->
