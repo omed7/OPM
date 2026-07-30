@@ -13,13 +13,51 @@
 </head>
 <body>
     <header>
-        <h1>Upcoming Fixtures</h1>
-        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">🌙</button>
+        <h1>Football Predictions</h1>
+        <div class="header-right">
+            <button id="mode-toggle" class="mode-toggle-btn">🔮 Semi-Auto</button>
+            <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">🌙</button>
+        </div>
     </header>
     <main id="fixtures-container">
         <!-- Fixtures will be loaded here -->
         <div class="loading">Loading fixtures...</div>
     </main>
+
+    <main id="semi-auto-container" class="hidden">
+        <section class="semi-auto-card">
+            <h2>🔮 Semi-Automatic Prediction</h2>
+            <p class="semi-auto-desc">
+                Predict expected xG for fixtures in leagues not fully automated. Fetch matches directly, or paste OddAlerts page source if blocked by Cloudflare.
+            </p>
+
+            <div class="form-group">
+                <label for="semi-league-select">Select League:</label>
+                <select id="semi-league-select">
+                    <option value="">-- Choose a League --</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="html-paste-group">
+                <label for="semi-html-paste">Paste OddAlerts Page HTML (Optional / Fallback):</label>
+                <textarea id="semi-html-paste" placeholder="Right-click on OddAlerts xG page (e.g. oddalerts.com/xg/mls) -> View Page Source -> Copy All -> Paste here..."></textarea>
+            </div>
+
+            <button id="semi-fetch-btn" class="action-btn">Load Fixtures</button>
+
+            <div id="semi-fixture-selection-group" class="form-group hidden">
+                <label for="semi-fixture-select">Select Fixture:</label>
+                <select id="semi-fixture-select">
+                    <option value="">-- Choose a Fixture --</option>
+                </select>
+            </div>
+
+            <button id="semi-predict-btn" class="action-btn hidden">Calculate Prediction</button>
+        </section>
+
+        <div id="semi-prediction-result"></div>
+    </main>
+
     <footer>
         <p id="version-tag"></p>
     </footer>
