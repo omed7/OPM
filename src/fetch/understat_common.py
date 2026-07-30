@@ -12,9 +12,9 @@ def get_current_season():
     else:
         return str(now.year - 1)
 
-def get_team_matches(team_name, total_matches=4, season=None):
+def get_team_matches(league_code, team_name, total_matches=4, season=None):
     if season is None:
-        season = get_current_season()
+        season = os.environ.get('SEASON', get_current_season())
 
     client = UnderstatClient()
 
@@ -22,7 +22,7 @@ def get_team_matches(team_name, total_matches=4, season=None):
     time.sleep(2)
 
     # Fetch team data to find the team ID
-    league_data = client.league(league='EPL').get_team_data(season)
+    league_data = client.league(league=league_code).get_team_data(season)
 
     team_id = None
     for t_id, t_data in league_data.items():
@@ -31,17 +31,11 @@ def get_team_matches(team_name, total_matches=4, season=None):
             break
 
     if not team_id:
-        raise ValueError(f"Team {team_name} not found in EPL for season {season}")
+        raise ValueError(f"Team {team_name} not found in {league_code} for season {season}")
 
     time.sleep(2)
 
-    # Get match data for the league to filter by team
-    # (The alternative is getting all match data and parsing, or using get_match_data for the league)
-    # Actually, we can get team match data directly if there's an endpoint, but the library
-    # doesn't easily expose team match data directly by ID in a straightforward single call without parsing league matches.
-    # Let's get the league matches and filter them for the team.
-
-    league_matches = client.league(league='EPL').get_match_data(season)
+    league_matches = client.league(league=league_code).get_match_data(season)
 
     # Filter matches involving the team and where isResult is True (meaning it has been played)
     team_matches = [m for m in league_matches if m.get('isResult') and
@@ -84,22 +78,22 @@ def get_team_matches(team_name, total_matches=4, season=None):
             away_count += 1
 
     if home_count < home_matches_needed or away_count < away_matches_needed:
-        print(f"Warning: Could not find enough matches for {team_name}. Found {home_count} home and {away_count} away.")
+        print(f"Warning: Could not find enough matches for {team_name} in {league_code}. Found {home_count} home and {away_count} away.")
 
     return selected_matches
 
-def get_upcoming_fixtures(season=None):
+def get_upcoming_fixtures(league_code, season=None):
     if season is None:
-        season = get_current_season()
+        season = os.environ.get('SEASON', get_current_season())
 
     client = UnderstatClient()
     # Be a polite scraper
     time.sleep(2)
 
     try:
-        league_matches = client.league(league='EPL').get_match_data(season)
+        league_matches = client.league(league=league_code).get_match_data(season)
     except Exception as e:
-        print(f"Error fetching league matches: {e}")
+        print(f"Error fetching league matches for {league_code}: {e}")
         return []
 
     upcoming = [m for m in league_matches if not m.get('isResult')]
@@ -107,7 +101,7 @@ def get_upcoming_fixtures(season=None):
     if not upcoming:
         # For testing purposes in environments where no upcoming matches exist
         if os.environ.get('MOCK_UPCOMING') == '1':
-            print("MOCK_UPCOMING is set. Returning mock upcoming fixtures.")
+            print(f"MOCK_UPCOMING is set. Returning mock upcoming fixtures for {league_code}.")
             # Use the last few matches as "upcoming" for demonstration if none are actually upcoming
             played = [m for m in league_matches if m.get('isResult')]
             if played:

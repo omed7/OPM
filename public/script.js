@@ -2,14 +2,10 @@ const FIXTURE_LIMIT = 10;
 
 const LEAGUE_FLAGS = {
     'premier_league': '🏴\u200d󠁢\u200d󠁥\u200d󠁢\u200d󠁧\u200d󠁿',
-    'besta_deild_karla': '🇮🇸',
-    'brazilian_serie_a': '🇧🇷',
-    'scotland_premiership': '🏴\u200d󠁢\u200d󠁳\u200d󠁣\u200d󠁴\u200d󠁿',
-    'denmark_superliga': '🇩🇰',
-    'mls': '🇺🇸',
-    'canadian_premier_league': '🇨🇦',
-    'norway_eliteserien': '🇳🇴',
-    'finland_veikkausliiga': '🇫🇮'
+    'la_liga': '🇪🇸',
+    'serie_a': '🇮🇹',
+    'bundesliga': '🇩🇪',
+    'ligue_1': '🇫🇷'
 };
 
 async function init() {
