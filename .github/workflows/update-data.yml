@@ -28,9 +28,6 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run pipeline
-        env:
-          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
-          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
         run: python3 src/output_writer.py
 
       - name: Check if fixtures changed

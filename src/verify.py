@@ -1,45 +1,43 @@
-from fetch.premier_league import get_team_matches
+import os
+from fetch.understat_common import get_team_matches, get_current_season
 from compute.xg_formula import calculate_expected_xg
 
 def verify():
-    print("Fetching matches for Arsenal...")
-    # Season 2023 for verification to ensure we have matches available to pull
-    team_a_matches = get_team_matches("Arsenal", total_matches=4, season="2023")
-    print("Arsenal matches:")
-    for m in team_a_matches:
-        print(f"  {m['date']} ({m['venue']}) vs {m['opponent']}: xG For: {m['xg_for']:.2f}, xG Against: {m['xg_against']:.2f}")
+    # Let's verify each of the 5 leagues on historical data to confirm they work
+    season = "2024"  # Use a completed season to ensure data is populated on Understat
+    print(f"--- Verifying Understat Integration for season {season} ---")
 
-    print("\nFetching matches for Liverpool...")
-    team_b_matches = get_team_matches("Liverpool", total_matches=4, season="2023")
-    print("Liverpool matches:")
-    for m in team_b_matches:
-        print(f"  {m['date']} ({m['venue']}) vs {m['opponent']}: xG For: {m['xg_for']:.2f}, xG Against: {m['xg_against']:.2f}")
+    leagues_to_test = [
+        {"code": "EPL", "team1": "Arsenal", "team2": "Liverpool"},
+        {"code": "La_Liga", "team1": "Real Madrid", "team2": "Barcelona"},
+        {"code": "Serie_A", "team1": "Juventus", "team2": "AC Milan"},
+        {"code": "Bundesliga", "team1": "Bayern Munich", "team2": "Borussia Dortmund"},
+        {"code": "Ligue_1", "team1": "Paris Saint Germain", "team2": "Monaco"},
+    ]
 
-    print("\nCalculating expected xG...")
-    result = calculate_expected_xg(team_a_matches, team_b_matches)
+    for item in leagues_to_test:
+        code = item["code"]
+        team1 = item["team1"]
+        team2 = item["team2"]
+        print(f"\nTesting League: {code}")
+        try:
+            print(f"Fetching matches for {team1}...")
+            team1_matches = get_team_matches(code, team1, total_matches=4, season=season)
+            print(f"Found {len(team1_matches)} matches.")
+            for m in team1_matches[:2]:
+                print(f"  {m['date']} ({m['venue']}) vs {m['opponent']}: xG For: {m['xg_for']:.2f}, xG Against: {m['xg_against']:.2f}")
 
-    print("\nResults:")
-    print(f"Arsenal Expected xG: {result['team_a_expected_xg']:.2f}")
-    print(f"Liverpool Expected xG: {result['team_b_expected_xg']:.2f}")
+            print(f"Fetching matches for {team2}...")
+            team2_matches = get_team_matches(code, team2, total_matches=4, season=season)
+            print(f"Found {len(team2_matches)} matches.")
+            for m in team2_matches[:2]:
+                print(f"  {m['date']} ({m['venue']}) vs {m['opponent']}: xG For: {m['xg_for']:.2f}, xG Against: {m['xg_against']:.2f}")
+
+            print("Calculating expected xG...")
+            result = calculate_expected_xg(team1_matches, team2_matches)
+            print(f"Results: {team1} expected xG: {result['team_a_expected_xg']:.2f}, {team2} expected xG: {result['team_b_expected_xg']:.2f}")
+        except Exception as e:
+            print(f"Verification failed for league {code}: {e}")
 
 if __name__ == "__main__":
     verify()
-
-from fetch.besta_deild import get_besta_deild_data
-from compute.goals_formula import calculate_expected_goals
-print("\nVerifying Besta deild karla...")
-bd_data = get_besta_deild_data('2024')
-if bd_data:
-    fixture = bd_data[0]
-    print(f"Fixture: {fixture['home_team']} vs {fixture['away_team']}")
-    print("Home History:")
-    for match in fixture['home_history']:
-        print(f"  {match['date']} ({match['venue']}) vs {match['opponent']}: Goals For: {match['goals_for']}, Goals Against: {match['goals_against']}")
-    print("Away History:")
-    for match in fixture['away_history']:
-        print(f"  {match['date']} ({match['venue']}) vs {match['opponent']}: Goals For: {match['goals_for']}, Goals Against: {match['goals_against']}")
-
-    expected = calculate_expected_goals(fixture['home_history'], fixture['away_history'])
-    print(f"\nResults:")
-    print(f"{fixture['home_team']} Expected Goals: {expected['team_a_expected_goals']}")
-    print(f"{fixture['away_team']} Expected Goals: {expected['team_b_expected_goals']}")
