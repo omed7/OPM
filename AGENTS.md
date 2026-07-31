@@ -1,9 +1,9 @@
 # AGENTS.md
 
-Instructions for AI coding agents (Jules) working in this repo. Keep this in sync with reality as the codebase grows — update it, don't let it drift.
+Instructions for AI coding agents (Jules) working in this repo. Whenever your PR changes a data source, an env var, or the architecture, update this file in the same PR — don't wait to be asked.
 
 ## Project
-A website that automates Omed's personal football xG prediction formula. It shows two numbers per fixture and nothing else. It does **not** predict match winners, scores, or probabilities. Do not add those unless the task prompt explicitly asks for them.
+Automates Omed's personal football prediction formulas. Shows two numbers per fixture, nothing else — no winners, scores, or probabilities unless a task explicitly asks for them.
 
 ## The formulas (do not alter without being told to)
 ### xG Formula
@@ -15,27 +15,34 @@ For a fixture between Team A (home) and Team B (away), using each team's last 4 
 - Team B's expected xG = (Team B's AVG xG FOR + Team A's AVG xG AGAINST) / 2
 
 ### Goals Formula
-Same as above, but uses actual goals scored and conceded rather than expected goals (xG). Used for Besta deild karla.
+Same as above, using actual goals scored/conceded instead of xG. A Python compute module for this formula (`src/compute/goals_formula.py`) exists in the codebase but is not currently used by the active automated or semi-automatic modes (both modes predict using xG).
 
-Sample size (4 matches) must be a configurable variable, never hardcoded.
+Sample size (4 matches) must be a configurable variable (`SAMPLE_SIZE` in `xg_formula.py` / `goals_formula.py`), never hardcoded on the frontend or fetch scripts.
 
-## Data source
-- **Premier League**: Understat.com, scraped (no official API) — use the `understatapi` package on PyPI. Rate-limit requests (a few seconds apart, be a polite scraper).
-- **Besta deild karla**: API-Football REST API (`https://v3.football.api-sports.io`). **Requires the `API_FOOTBALL_KEY` environment variable** to be set.
+## Data sources
+
+- **Fully automated (5 leagues)**: Understat.com, scraped using the `understatapi` package. Supported leagues: Premier League (`EPL`), La Liga (`La_Liga`), Serie A (`Serie_A`), Bundesliga (`Bundesliga`), and Ligue 1 (`Ligue_1`). RFPL (Russia) is deliberately excluded. Be a polite scraper (use rate limiting).
+- **Semi-automatic**: OddAlerts.com, scraped on demand, not part of the daily pipeline. Free pages only — robots.txt blocks `/UpdateLiveFeed`, `/UpdateLiveStats`, `/app/`; everything else public is fair game. "Recent Results with xG" on `/xg/<league>` pages is server-rendered and scrapeable. "Upcoming Fixtures" on those same pages is Vue-rendered client-side and invisible to a plain fetch — don't build against it. Active semi-automatic leagues include MLS, Eliteserien, Premiership, and Superliga.
 
 ## Stack
-Python fetch/compute script → single output JSON (include the 4 underlying matches per team, not just the averages — the frontend displays them) → static HTML/CSS/JS frontend → Vercel. A scheduled GitHub Actions workflow runs fetch + compute automatically; no manual trigger.
+
+- **Automated pipeline**: Python fetch/compute → `public/data.json` (includes the 4 underlying matches per team) → static HTML/CSS/JS frontend → Vercel. Daily cron plus manual `workflow_dispatch`.
+- **Semi-automatic**: On-demand Python serverless functions under `/api` (Vercel), called live from the frontend — separate from the daily pipeline. Uses a direct team-picker UI. Supports direct scraping of OddAlerts or manual HTML copy-paste input to bypass Cloudflare protection.
 
 ## Environment Variables
-- `API_FOOTBALL_KEY` (Required): Used to authenticate with the API-Football service. Do not hardcode this anywhere.
-- `SEASON` (Optional): Can be set to override automatic season detection for testing.
-- `MOCK_UPCOMING` (Optional): Used in tests or when there are no live future fixtures (e.g., `MOCK_UPCOMING=1`).
+
+- `SEASON` (Optional): Override automatic season detection for testing.
+- `MOCK_UPCOMING` (Optional): Enable fallback mock fixture generation in `src/fetch/understat_common.py` when no live future fixtures exist.
+- No API keys are currently required — every active data source is scraped.
 
 ## Frontend
-Fixture card: team badges either side, combined xG shown between them, a horizontal bar under each team sized to its xG on a shared scale (not each normalized to its own max), the 4 underlying match values listed below each bar. Footer shows an auto-incrementing app version (e.g. v1.0.0) — no manual version bumping.
+- **Fixture card**: Team badges on either side (CSS-based initials in colored shapes, no external images), combined value between them, a bar under each team on a shared scale, and the 4 underlying matches listed below.
+- **Layout & Navigation**: Tab bar scrolls horizontally on mobile. Fixture lists are capped at a maximum of 10 matches (enforced via `FIXTURE_LIMIT` in JS). Footer shows an auto-incrementing version.
+- **Theme**: Supports a persistent Dark Mode mapped via `[data-theme="dark"]` in `public/style.css` and saved in `localStorage`.
 
 ## Conventions
-- Before opening a PR, run `git status` and `git diff --stat` and paste the actual output into the PR description, alongside the usual plain-language summary. Show what changed, don't just describe it.
-- Build/test commands: none yet — add here once the codebase exists.
-- Stay scoped to exactly what the task prompt asks. Bigger feature ideas live in the Claude Project's roadmap doc, not here — don't build them speculatively just because they're mentioned somewhere.
-To run sanity check: python3 src/verify.py
+
+- Tests live under `tests/` — run them before opening a PR.
+- Before opening a PR: run `git status` and `git diff --stat`, paste the actual output in the write-up alongside the plain-language summary.
+- Stay scoped to exactly what the task asks. Bigger ideas belong in the Claude Project's roadmap, not here.
+- Run sanity check: `python3 src/verify.py`
