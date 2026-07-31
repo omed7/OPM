@@ -222,8 +222,8 @@ function setupTheme() {
     });
 }
 
-// State to track whether we've loaded upcoming fixtures for the currently selected league
-let fetchedFixtures = [];
+// State to track loaded teams for the currently selected league
+let fetchedTeams = [];
 
 function setupModeToggle() {
     const modeBtn = document.getElementById('mode-toggle');
@@ -278,9 +278,7 @@ async function initSemiAuto() {
             {"id": "mls", "name": "Major League Soccer", "flag": "🇺🇸"},
             {"id": "eliteserien", "name": "Eliteserien", "flag": "🇳🇴"},
             {"id": "premiership", "name": "Premiership", "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿"},
-            {"id": "superliga-denmark", "name": "Superliga", "flag": "🇩🇰"},
-            {"id": "veikkausliiga", "name": "Veikkausliiga", "flag": "🇫🇮"},
-            {"id": "canadian-premier-league", "name": "Canadian Premier League", "flag": "🇨🇦"}
+            {"id": "superliga-denmark", "name": "Superliga", "flag": "🇩🇰"}
         ];
         populateLeagues(fallbackLeagues);
     }
@@ -301,20 +299,22 @@ function setupSemiAutoHandlers() {
     const leagueSelect = document.getElementById('semi-league-select');
     const htmlPaste = document.getElementById('semi-html-paste');
     const fetchBtn = document.getElementById('semi-fetch-btn');
-    const fixtureGroup = document.getElementById('semi-fixture-selection-group');
-    const fixtureSelect = document.getElementById('semi-fixture-select');
+    const teamGroup = document.getElementById('semi-team-selection-group');
+    const homeTeamSelect = document.getElementById('semi-home-team-select');
+    const awayTeamSelect = document.getElementById('semi-away-team-select');
     const predictBtn = document.getElementById('semi-predict-btn');
     const resultDiv = document.getElementById('semi-prediction-result');
 
     if (!fetchBtn) return;
 
-    // Reset fixtures when league changes
+    // Reset teams when league changes
     leagueSelect.addEventListener('change', () => {
-        fixtureGroup.classList.add('hidden');
+        teamGroup.classList.add('hidden');
         predictBtn.classList.add('hidden');
-        fixtureSelect.innerHTML = '<option value="">-- Choose a Fixture --</option>';
+        homeTeamSelect.innerHTML = '<option value="">-- Choose Home Team --</option>';
+        awayTeamSelect.innerHTML = '<option value="">-- Choose Away Team --</option>';
         resultDiv.innerHTML = '';
-        fetchedFixtures = [];
+        fetchedTeams = [];
     });
 
     fetchBtn.addEventListener('click', async () => {
@@ -326,24 +326,25 @@ function setupSemiAutoHandlers() {
 
         const pastedHtml = htmlPaste.value.trim();
         fetchBtn.disabled = true;
-        fetchBtn.textContent = 'Loading Fixtures...';
+        fetchBtn.textContent = 'Loading Teams...';
         resultDiv.innerHTML = '';
-        fixtureGroup.classList.add('hidden');
+        teamGroup.classList.add('hidden');
         predictBtn.classList.add('hidden');
-        fixtureSelect.innerHTML = '<option value="">-- Choose a Fixture --</option>';
+        homeTeamSelect.innerHTML = '<option value="">-- Choose Home Team --</option>';
+        awayTeamSelect.innerHTML = '<option value="">-- Choose Away Team --</option>';
 
         try {
             let res;
             if (pastedHtml) {
-                // If HTML pasted, make a POST request with the source
-                res = await fetch(`/api/upcoming?league=${league}`, {
+                // If HTML pasted, make a POST request with the source (no teams parameters to trigger extraction)
+                res = await fetch(`/api/predict`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ html: pastedHtml })
+                    body: JSON.stringify({ league, html: pastedHtml })
                 });
             } else {
-                // Otherwise do a GET which triggers direct fetching on the server
-                res = await fetch(`/api/upcoming?league=${league}`);
+                // Otherwise do a GET with only league which triggers direct fetching and team extraction
+                res = await fetch(`/api/predict?league=${league}`);
             }
 
             if (!res.ok) {
@@ -357,48 +358,55 @@ function setupSemiAutoHandlers() {
             }
 
             const data = await res.json();
-            fetchedFixtures = data.fixtures || [];
+            fetchedTeams = data.teams || [];
 
-            // Filter for upcoming fixtures (where is_result is false, or format nicely)
-            const upcoming = fetchedFixtures.filter(f => !f.is_result);
-            if (upcoming.length === 0) {
-                // If no upcoming found, let them predict on recent results just in case, but warn them
-                showSemiAlert('No upcoming fixtures found in the source. You can still select from played matches below if desired.', 'success');
-            } else {
-                showSemiAlert(`Successfully loaded ${upcoming.length} upcoming fixtures. Select one below to calculate prediction!`, 'success');
+            if (fetchedTeams.length === 0) {
+                showSemiAlert('No teams found in the source. Please check your pasted HTML or try again.', 'error');
+                return;
             }
 
-            // Populate fixtures drop down
-            const displayFixtures = fetchedFixtures.length > 0 ? fetchedFixtures : [];
-            displayFixtures.forEach((f, idx) => {
-                const opt = document.createElement('option');
-                opt.value = idx;
-                const statusTag = f.is_result ? `(Result: ${f.status})` : `(Upcoming: ${f.status})`;
-                opt.textContent = `${f.date} - ${f.home_team} vs ${f.away_team} ${statusTag}`;
-                fixtureSelect.appendChild(opt);
+            showSemiAlert(`Successfully loaded ${fetchedTeams.length} teams. Choose Home & Away teams below to predict!`, 'success');
+
+            // Populate team dropdowns
+            fetchedTeams.forEach(team => {
+                const optH = document.createElement('option');
+                optH.value = team;
+                optH.textContent = team;
+                homeTeamSelect.appendChild(optH);
+
+                const optA = document.createElement('option');
+                optA.value = team;
+                optA.textContent = team;
+                awayTeamSelect.appendChild(optA);
             });
 
-            fixtureGroup.classList.remove('hidden');
+            teamGroup.classList.remove('hidden');
             predictBtn.classList.remove('hidden');
 
         } catch (err) {
             console.error(err);
-            showSemiAlert(`Error fetching fixtures: ${err.message}`, 'error');
+            showSemiAlert(`Error fetching teams: ${err.message}`, 'error');
         } finally {
             fetchBtn.disabled = false;
-            fetchBtn.textContent = 'Load Fixtures';
+            fetchBtn.textContent = 'Load Teams';
         }
     });
 
     predictBtn.addEventListener('click', async () => {
         const league = leagueSelect.value;
-        const fixtureIdx = fixtureSelect.value;
-        if (!league || fixtureIdx === '') {
-            showSemiAlert('Please select a fixture to calculate predictions.', 'error');
+        const homeTeam = homeTeamSelect.value;
+        const awayTeam = awayTeamSelect.value;
+
+        if (!league || !homeTeam || !awayTeam) {
+            showSemiAlert('Please select both Home and Away teams to calculate predictions.', 'error');
             return;
         }
 
-        const selectedFixture = fetchedFixtures[fixtureIdx];
+        if (homeTeam.toLowerCase() === awayTeam.toLowerCase()) {
+            showSemiAlert('Home and Away teams must be different.', 'error');
+            return;
+        }
+
         const pastedHtml = htmlPaste.value.trim();
 
         predictBtn.disabled = true;
@@ -408,8 +416,8 @@ function setupSemiAutoHandlers() {
             let res;
             const payload = {
                 league,
-                home_team: selectedFixture.home_team,
-                away_team: selectedFixture.away_team
+                home_team: homeTeam,
+                away_team: awayTeam
             };
 
             if (pastedHtml) {
@@ -431,12 +439,10 @@ function setupSemiAutoHandlers() {
 
             const prediction = await res.json();
 
-            // Clear loading and render the prediction card beautifully
+            // Clear loading/alerts and render the prediction card beautifully
             resultDiv.innerHTML = '';
 
             // Format prediction matching standard createFixtureCard component
-            // createFixtureCard expects (fixture, scaleMax, metric)
-            // Let's adapt prediction to fixture schema
             const cardFixture = {
                 home_team: prediction.home_team,
                 away_team: prediction.away_team,
@@ -445,7 +451,7 @@ function setupSemiAutoHandlers() {
                 combined_expected_xg: prediction.combined_expected_xg,
                 home_last_xg_matches: prediction.home_last_xg_matches,
                 away_last_xg_matches: prediction.away_last_xg_matches,
-                date: selectedFixture.date
+                date: 'Upcoming Prediction'
             };
 
             // Set dynamic scaleMax

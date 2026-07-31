@@ -7,9 +7,7 @@ class handler(BaseHTTPRequestHandler):
             {"id": "mls", "name": "Major League Soccer", "flag": "🇺🇸"},
             {"id": "eliteserien", "name": "Eliteserien", "flag": "🇳🇴"},
             {"id": "premiership", "name": "Premiership", "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿"},
-            {"id": "superliga-denmark", "name": "Superliga", "flag": "🇩🇰"},
-            {"id": "veikkausliiga", "name": "Veikkausliiga", "flag": "🇫🇮"},
-            {"id": "canadian-premier-league", "name": "Canadian Premier League", "flag": "🇨🇦"}
+            {"id": "superliga-denmark", "name": "Superliga", "flag": "🇩🇰"}
         ]
 
         self.send_response(200)
