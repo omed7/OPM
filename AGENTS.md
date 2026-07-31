@@ -35,6 +35,7 @@ Python fetch/compute script → single output JSON (include the 4 underlying mat
 Fixture card: team badges either side, combined xG shown between them, a horizontal bar under each team sized to its xG on a shared scale (not each normalized to its own max), the 4 underlying match values listed below each bar. Footer shows an auto-incrementing app version (e.g. v1.0.0) — no manual version bumping.
 
 ## Conventions
+- Before opening a PR, run `git status` and `git diff --stat` and paste the actual output into the PR description, alongside the usual plain-language summary. Show what changed, don't just describe it.
 - Build/test commands: none yet — add here once the codebase exists.
 - Stay scoped to exactly what the task prompt asks. Bigger feature ideas live in the Claude Project's roadmap doc, not here — don't build them speculatively just because they're mentioned somewhere.
 To run sanity check: python3 src/verify.py
