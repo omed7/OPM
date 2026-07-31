@@ -43,13 +43,23 @@
                 <textarea id="semi-html-paste" placeholder="Right-click on OddAlerts xG page (e.g. oddalerts.com/xg/mls) -> View Page Source -> Copy All -> Paste here..."></textarea>
             </div>
 
-            <button id="semi-fetch-btn" class="action-btn">Load Fixtures</button>
+            <button id="semi-fetch-btn" class="action-btn">Load Teams</button>
 
-            <div id="semi-fixture-selection-group" class="form-group hidden">
-                <label for="semi-fixture-select">Select Fixture:</label>
-                <select id="semi-fixture-select">
-                    <option value="">-- Choose a Fixture --</option>
-                </select>
+            <div id="semi-team-selection-group" class="form-group hidden">
+                <div class="team-select-row">
+                    <div class="team-select-col">
+                        <label for="semi-home-team-select">Select Home Team:</label>
+                        <select id="semi-home-team-select">
+                            <option value="">-- Choose Home Team --</option>
+                        </select>
+                    </div>
+                    <div class="team-select-col">
+                        <label for="semi-away-team-select">Select Away Team:</label>
+                        <select id="semi-away-team-select">
+                            <option value="">-- Choose Away Team --</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <button id="semi-predict-btn" class="action-btn hidden">Calculate Prediction</button>
