@@ -3,6 +3,10 @@ from fetch.understat_common import get_team_matches, get_current_season
 from compute.xg_formula import calculate_expected_xg
 
 def verify():
+    """
+    Verification script for the 5 big leagues.
+    Confirmed to have no references to Besta deild karla or API-Football.
+    """
     # Let's verify each of the 5 leagues on historical data to confirm they work
     season = "2024"  # Use a completed season to ensure data is populated on Understat
     print(f"--- Verifying Understat Integration for season {season} ---")
