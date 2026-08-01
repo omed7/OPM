@@ -6,7 +6,7 @@ from unittest.mock import patch, MagicMock
 # Add src to python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
-from fetch.understat_common import get_current_season, get_team_matches, get_upcoming_fixtures
+from fetch.understat_common import get_current_season, get_team_matches, get_upcoming_fixtures, get_played_matches
 
 class TestUnderstatCommon(unittest.TestCase):
 
@@ -100,6 +100,31 @@ class TestUnderstatCommon(unittest.TestCase):
         # Away matches: 2025-09-10 (xg_for=2.5) and 2025-08-20 (xg_for=1.8)
         self.assertEqual(away_matches[0]['date'], "2025-09-10 15:00:00")
         self.assertEqual(away_matches[0]['xg_for'], 2.5)
+
+    @patch('fetch.understat_common.UnderstatClient')
+    def test_get_played_matches(self, mock_client_class):
+        mock_client = MagicMock()
+        mock_client_class.return_value = mock_client
+
+        mock_match_data = [
+            {
+                "isResult": True,
+                "datetime": "2025-08-15 15:00:00",
+                "h": {"id": "1", "title": "Team A"},
+                "a": {"id": "2", "title": "Team B"},
+            },
+            {
+                "isResult": False,
+                "datetime": "2025-08-22 19:45:00",
+                "h": {"id": "1", "title": "Team A"},
+                "a": {"id": "3", "title": "Team C"},
+            }
+        ]
+        mock_client.league.return_value.get_match_data.return_value = mock_match_data
+
+        played = get_played_matches(league_code="Serie_A", season="2025")
+        self.assertEqual(len(played), 1)
+        self.assertEqual(played[0]['h']['title'], "Team A")
 
     @patch('fetch.understat_common.UnderstatClient')
     def test_get_upcoming_fixtures(self, mock_client_class):

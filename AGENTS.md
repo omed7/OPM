@@ -22,11 +22,30 @@ Sample size (4 matches) must be a configurable variable (`SAMPLE_SIZE` in `xg_fo
 ## Data sources
 
 - **Fully automated (5 leagues)**: Understat.com, scraped using the `understatapi` package. Supported leagues: Premier League (`EPL`), La Liga (`La_Liga`), Serie A (`Serie_A`), Bundesliga (`Bundesliga`), and Ligue 1 (`Ligue_1`). RFPL (Russia) is deliberately excluded. Be a polite scraper (use rate limiting).
-- **Semi-automatic / Proof of Concept**: OddAlerts.com. Free pages only — robots.txt blocks `/UpdateLiveFeed`, `/UpdateLiveStats`, `/app/`; everything else public is fair game. "Recent Results with xG" on `/xg/<league>` pages is server-rendered and scrapeable. "Upcoming Fixtures" on those same pages is Vue-rendered client-side and invisible to a plain fetch — don't build against it. Active semi-automatic leagues include MLS, Eliteserien, Premiership, and Superliga. A scheduled daily fetch is implemented as a proof-of-concept for MLS, scraping `/xg/mls` and storing the results as structured data.
+- **Semi-automatic / Unified database**: OddAlerts.com. Free pages only — robots.txt blocks `/UpdateLiveFeed`, `/UpdateLiveStats`, `/app/`; everything else public is fair game. "Recent Results with xG" on `/xg/<league>` pages is server-rendered and scrapeable. "Upcoming Fixtures" on those same pages is Vue-rendered client-side and invisible to a plain fetch — don't build against it. Active semi-automatic leagues include MLS, Eliteserien, Premiership, and Superliga.
+
+## Unified Match Database
+- `public/match_database.json`: Consolidates played team-matches from both Understat and OddAlerts.
+- Structure per entry:
+  ```json
+  {
+    "team": "Team Name",
+    "opponent": "Opponent Name",
+    "date": "Date of match",
+    "venue": "home" or "away",
+    "goals_for": integer or null,
+    "goals_against": integer or null,
+    "xg_for": float or null,
+    "xg_against": float or null,
+    "source": "understat" or "oddalerts",
+    "league": "league_id",
+    "weight": 1.0
+  }
+  ```
 
 ## Stack
 
-- **Automated pipeline**: Python fetch/compute → `public/data.json` (includes the 4 underlying matches per team) → static HTML/CSS/JS frontend → Vercel. Daily cron plus manual `workflow_dispatch`. Also runs a daily OddAlerts scheduled fetch for MLS, writing results to `public/oddalerts_mls.json`.
+- **Automated pipeline**: Python fetch/compute → `public/data.json` (includes the 4 underlying matches per team) → static HTML/CSS/JS frontend → Vercel. Daily cron plus manual `workflow_dispatch`. Also consolidates all Understat played matches and OddAlerts leagues into `public/match_database.json`.
 - **Semi-automatic**: On-demand Python serverless functions under `/api` (Vercel), called live from the frontend — separate from the daily pipeline. Uses a direct team-picker UI. Supports direct scraping of OddAlerts or manual HTML copy-paste input to bypass Cloudflare protection.
 
 ## Environment Variables
