@@ -3,6 +3,42 @@ import re
 import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
+from datetime import datetime
+
+def resolve_oddalerts_dates(dates, current_dt=None):
+    if not current_dt:
+        current_dt = datetime.now()
+
+    months = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12}
+
+    resolved = {}
+    last_month_num = None
+    year = current_dt.year
+
+    for idx, (pos, d_str) in enumerate(dates):
+        # Match e.g. "Fri, Jul 31" or just "Jul 31"
+        m = re.search(r'\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b\s+(\d+)', d_str)
+        if not m:
+            resolved[pos] = d_str
+            continue
+
+        mon_str, day_str = m.group(1), m.group(2)
+        mon_num = months[mon_str]
+        day_num = int(day_str)
+
+        if idx == 0:
+            # First element (most recent date)
+            if mon_num > current_dt.month or (mon_num == current_dt.month and day_num > current_dt.day):
+                year -= 1
+        else:
+            if last_month_num is not None and mon_num > last_month_num:
+                year -= 1
+
+        last_month_num = mon_num
+        formatted = f"{year:04d}-{mon_num:02d}-{day_num:02d}"
+        resolved[pos] = formatted
+
+    return resolved
 
 def parse_recent_results(html):
     # Normalize single quotes to double quotes for class names to support direct server fetch (OddAlerts uses single quotes)
@@ -20,6 +56,9 @@ def parse_recent_results(html):
         for m in re.finditer(r'<div class="fixture heading">.*?class="status-text">(.*?)<', html, re.DOTALL):
             dates.append((m.start(), m.group(1).strip()))
 
+    # Resolve date strings to formatted YYYY-MM-DD
+    resolved_dates = resolve_oddalerts_dates(dates)
+
     parts = html.split('<div class="fixture')
     current_pos = len(parts[0])
 
@@ -30,7 +69,7 @@ def parse_recent_results(html):
         current_date = "Unknown Date"
         for pos, date_str in reversed(dates):
             if pos < current_pos:
-                current_date = date_str
+                current_date = resolved_dates.get(pos, date_str)
                 break
 
         # Update current_pos for the next iteration
