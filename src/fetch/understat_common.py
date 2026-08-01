@@ -3,14 +3,35 @@ import os
 from datetime import datetime, timedelta
 from understatapi import UnderstatClient
 
+_cached_active_season = None
+
 def get_current_season():
+    global _cached_active_season
+    if _cached_active_season is not None:
+        return _cached_active_season
+
     # Simplistic season logic: Understat uses the starting year of the season.
-    # In August 2024, the season is 2024. In May 2025, the season is still 2024.
     now = datetime.now()
     if now.month >= 7:
-        return str(now.year)
+        season = str(now.year)
     else:
-        return str(now.year - 1)
+        season = str(now.year - 1)
+
+    # Verify if the season has any played matches on Understat yet
+    try:
+        client = UnderstatClient()
+        time.sleep(1)
+        matches = client.league(league='EPL').get_match_data(season)
+        played_matches = [m for m in matches if m.get('isResult')]
+        if not played_matches:
+            fallback = str(int(season) - 1)
+            print(f"Season {season} has no played matches on Understat yet. Falling back to most recently completed season {fallback}.")
+            season = fallback
+    except Exception as e:
+        print(f"Error checking season {season} matches: {e}. Falling back to default simplistic calculation.")
+
+    _cached_active_season = season
+    return season
 
 def get_team_matches(league_code, team_name, total_matches=4, season=None):
     if season is None:
