@@ -2,8 +2,15 @@ import json
 import re
 import urllib.request
 import urllib.parse
+import sys
+import os
 from http.server import BaseHTTPRequestHandler
 from datetime import datetime
+
+# Add the project root to sys.path so we can import from src
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from src.compute.methodology import load_match_database, predict_fixture, compute_all_comparisons
 
 def resolve_oddalerts_dates(dates, current_dt=None):
     if not current_dt:
@@ -123,6 +130,61 @@ def parse_recent_results(html):
                     pass
     return matches
 
+def map_parsed_to_db_schema(parsed_matches, league_id):
+    records = []
+    for m in parsed_matches:
+        home_goals = None
+        away_goals = None
+        score = m.get("score", "")
+        if " - " in score:
+            try:
+                pts = score.split(" - ")
+                home_goals = int(pts[0].strip())
+                away_goals = int(pts[1].strip())
+            except ValueError:
+                pass
+        records.append({
+            "team": m["home_team"],
+            "opponent": m["away_team"],
+            "date": m["date"],
+            "venue": "home",
+            "goals_for": home_goals,
+            "goals_against": away_goals,
+            "xg_for": m["home_xg"],
+            "xg_against": m["away_xg"],
+            "source": "pasted_html",
+            "league": league_id,
+            "weight": 1.0
+        })
+        records.append({
+            "team": m["away_team"],
+            "opponent": m["home_team"],
+            "date": m["date"],
+            "venue": "away",
+            "goals_for": away_goals,
+            "goals_against": home_goals,
+            "xg_for": m["away_xg"],
+            "xg_against": m["home_xg"],
+            "source": "pasted_html",
+            "league": league_id,
+            "weight": 1.0
+        })
+    return records
+
+def parse_overrides(overrides_input):
+    if not overrides_input:
+        return None
+    if isinstance(overrides_input, dict):
+        return {int(k): float(v) for k, v in overrides_input.items()}
+    if isinstance(overrides_input, str):
+        try:
+            parsed = json.loads(overrides_input)
+            if isinstance(parsed, dict):
+                return {int(k): float(v) for k, v in parsed.items()}
+        except Exception:
+            pass
+    return None
+
 class handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
         self.send_response(200)
@@ -145,6 +207,11 @@ class handler(BaseHTTPRequestHandler):
         league = query_params.get('league', [None])[0]
         home_team = query_params.get('home_team', [None])[0]
         away_team = query_params.get('away_team', [None])[0]
+        methodology_param = query_params.get('methodology', [None])[0] or query_params.get('methodology_id', [None])[0]
+        metric_param = query_params.get('metric', [None])[0]
+
+        home_overrides_param = query_params.get('home_overrides', [None])[0]
+        away_overrides_param = query_params.get('away_overrides', [None])[0]
 
         html_content = ""
 
@@ -162,6 +229,14 @@ class handler(BaseHTTPRequestHandler):
                         home_team = payload.get('home_team')
                     if not away_team:
                         away_team = payload.get('away_team')
+                    if not methodology_param:
+                        methodology_param = payload.get('methodology') or payload.get('methodology_id')
+                    if not metric_param:
+                        metric_param = payload.get('metric')
+                    if not home_overrides_param:
+                        home_overrides_param = payload.get('home_overrides')
+                    if not away_overrides_param:
+                        away_overrides_param = payload.get('away_overrides')
                 except json.JSONDecodeError:
                     html_content = body
             except Exception as e:
@@ -172,8 +247,26 @@ class handler(BaseHTTPRequestHandler):
             self.send_json({"error": "league parameter is required"}, 400)
             return
 
-        # If no HTML content was provided via POST, fetch from OddAlerts
-        if not html_content:
+        # Defaults
+        try:
+            methodology_id = int(methodology_param) if methodology_param else 2
+        except ValueError:
+            methodology_id = 2
+
+        metric = metric_param if metric_param else "xg"
+        metric = metric.strip().lower()
+
+        home_overrides = parse_overrides(home_overrides_param)
+        away_overrides = parse_overrides(away_overrides_param)
+
+        # 1. Load database
+        database = load_match_database()
+
+        # 2. Check if we should fall back to fetching/parsing HTML
+        has_league_in_db = any(m.get("league", "").lower() == league.lower() for m in database)
+
+        if not has_league_in_db and not html_content:
+            # Try to fetch from OddAlerts directly
             url = f"https://www.oddalerts.com/xg/{league}"
             req = urllib.request.Request(
                 url,
@@ -183,25 +276,123 @@ class handler(BaseHTTPRequestHandler):
                 with urllib.request.urlopen(req, timeout=10) as response:
                     html_content = response.read().decode('utf-8')
             except Exception as e:
-                self.send_json({
-                    "error": "Failed to fetch from OddAlerts directly (e.g. Cloudflare restriction). Please use Paste HTML Box below.",
-                    "details": str(e),
-                    "blocked": True
-                }, 403)
-                return
+                pass
+
+        # Parse HTML if league is not in DB and HTML is available
+        if not has_league_in_db and html_content:
+            try:
+                parsed = parse_recent_results(html_content)
+                database = map_parsed_to_db_schema(parsed, league)
+            except Exception as e:
+                pass
 
         # Check if we should extract teams or run prediction
         if not home_team or not away_team:
-            try:
+            # Get list of unique teams
+            teams = sorted(list(set(m["team"] for m in database if m.get("league", "").lower() == league.lower())))
+            if not teams and html_content:
                 teams = self.extract_teams(html_content)
-                self.send_json({"league": league, "teams": teams}, 200)
-            except Exception as e:
-                self.send_json({"error": "Failed to extract teams", "details": str(e)}, 500)
+
+            self.send_json({"league": league, "teams": teams}, 200)
             return
 
+        # Perform prediction
         try:
-            prediction = self.calculate_predictions(html_content, home_team, away_team)
-            self.send_json(prediction, 200)
+            # Active prediction
+            # We fetch prediction for both metrics to be completely comprehensive and backwards compatible
+            pred_xg = None
+            pred_goals = None
+
+            try:
+                pred_xg = predict_fixture(
+                    database, home_team, away_team, league,
+                    methodology_id=methodology_id, metric="xg",
+                    home_overrides=home_overrides, away_overrides=away_overrides
+                )
+            except Exception as e:
+                pass
+
+            try:
+                pred_goals = predict_fixture(
+                    database, home_team, away_team, league,
+                    methodology_id=methodology_id, metric="goals",
+                    home_overrides=home_overrides, away_overrides=away_overrides
+                )
+            except Exception as e:
+                pass
+
+            if not pred_xg and not pred_goals:
+                raise ValueError("Could not calculate prediction for either xG or Goals.")
+
+            # Silent comparisons
+            comparisons = compute_all_comparisons(database, home_team, away_team, league)
+
+            # Build response
+            response_data = {
+                "home_team": home_team,
+                "away_team": away_team,
+                "active_methodology": methodology_id,
+                "active_metric": metric,
+                "comparisons": comparisons
+            }
+
+            # Add xg-specific fields
+            if pred_xg:
+                # Update match dict weights
+                home_matches_copied = [dict(m) for m in pred_xg["home_matches"]]
+                away_matches_copied = [dict(m) for m in pred_xg["away_matches"]]
+                for m, w in zip(home_matches_copied, pred_xg["home_weights"]):
+                    m["weight"] = w
+                for m, w in zip(away_matches_copied, pred_xg["away_weights"]):
+                    m["weight"] = w
+
+                response_data.update({
+                    "home_expected_xg": pred_xg["home_expected"],
+                    "away_expected_xg": pred_xg["away_expected"],
+                    "combined_expected_xg": pred_xg["home_expected"] + pred_xg["away_expected"],
+                    "home_last_xg_matches": home_matches_copied,
+                    "away_last_xg_matches": away_matches_copied,
+                })
+
+            # Add goals-specific fields
+            if pred_goals:
+                # Update match dict weights
+                home_matches_copied = [dict(m) for m in pred_goals["home_matches"]]
+                away_matches_copied = [dict(m) for m in pred_goals["away_matches"]]
+                for m, w in zip(home_matches_copied, pred_goals["home_weights"]):
+                    m["weight"] = w
+                for m, w in zip(away_matches_copied, pred_goals["away_weights"]):
+                    m["weight"] = w
+
+                response_data.update({
+                    "home_expected_goals": pred_goals["home_expected"],
+                    "away_expected_goals": pred_goals["away_expected"],
+                    "combined_expected_goals": pred_goals["home_expected"] + pred_goals["away_expected"],
+                    "home_last_goals_matches": home_matches_copied,
+                    "away_last_goals_matches": away_matches_copied,
+                })
+
+            # Set default top-level expected fields matching the active metric
+            active_pred = pred_xg if metric == "xg" else pred_goals
+            if not active_pred:
+                active_pred = pred_xg or pred_goals # fallback
+
+            response_data.update({
+                "home_expected": active_pred["home_expected"],
+                "away_expected": active_pred["away_expected"],
+                "combined_expected": active_pred["home_expected"] + active_pred["away_expected"],
+                "meta": {
+                    "home_avg_for": active_pred["home_avg_for"],
+                    "home_avg_against": active_pred["home_avg_against"],
+                    "away_avg_for": active_pred["away_avg_for"],
+                    "away_avg_against": active_pred["away_avg_against"],
+                    "home_matches_count": active_pred["home_matches_count"],
+                    "away_matches_count": active_pred["away_matches_count"]
+                }
+            })
+
+            self.send_json(response_data, 200)
+
         except Exception as e:
             self.send_json({"error": "Failed to calculate predictions", "details": str(e)}, 500)
 
@@ -229,81 +420,6 @@ class handler(BaseHTTPRequestHandler):
                         teams.add(cleaned)
 
         return sorted(list(teams))
-
-    def calculate_predictions(self, html, home_team, away_team):
-        # 1. Parse all played match results from the HTML page
-        matches = parse_recent_results(html)
-
-        # 2. Extract match history for home_team and away_team
-        home_team_home_matches = [m for m in matches if m["home_team"].lower() == home_team.lower()][:2]
-        home_team_away_matches = [m for m in matches if m["away_team"].lower() == home_team.lower()][:2]
-
-        away_team_home_matches = [m for m in matches if m["home_team"].lower() == away_team.lower()][:2]
-        away_team_away_matches = [m for m in matches if m["away_team"].lower() == away_team.lower()][:2]
-
-        home_team_history = []
-        for m in home_team_home_matches:
-            home_team_history.append({
-                "xg_for": m["home_xg"],
-                "xg_against": m["away_xg"],
-                "opponent": m["away_team"],
-                "venue": "home"
-            })
-        for m in home_team_away_matches:
-            home_team_history.append({
-                "xg_for": m["away_xg"],
-                "xg_against": m["home_xg"],
-                "opponent": m["home_team"],
-                "venue": "away"
-            })
-
-        away_team_history = []
-        for m in away_team_home_matches:
-            away_team_history.append({
-                "xg_for": m["home_xg"],
-                "xg_against": m["away_xg"],
-                "opponent": m["away_team"],
-                "venue": "home"
-            })
-        for m in away_team_away_matches:
-            away_team_history.append({
-                "xg_for": m["away_xg"],
-                "xg_against": m["home_xg"],
-                "opponent": m["home_team"],
-                "venue": "away"
-            })
-
-        # Calculate Averages (fallback to 0 if list is empty)
-        def avg(lst):
-            return sum(lst) / len(lst) if lst else 0.0
-
-        home_avg_for = avg([m["xg_for"] for m in home_team_history])
-        home_avg_against = avg([m["xg_against"] for m in home_team_history])
-
-        away_avg_for = avg([m["xg_for"] for m in away_team_history])
-        away_avg_against = avg([m["xg_against"] for m in away_team_history])
-
-        expected_home_xg = (home_avg_for + away_avg_against) / 2
-        expected_away_xg = (away_avg_for + home_avg_against) / 2
-        combined_expected_xg = expected_home_xg + expected_away_xg
-
-        return {
-            "home_team": home_team,
-            "away_team": away_team,
-            "home_expected_xg": expected_home_xg,
-            "away_expected_xg": expected_away_xg,
-            "combined_expected_xg": combined_expected_xg,
-            "home_last_xg_matches": home_team_history,
-            "away_last_xg_matches": away_team_history,
-            "meta": {
-                "home_avg_for": home_avg_for,
-                "home_avg_against": home_avg_against,
-                "away_avg_for": away_avg_for,
-                "away_avg_against": away_avg_against,
-                "home_matches_count": len(home_team_history),
-                "away_matches_count": len(away_team_history)
-            }
-        }
 
     def send_json(self, data, status_code):
         self.send_response(status_code)
