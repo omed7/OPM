@@ -4,6 +4,86 @@ import urllib.request
 import urllib.parse
 from http.server import BaseHTTPRequestHandler
 
+def parse_recent_results(html):
+    # Normalize single quotes to double quotes for class names to support direct server fetch (OddAlerts uses single quotes)
+    html = re.sub(r"class='([^']*)'", r'class="\1"', html)
+
+    # 1. Parse all played match results from the HTML page
+    matches = []
+
+    # Parse date groupings
+    dates = []
+    for m in re.finditer(r'<div class="fixture heading">.*?<span class="status-text">(.*?)</span>.*?</div>', html, re.DOTALL):
+        dates.append((m.start(), m.group(1).strip()))
+
+    if not dates:
+        for m in re.finditer(r'<div class="fixture heading">.*?class="status-text">(.*?)<', html, re.DOTALL):
+            dates.append((m.start(), m.group(1).strip()))
+
+    parts = html.split('<div class="fixture')
+    current_pos = len(parts[0])
+
+    for part in parts[1:]:
+        is_heading = part.startswith(' heading')
+
+        # Find the actual date that corresponds to this position
+        current_date = "Unknown Date"
+        for pos, date_str in reversed(dates):
+            if pos < current_pos:
+                current_date = date_str
+                break
+
+        # Update current_pos for the next iteration
+        current_pos += len('<div class="fixture') + len(part)
+
+        if is_heading:
+            continue
+
+        teams_data = []
+        team_parts = part.split('<div class="team">')
+        for tp in team_parts[1:3]:
+            xg_m = re.search(r'<span class="xg[^\"]*\"[^>]*>(.*?)</span>', tp, re.DOTALL)
+            name_m = re.search(r'<div class="name">(.*?)</div>', tp, re.DOTALL)
+
+            xg_val = xg_m.group(1).strip() if xg_m else "0.0"
+            name_val = name_m.group(1).strip() if name_m else ""
+
+            if name_val:
+                teams_data.append({"name": name_val, "xg": xg_val})
+
+        status_match = re.search(r'<div class="status">.*?<span class="status-text">(.*?)</span>', part, re.DOTALL)
+        status_text = status_match.group(1).strip() if status_match else ""
+
+        def clean_name(name):
+            name = name.replace('&amp;', '&').replace('&nbsp;', ' ')
+            name = re.sub(r'<[^>]*>', '', name)
+            return name.strip()
+
+        if len(teams_data) >= 2:
+            h_name = clean_name(teams_data[0]["name"])
+            a_name = clean_name(teams_data[1]["name"])
+
+            # Check if this is a result
+            is_result = False
+            if "-" in status_text and not ":" in status_text:
+                is_result = True
+
+            if is_result:
+                try:
+                    h_xg = float(teams_data[0]["xg"])
+                    a_xg = float(teams_data[1]["xg"])
+                    matches.append({
+                        "date": current_date,
+                        "home_team": h_name,
+                        "away_team": a_name,
+                        "home_xg": h_xg,
+                        "away_xg": a_xg,
+                        "score": status_text
+                    })
+                except ValueError:
+                    pass
+    return matches
+
 class handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
         self.send_response(200)
@@ -87,6 +167,8 @@ class handler(BaseHTTPRequestHandler):
             self.send_json({"error": "Failed to calculate predictions", "details": str(e)}, 500)
 
     def extract_teams(self, html):
+        # Normalize single quotes to double quotes for class names
+        html = re.sub(r"class='([^']*)'", r'class="\1"', html)
         teams = set()
 
         def clean_name(name):
@@ -111,79 +193,7 @@ class handler(BaseHTTPRequestHandler):
 
     def calculate_predictions(self, html, home_team, away_team):
         # 1. Parse all played match results from the HTML page
-        matches = []
-
-        # Parse date groupings
-        dates = []
-        for m in re.finditer(r'<div class="fixture heading">.*?<span class="status-text">(.*?)</span>.*?</div>', html, re.DOTALL):
-            dates.append((m.start(), m.group(1).strip()))
-
-        if not dates:
-            for m in re.finditer(r'<div class="fixture heading">.*?class="status-text">(.*?)<', html, re.DOTALL):
-                dates.append((m.start(), m.group(1).strip()))
-
-        parts = html.split('<div class="fixture')
-        current_pos = len(parts[0])
-
-        for part in parts[1:]:
-            is_heading = part.startswith(' heading')
-
-            # Find the actual date that corresponds to this position
-            current_date = "Unknown Date"
-            for pos, date_str in reversed(dates):
-                if pos < current_pos:
-                    current_date = date_str
-                    break
-
-            # Update current_pos for the next iteration
-            current_pos += len('<div class="fixture') + len(part)
-
-            if is_heading:
-                continue
-
-            teams_data = []
-            team_parts = part.split('<div class="team">')
-            for tp in team_parts[1:3]:
-                xg_m = re.search(r'<span class="xg"[^>]*>(.*?)</span>', tp, re.DOTALL)
-                name_m = re.search(r'<div class="name">(.*?)</div>', tp, re.DOTALL)
-
-                xg_val = xg_m.group(1).strip() if xg_m else "0.0"
-                name_val = name_m.group(1).strip() if name_m else ""
-
-                if name_val:
-                    teams_data.append({"name": name_val, "xg": xg_val})
-
-            status_match = re.search(r'<div class="status">.*?<span class="status-text">(.*?)</span>', part, re.DOTALL)
-            status_text = status_match.group(1).strip() if status_match else ""
-
-            def clean_name(name):
-                name = name.replace('&amp;', '&').replace('&nbsp;', ' ')
-                name = re.sub(r'<[^>]*>', '', name)
-                return name.strip()
-
-            if len(teams_data) >= 2:
-                h_name = clean_name(teams_data[0]["name"])
-                a_name = clean_name(teams_data[1]["name"])
-
-                # Check if this is a result
-                is_result = False
-                if "-" in status_text and not ":" in status_text:
-                    is_result = True
-
-                if is_result:
-                    try:
-                        h_xg = float(teams_data[0]["xg"])
-                        a_xg = float(teams_data[1]["xg"])
-                        matches.append({
-                            "date": current_date,
-                            "home_team": h_name,
-                            "away_team": a_name,
-                            "home_xg": h_xg,
-                            "away_xg": a_xg,
-                            "score": status_text
-                        })
-                    except ValueError:
-                        pass
+        matches = parse_recent_results(html)
 
         # 2. Extract match history for home_team and away_team
         home_team_home_matches = [m for m in matches if m["home_team"].lower() == home_team.lower()][:2]

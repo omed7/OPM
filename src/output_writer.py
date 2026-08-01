@@ -1,7 +1,12 @@
 import os
 import json
+import sys
 import subprocess
+import urllib.request
 from datetime import datetime, timezone
+
+# Add the project root to sys.path so we can import from api
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from fetch.understat_common import get_upcoming_fixtures, get_team_matches, get_current_season
 from compute.xg_formula import calculate_expected_xg, SAMPLE_SIZE as XG_SAMPLE_SIZE
@@ -81,7 +86,118 @@ def process_understat_league(league_code, league_name, output_id):
         "fixtures": output_fixtures
     }
 
+def fetch_and_parse_oddalerts_mls():
+    print("Fetching MLS matches from OddAlerts (proof of concept)...")
+    url = "https://www.oddalerts.com/xg/mls"
+    req = urllib.request.Request(
+        url,
+        headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
+    )
+
+    html_content = ""
+    status = "unknown"
+    try:
+        with urllib.request.urlopen(req, timeout=10) as response:
+            html_content = response.read().decode('utf-8')
+            status = "succeeded"
+            print("Fetch succeeded.")
+    except Exception as e:
+        status = f"blocked or failed: {e}"
+        print(f"Fetch blocked or failed: {e}")
+
+    parsed_matches = []
+    team_records = []
+
+    if html_content:
+        # Reuse existing parsing logic
+        from api.predict import parse_recent_results
+        try:
+            matches = parse_recent_results(html_content)
+            print(f"Parsed {len(matches)} matches successfully.")
+
+            for m in matches:
+                # Extract goals from score e.g. "1 - 1"
+                home_goals = None
+                away_goals = None
+                score = m.get("score", "")
+                if " - " in score:
+                    try:
+                        pts = score.split(" - ")
+                        home_goals = int(pts[0].strip())
+                        away_goals = int(pts[1].strip())
+                    except ValueError:
+                        pass
+
+                home_xg = m.get("home_xg")
+                away_xg = m.get("away_xg")
+                date = m.get("date")
+                home_team = m.get("home_team")
+                away_team = m.get("away_team")
+
+                parsed_matches.append({
+                    "date": date,
+                    "home_team": home_team,
+                    "away_team": away_team,
+                    "home_goals": home_goals,
+                    "away_goals": away_goals,
+                    "home_xg": home_xg,
+                    "away_xg": away_xg,
+                    "score": score
+                })
+
+                # Team-centric records: home team
+                team_records.append({
+                    "team": home_team,
+                    "date": date,
+                    "venue": "home",
+                    "goals": home_goals,
+                    "xg": home_xg,
+                    "opponent": away_team,
+                    "opponent_goals": away_goals,
+                    "opponent_xg": away_xg
+                })
+
+                # Team-centric records: away team
+                team_records.append({
+                    "team": away_team,
+                    "date": date,
+                    "venue": "away",
+                    "goals": away_goals,
+                    "xg": away_xg,
+                    "opponent": home_team,
+                    "opponent_goals": home_goals,
+                    "opponent_xg": home_xg
+                })
+        except Exception as e:
+            print(f"Error parsing matches: {e}")
+
+    # Prepare output
+    output_data = {
+        "meta": {
+            "fetch_status": status,
+            "fetched_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+            "matches_parsed_count": len(parsed_matches)
+        },
+        "matches": parsed_matches,
+        "team_records": team_records
+    }
+
+    # Ensure public directory exists
+    os.makedirs('public', exist_ok=True)
+
+    # Store the parsed matches as simple structured data
+    with open('public/oddalerts_mls.json', 'w') as f:
+        json.dump(output_data, f, indent=2)
+
+    print(f"Stored OddAlerts MLS proof of concept data to public/oddalerts_mls.json (parsed matches: {len(parsed_matches)})")
+
 def main():
+    # Run the MLS OddAlerts fetch proof of concept
+    try:
+        fetch_and_parse_oddalerts_mls()
+    except Exception as e:
+        print(f"OddAlerts MLS fetch failed: {e}")
+
     leagues_data = []
 
     for league in UNDERSTAT_LEAGUES:
