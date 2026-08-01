@@ -49,5 +49,39 @@ class TestPredictDates(unittest.TestCase):
         self.assertEqual(resolved[30], '2026-12-31')
         self.assertEqual(resolved[40], '2026-12-30')
 
+from api.predict import parse_overrides, map_parsed_to_db_schema
+
+class TestPredictHelpers(unittest.TestCase):
+
+    def test_parse_overrides_valid(self):
+        parsed = parse_overrides('{"0": 0.0, "1": 0.5}')
+        self.assertEqual(parsed, {0: 0.0, 1: 0.5})
+
+    def test_parse_overrides_invalid(self):
+        self.assertIsNone(parse_overrides('invalid_json'))
+        self.assertIsNone(parse_overrides(None))
+
+    def test_map_parsed_to_db_schema(self):
+        parsed_matches = [
+            {
+                "date": "2026-07-31",
+                "home_team": "Team A",
+                "away_team": "Team B",
+                "home_xg": 2.2,
+                "away_xg": 1.1,
+                "score": "2 - 1"
+            }
+        ]
+        db_records = map_parsed_to_db_schema(parsed_matches, "mls")
+        self.assertEqual(len(db_records), 2)
+
+        home_rec = [r for m in [db_records] for r in m if r["venue"] == "home"][0]
+        self.assertEqual(home_rec["team"], "Team A")
+        self.assertEqual(home_rec["opponent"], "Team B")
+        self.assertEqual(home_rec["goals_for"], 2)
+        self.assertEqual(home_rec["goals_against"], 1)
+        self.assertEqual(home_rec["xg_for"], 2.2)
+        self.assertEqual(home_rec["xg_against"], 1.1)
+
 if __name__ == '__main__':
     unittest.main()

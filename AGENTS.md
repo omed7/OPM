@@ -6,18 +6,24 @@ Instructions for AI coding agents (Jules) working in this repo. Whenever your PR
 Automates Omed's personal football prediction formulas. Shows two numbers per fixture, nothing else — no winners, scores, or probabilities unless a task explicitly asks for them.
 
 ## The formulas (do not alter without being told to)
-### xG Formula
-For a fixture between Team A (home) and Team B (away), using each team's last 4 matches (2 home + 2 away):
+### Methodology System
+The prediction engine supports multiple methodologies and metrics (xG and Goals) running on balanced historical matches pulled directly from the unified match database. Both teams in a fixture must share the same methodology and the same metric.
 
-- Team X's AVG xG FOR = average of X's xG scored across those 4 matches
-- Team X's AVG xG AGAINST = average of X's xG conceded across those 4 matches
-- Team A's expected xG = (Team A's AVG xG FOR + Team B's AVG xG AGAINST) / 2
-- Team B's expected xG = (Team B's AVG xG FOR + Team A's AVG xG AGAINST) / 2
+- **Methodology 1**: Equal weight, last 4 matches (2 home + 2 away). Default weight: 25.0% per match.
+- **Methodology 2**: Last 8 matches (4 home + 4 away), chronologically ordered. Default weight: 70% collectively across the most recent 4 matches (17.5% each) / 30% collectively across the older 4 matches (7.5% each).
 
-### Goals Formula
-Same as above, using actual goals scored/conceded instead of xG. A Python compute module for this formula (`src/compute/goals_formula.py`) exists in the codebase but is not currently used by the active automated or semi-automatic modes (both modes predict using xG).
+### Weight Normalization and Redistribution
+Weights are normalized per tier to sum to 100% of that tier's target total (Methodology 1 has one tier with total 1.0; Methodology 2 has two tiers: recent with total 0.70 and older with total 0.30).
+- If a match is deleted (weight set to 0.0) or manually overridden, the difference is redistributed **proportionally** across all other unoverridden matches within the same tier to maintain the tier's target total.
 
-Sample size (4 matches) must be a configurable variable (`SAMPLE_SIZE` in `xg_formula.py` / `goals_formula.py`), never hardcoded on the frontend or fetch scripts.
+### Formula Calculations (xG & Goals)
+For a fixture between Team A (home) and Team B (away) with computed weighted averages for each team:
+- Team X's AVG FOR = weighted sum of X's scored goals/xG across matches
+- Team X's AVG AGAINST = weighted sum of X's conceded goals/xG across matches
+- Team A's expected metric = (Team A's AVG FOR + Team B's AVG AGAINST) / 2
+- Team B's expected metric = (Team B's AVG FOR + Team A's AVG AGAINST) / 2
+
+When computing a prediction, the engine also silently computes comparison projections for all default methodologies/metrics and stores them inside the `comparisons` field.
 
 ## Data sources
 
