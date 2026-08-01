@@ -82,6 +82,22 @@ def get_team_matches(league_code, team_name, total_matches=4, season=None):
 
     return selected_matches
 
+def get_played_matches(league_code, season=None):
+    if season is None:
+        season = os.environ.get('SEASON', get_current_season())
+
+    client = UnderstatClient()
+    # Be a polite scraper
+    time.sleep(2)
+
+    try:
+        league_matches = client.league(league=league_code).get_match_data(season)
+    except Exception as e:
+        print(f"Error fetching league matches for {league_code}: {e}")
+        return []
+
+    return [m for m in league_matches if m.get('isResult')]
+
 def get_upcoming_fixtures(league_code, season=None):
     if season is None:
         season = os.environ.get('SEASON', get_current_season())
