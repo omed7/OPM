@@ -309,7 +309,7 @@ footer {
     font-weight: 600;
 }
 
-.form-group select, .form-group textarea {
+.form-group select, .form-group textarea, .form-group input[type="text"] {
     padding: 10px 12px;
     border-radius: 8px;
     border: 1px solid var(--text-secondary);
@@ -319,9 +319,11 @@ footer {
     font-size: 0.9rem;
     outline: none;
     transition: border-color 0.2s ease;
+    box-sizing: border-box;
+    width: 100%;
 }
 
-.form-group select:focus, .form-group textarea:focus {
+.form-group select:focus, .form-group textarea:focus, .form-group input[type="text"]:focus {
     border-color: var(--accent-color);
 }
 
@@ -415,6 +417,82 @@ footer {
     background-color: var(--accent-color);
     color: #ffffff;
     box-shadow: var(--btn-active-shadow);
+}
+
+/* Autocomplete styles */
+.autocomplete-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid var(--text-secondary);
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border-radius: 0 0 8px 8px;
+    overflow-y: auto;
+    max-height: 200px;
+    background-color: var(--card-bg);
+    box-shadow: var(--card-shadow);
+}
+
+.autocomplete-item {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--text-secondary);
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.autocomplete-item:hover, .autocomplete-item.autocomplete-active {
+    background-color: var(--bg-color);
+}
+
+.autocomplete-item .mini-badge {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 0.65rem;
+    flex-shrink: 0;
+}
+
+.autocomplete-item .mini-badge img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Custom prompt badge logo cursor/styling */
+.team-badge {
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.team-badge:hover {
+    transform: scale(1.08);
+    filter: brightness(1.1);
+}
+
+.team-badge img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 @media (max-width: 400px) {

@@ -1,5 +1,42 @@
 const FIXTURE_LIMIT = 10;
 
+// Team identity store (name -> logo mapping)
+const TeamIdentityStore = {
+    getLogo(teamName) {
+        if (!teamName) return null;
+        try {
+            const logos = JSON.parse(localStorage.getItem('team_logos') || '{}');
+            return logos[teamName] || null;
+        } catch (e) {
+            console.error('Failed to parse team logos from localStorage', e);
+            return null;
+        }
+    },
+    setLogo(teamName, url) {
+        if (!teamName) return;
+        try {
+            const logos = JSON.parse(localStorage.getItem('team_logos') || '{}');
+            if (url) {
+                logos[teamName] = url;
+            } else {
+                delete logos[teamName];
+            }
+            localStorage.setItem('team_logos', JSON.stringify(logos));
+            // Trigger custom event so the UI updates
+            window.dispatchEvent(new CustomEvent('team-logo-updated', { detail: { teamName, url } }));
+        } catch (e) {
+            console.error('Failed to save team logo to localStorage', e);
+        }
+    },
+    getAllLogos() {
+        try {
+            return JSON.parse(localStorage.getItem('team_logos') || '{}');
+        } catch (e) {
+            return {};
+        }
+    }
+};
+
 const LEAGUE_FLAGS = {
     'premier_league': '🏴\u200d󠁢\u200d󠁥\u200d󠁢\u200d󠁧\u200d󠁿',
     'la_liga': '🇪🇸',
@@ -8,11 +45,29 @@ const LEAGUE_FLAGS = {
     'ligue_1': '🇫🇷'
 };
 
+let databaseTeams = [];
+
 async function init() {
     const container = document.getElementById('fixtures-container');
     const versionTag = document.getElementById('version-tag');
 
     try {
+        // Fetch match database for autocomplete
+        try {
+            const dbResponse = await fetch('match_database.json');
+            if (dbResponse.ok) {
+                const dbData = await dbResponse.json();
+                const teamsSet = new Set();
+                dbData.forEach(entry => {
+                    if (entry.team) teamsSet.add(entry.team);
+                    if (entry.opponent) teamsSet.add(entry.opponent);
+                });
+                databaseTeams = Array.from(teamsSet).sort();
+            }
+        } catch (e) {
+            console.error('Failed to load match_database.json for autocomplete', e);
+        }
+
         const response = await fetch('data.json');
         if (!response.ok) throw new Error('Failed to fetch data');
         const data = await response.json();
@@ -112,14 +167,41 @@ async function init() {
     }
 }
 
+function escapeHtmlAttr(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#39;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;');
+}
+
+function renderBadgeHTML(teamName) {
+    const logoUrl = TeamIdentityStore.getLogo(teamName);
+    const initials = getInitials(teamName);
+    const color = getColor(teamName);
+    if (logoUrl) {
+        const escapedUrl = escapeHtmlAttr(logoUrl);
+        const escapedTeam = escapeHtmlAttr(teamName);
+        return `<div class="team-badge with-logo" data-team="${escapedTeam}" title="Click to edit logo"><img src="${escapedUrl}" alt="${escapedTeam}" onerror="handleLogoError(this, '${escapedTeam}')"></div>`;
+    }
+    const escapedTeam = escapeHtmlAttr(teamName);
+    return `<div class="team-badge" style="background-color: ${color}" data-team="${escapedTeam}" title="Click to edit logo">${initials}</div>`;
+}
+
+function handleLogoError(img, teamName) {
+    // If logo fails to load, gracefully fall back to the initials placeholder
+    const container = img.parentElement;
+    if (container) {
+        container.classList.remove('with-logo');
+        container.style.backgroundColor = getColor(teamName);
+        container.textContent = getInitials(teamName);
+    }
+}
+
 function createFixtureCard(fixture, scaleMax, metric) {
     const card = document.createElement('div');
     card.className = 'fixture-card';
-
-    const homeInitials = getInitials(fixture.home_team);
-    const awayInitials = getInitials(fixture.away_team);
-    const homeColor = getColor(fixture.home_team);
-    const awayColor = getColor(fixture.away_team);
 
     const combinedVal = fixture[`combined_expected_${metric}`] || 0;
     const homeExpectedVal = fixture[`home_expected_${metric}`] || 0;
@@ -153,7 +235,7 @@ function createFixtureCard(fixture, scaleMax, metric) {
     card.innerHTML = `
         <div class="fixture-header">
             <div class="team">
-                <div class="team-badge" style="background-color: ${homeColor}">${homeInitials}</div>
+                ${renderBadgeHTML(fixture.home_team)}
                 <div class="team-name">${fixture.home_team}</div>
             </div>
             <div class="xg-center">
@@ -162,7 +244,7 @@ function createFixtureCard(fixture, scaleMax, metric) {
                 <div class="split-xg">${homeExpectedVal.toFixed(2)} - ${awayExpectedVal.toFixed(2)}</div>
             </div>
             <div class="team">
-                <div class="team-badge" style="background-color: ${awayColor}">${awayInitials}</div>
+                ${renderBadgeHTML(fixture.away_team)}
                 <div class="team-name">${fixture.away_team}</div>
             </div>
         </div>
@@ -295,6 +377,144 @@ function showSemiAlert(msg, type = 'error') {
     `;
 }
 
+function getAutocompleteDataset() {
+    const dataset = new Set();
+    databaseTeams.forEach(t => dataset.add(t));
+    const logos = TeamIdentityStore.getAllLogos();
+    Object.keys(logos).forEach(t => dataset.add(t));
+    fetchedTeams.forEach(t => dataset.add(t));
+    return Array.from(dataset).sort();
+}
+
+function setupAutocomplete(input, listContainer) {
+    let currentFocus = -1;
+
+    function renderMatches(val) {
+        listContainer.innerHTML = '';
+        const dataset = getAutocompleteDataset();
+        const matches = val
+            ? dataset.filter(team => team.toLowerCase().includes(val.toLowerCase()))
+            : (fetchedTeams.length > 0 ? fetchedTeams : []);
+
+        if (matches.length === 0) {
+            listContainer.classList.add('hidden');
+            return;
+        }
+
+        listContainer.classList.remove('hidden');
+
+        matches.forEach((team, index) => {
+            const item = document.createElement('div');
+            item.className = 'autocomplete-item';
+            if (index === currentFocus) {
+                item.classList.add('autocomplete-active');
+            }
+
+            const logoUrl = TeamIdentityStore.getLogo(team);
+            const initials = getInitials(team);
+            const color = getColor(team);
+
+            let badgeHTML = '';
+            if (logoUrl) {
+                const escapedUrl = escapeHtmlAttr(logoUrl);
+                const escapedTeam = escapeHtmlAttr(team);
+                badgeHTML = `<div class="mini-badge"><img src="${escapedUrl}" alt="" onerror="handleLogoError(this, '${escapedTeam}')"></div>`;
+            } else {
+                badgeHTML = `<div class="mini-badge" style="background-color: ${color}">${initials}</div>`;
+            }
+
+            let boldedName = team;
+            if (val) {
+                const startIdx = team.toLowerCase().indexOf(val.toLowerCase());
+                if (startIdx >= 0) {
+                    const prefix = team.substring(0, startIdx);
+                    const matchPart = team.substring(startIdx, startIdx + val.length);
+                    const suffix = team.substring(startIdx + val.length);
+                    boldedName = `${prefix}<strong>${matchPart}</strong>${suffix}`;
+                }
+            }
+
+            item.innerHTML = `${badgeHTML}<span>${boldedName}</span>`;
+
+            item.addEventListener('mousedown', function(e) {
+                // Prevent input blur before click registers
+                e.preventDefault();
+                input.value = team;
+                closeAllLists();
+            });
+
+            listContainer.appendChild(item);
+        });
+    }
+
+    input.addEventListener('input', function() {
+        currentFocus = -1;
+        renderMatches(this.value);
+    });
+
+    input.addEventListener('focus', function() {
+        currentFocus = -1;
+        renderMatches(this.value);
+    });
+
+    input.addEventListener('blur', function() {
+        // Delay to allow mousedown to register clicks
+        setTimeout(() => {
+            closeAllLists();
+        }, 150);
+    });
+
+    input.addEventListener('keydown', function(e) {
+        let items = listContainer.getElementsByClassName('autocomplete-item');
+        if (e.keyCode === 40) { // Arrow Down
+            e.preventDefault();
+            currentFocus++;
+            addActive(items);
+        } else if (e.keyCode === 38) { // Arrow Up
+            e.preventDefault();
+            currentFocus--;
+            addActive(items);
+        } else if (e.keyCode === 13) { // Enter
+            e.preventDefault();
+            if (currentFocus > -1) {
+                if (items[currentFocus]) {
+                    const teamSpan = items[currentFocus].querySelector('span');
+                    if (teamSpan) {
+                        input.value = teamSpan.textContent;
+                    }
+                    closeAllLists();
+                }
+            } else if (items.length > 0) {
+                const teamSpan = items[0].querySelector('span');
+                if (teamSpan) {
+                    input.value = teamSpan.textContent;
+                }
+                closeAllLists();
+            }
+        }
+    });
+
+    function addActive(items) {
+        if (!items) return false;
+        removeActive(items);
+        if (currentFocus >= items.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = items.length - 1;
+        items[currentFocus].classList.add('autocomplete-active');
+        items[currentFocus].scrollIntoView({ block: 'nearest' });
+    }
+
+    function removeActive(items) {
+        for (let i = 0; i < items.length; i++) {
+            items[i].classList.remove('autocomplete-active');
+        }
+    }
+
+    function closeAllLists() {
+        listContainer.innerHTML = '';
+        listContainer.classList.add('hidden');
+    }
+}
+
 function setupSemiAutoHandlers() {
     const leagueSelect = document.getElementById('semi-league-select');
     const htmlPaste = document.getElementById('semi-html-paste');
@@ -302,17 +522,23 @@ function setupSemiAutoHandlers() {
     const teamGroup = document.getElementById('semi-team-selection-group');
     const homeTeamSelect = document.getElementById('semi-home-team-select');
     const awayTeamSelect = document.getElementById('semi-away-team-select');
+    const homeList = document.getElementById('semi-home-autocomplete-list');
+    const awayList = document.getElementById('semi-away-autocomplete-list');
     const predictBtn = document.getElementById('semi-predict-btn');
     const resultDiv = document.getElementById('semi-prediction-result');
 
     if (!fetchBtn) return;
 
+    // Initialize autocomplete on inputs
+    setupAutocomplete(homeTeamSelect, homeList);
+    setupAutocomplete(awayTeamSelect, awayList);
+
     // Reset teams when league changes
     leagueSelect.addEventListener('change', () => {
         teamGroup.classList.add('hidden');
         predictBtn.classList.add('hidden');
-        homeTeamSelect.innerHTML = '<option value="">-- Choose Home Team --</option>';
-        awayTeamSelect.innerHTML = '<option value="">-- Choose Away Team --</option>';
+        homeTeamSelect.value = '';
+        awayTeamSelect.value = '';
         resultDiv.innerHTML = '';
         fetchedTeams = [];
     });
@@ -330,8 +556,8 @@ function setupSemiAutoHandlers() {
         resultDiv.innerHTML = '';
         teamGroup.classList.add('hidden');
         predictBtn.classList.add('hidden');
-        homeTeamSelect.innerHTML = '<option value="">-- Choose Home Team --</option>';
-        awayTeamSelect.innerHTML = '<option value="">-- Choose Away Team --</option>';
+        homeTeamSelect.value = '';
+        awayTeamSelect.value = '';
 
         try {
             let res;
@@ -367,19 +593,6 @@ function setupSemiAutoHandlers() {
 
             showSemiAlert(`Successfully loaded ${fetchedTeams.length} teams. Choose Home & Away teams below to predict!`, 'success');
 
-            // Populate team dropdowns
-            fetchedTeams.forEach(team => {
-                const optH = document.createElement('option');
-                optH.value = team;
-                optH.textContent = team;
-                homeTeamSelect.appendChild(optH);
-
-                const optA = document.createElement('option');
-                optA.value = team;
-                optA.textContent = team;
-                awayTeamSelect.appendChild(optA);
-            });
-
             teamGroup.classList.remove('hidden');
             predictBtn.classList.remove('hidden');
 
@@ -394,8 +607,8 @@ function setupSemiAutoHandlers() {
 
     predictBtn.addEventListener('click', async () => {
         const league = leagueSelect.value;
-        const homeTeam = homeTeamSelect.value;
-        const awayTeam = awayTeamSelect.value;
+        const homeTeam = homeTeamSelect.value.trim();
+        const awayTeam = awayTeamSelect.value.trim();
 
         if (!league || !homeTeam || !awayTeam) {
             showSemiAlert('Please select both Home and Away teams to calculate predictions.', 'error');
@@ -471,9 +684,50 @@ function setupSemiAutoHandlers() {
     });
 }
 
+// Badge click and real-time update handling
+function setupBadgeLogoPrompt() {
+    // Click event delegation for team badges
+    document.addEventListener('click', (e) => {
+        const badge = e.target.closest('.team-badge');
+        if (!badge) return;
+
+        const teamName = badge.getAttribute('data-team');
+        if (!teamName) return;
+
+        const currentLogo = TeamIdentityStore.getLogo(teamName) || '';
+        const newLogoUrl = prompt(`Enter logo URL for ${teamName} (leave blank to clear):`, currentLogo);
+
+        if (newLogoUrl !== null) {
+            const cleanUrl = newLogoUrl.trim();
+            TeamIdentityStore.setLogo(teamName, cleanUrl || null);
+        }
+    });
+
+    // Listen for custom 'team-logo-updated' event to update UI in real-time
+    window.addEventListener('team-logo-updated', (e) => {
+        const { teamName, url } = e.detail;
+
+        const escapedTeam = escapeHtmlAttr(teamName);
+        // Find all badges for this team on the page and update them
+        document.querySelectorAll(`.team-badge[data-team="${escapedTeam}"]`).forEach(badge => {
+            if (url) {
+                const escapedUrl = escapeHtmlAttr(url);
+                badge.classList.add('with-logo');
+                badge.style.backgroundColor = '';
+                badge.innerHTML = `<img src="${escapedUrl}" alt="${escapedTeam}" onerror="handleLogoError(this, '${escapedTeam}')">`;
+            } else {
+                badge.classList.remove('with-logo');
+                badge.style.backgroundColor = getColor(teamName);
+                badge.textContent = getInitials(teamName);
+            }
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     init();
     setupTheme();
     setupModeToggle();
     setupSemiAutoHandlers();
+    setupBadgeLogoPrompt();
 });
