@@ -224,6 +224,9 @@ function setupTheme() {
 
 // State to track loaded teams for the currently selected league
 let fetchedTeams = [];
+let homeOverrides = {};
+let awayOverrides = {};
+let currentPrediction = null;
 
 function setupModeToggle() {
     const modeBtn = document.getElementById('mode-toggle');
@@ -256,14 +259,20 @@ function setupModeToggle() {
 
 async function initSemiAuto() {
     const leagueSelect = document.getElementById('semi-league-select');
-    if (!leagueSelect || leagueSelect.children.length > 1) return; // Already loaded
+    if (!leagueSelect || leagueSelect.querySelector('option[value="mls"]')) return; // Already loaded
 
     function populateLeagues(leagues) {
+        // Insert leagues before the manual option
+        const manualOpt = leagueSelect.querySelector('option[value="manual"]');
         leagues.forEach(l => {
             const opt = document.createElement('option');
             opt.value = l.id;
             opt.textContent = `${l.flag} ${l.name}`;
-            leagueSelect.appendChild(opt);
+            if (manualOpt) {
+                leagueSelect.insertBefore(opt, manualOpt);
+            } else {
+                leagueSelect.appendChild(opt);
+            }
         });
     }
 
@@ -293,6 +302,131 @@ function showSemiAlert(msg, type = 'error') {
             ${msg}
         </div>
     `;
+}
+
+// Client-side chronological tier-based weight redistribution logic
+function getTiers(methodologyId, numMatches) {
+    if (numMatches === 0) return [];
+    if (methodologyId === 1) {
+        return [{
+            indices: Array.from({length: numMatches}, (_, i) => i),
+            target_weight: 1.0
+        }];
+    } else if (methodologyId === 2) {
+        if (numMatches <= 4) {
+            return [{
+                indices: Array.from({length: numMatches}, (_, i) => i),
+                target_weight: 1.0
+            }];
+        } else {
+            return [
+                {
+                    indices: [0, 1, 2, 3],
+                    target_weight: 0.70
+                },
+                {
+                    indices: Array.from({length: numMatches - 4}, (_, i) => i + 4),
+                    target_weight: 0.30
+                }
+            ];
+        }
+    }
+    return [];
+}
+
+function getDefaultWeights(methodologyId, numMatches) {
+    if (numMatches === 0) return [];
+    if (methodologyId === 1) {
+        return Array(numMatches).fill(1.0 / numMatches);
+    } else if (methodologyId === 2) {
+        if (numMatches <= 4) {
+            return Array(numMatches).fill(1.0 / numMatches);
+        } else {
+            const weights = [];
+            for (let i = 0; i < numMatches; i++) {
+                if (i < 4) {
+                    weights.push(0.70 / 4);
+                } else {
+                    weights.push(0.30 / (numMatches - 4));
+                }
+            }
+            return weights;
+        }
+    }
+    return [];
+}
+
+function normalizeWeights(numMatches, defaultWeights, overrides, methodologyId) {
+    if (numMatches === 0) return [];
+    const weights = [...defaultWeights];
+    const tiers = getTiers(methodologyId, numMatches);
+
+    for (const tier of tiers) {
+        const tierIndices = tier.indices;
+        const targetTotal = tier.target_weight;
+
+        const overriddenIndices = [];
+        const unoverriddenIndices = [];
+
+        for (const idx of tierIndices) {
+            if (overrides !== null && overrides !== undefined && (idx in overrides || String(idx) in overrides)) {
+                let val = overrides[idx] !== undefined ? overrides[idx] : overrides[String(idx)];
+                val = parseFloat(val);
+                if (isNaN(val)) val = 0.0;
+                overriddenIndices.push({ idx, val });
+            } else {
+                unoverriddenIndices.push(idx);
+            }
+        }
+
+        if (overriddenIndices.length > 0) {
+            const totalOverride = overriddenIndices.reduce((sum, item) => sum + item.val, 0);
+
+            if (unoverriddenIndices.length === 0) {
+                if (totalOverride > 0) {
+                    for (const item of overriddenIndices) {
+                        weights[item.idx] = (item.val / totalOverride) * targetTotal;
+                    }
+                } else {
+                    for (const item of overriddenIndices) {
+                        weights[item.idx] = targetTotal / overriddenIndices.length;
+                    }
+                }
+            } else {
+                if (totalOverride >= targetTotal) {
+                    for (const idx of unoverriddenIndices) {
+                        weights[idx] = 0.0;
+                    }
+                    if (totalOverride > 0) {
+                        for (const item of overriddenIndices) {
+                            weights[item.idx] = (item.val / totalOverride) * targetTotal;
+                        }
+                    } else {
+                        for (const item of overriddenIndices) {
+                            weights[item.idx] = targetTotal / overriddenIndices.length;
+                        }
+                    }
+                } else {
+                    for (const item of overriddenIndices) {
+                        weights[item.idx] = item.val;
+                    }
+                    const remainingTarget = targetTotal - totalOverride;
+                    const totalDefault = unoverriddenIndices.reduce((sum, idx) => sum + defaultWeights[idx], 0);
+
+                    if (totalDefault > 0) {
+                        for (const idx of unoverriddenIndices) {
+                            weights[idx] = (defaultWeights[idx] / totalDefault) * remainingTarget;
+                        }
+                    } else {
+                        for (const idx of unoverriddenIndices) {
+                            weights[idx] = remainingTarget / unoverriddenIndices.length;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return weights;
 }
 
 function parsePastedLine(line, teamName, skipXG) {
@@ -787,10 +921,17 @@ function setupSemiAutoHandlers() {
         }
     });
 
-    predictBtn.addEventListener('click', async () => {
+    let lastLeague = '';
+    let lastHomeTeam = '';
+    let lastAwayTeam = '';
+    let lastMethodology = '';
+
+    async function calculateSemiPrediction(useOverrides = true) {
         const league = leagueSelect.value;
         const homeTeam = homeTeamSelect.value;
         const awayTeam = awayTeamSelect.value;
+        const methodology = parseInt(document.getElementById('semi-methodology-select').value);
+        const metric = document.getElementById('semi-metric-select').value;
 
         if (!league || !homeTeam || !awayTeam) {
             showSemiAlert('Please select both Home and Away teams to calculate predictions.', 'error');
@@ -802,30 +943,43 @@ function setupSemiAutoHandlers() {
             return;
         }
 
-        const pastedHtml = htmlPaste.value.trim();
+        // Reset overrides if the fixture or methodology changed
+        if (league !== lastLeague || homeTeam !== lastHomeTeam || awayTeam !== lastAwayTeam || methodology !== lastMethodology) {
+            if (!useOverrides) {
+                homeOverrides = {};
+                awayOverrides = {};
+            }
+            lastLeague = league;
+            lastHomeTeam = homeTeam;
+            lastAwayTeam = awayTeam;
+            lastMethodology = methodology;
+        }
 
         predictBtn.disabled = true;
         predictBtn.textContent = 'Calculating Prediction...';
 
+        const pastedHtml = htmlPaste.value.trim();
+
         try {
-            let res;
             const payload = {
                 league,
                 home_team: homeTeam,
-                away_team: awayTeam
+                away_team: awayTeam,
+                methodology: methodology,
+                metric: metric,
+                home_overrides: homeOverrides,
+                away_overrides: awayOverrides
             };
 
             if (pastedHtml) {
                 payload.html = pastedHtml;
-                res = await fetch('/api/predict', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-            } else {
-                const queryStr = new URLSearchParams(payload).toString();
-                res = await fetch(`/api/predict?${queryStr}`);
             }
+
+            const res = await fetch('/api/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
 
             if (!res.ok) {
                 const errorData = await res.json();
@@ -833,28 +987,9 @@ function setupSemiAutoHandlers() {
             }
 
             const prediction = await res.json();
+            currentPrediction = prediction;
 
-            // Clear loading/alerts and render the prediction card beautifully
-            resultDiv.innerHTML = '';
-
-            // Format prediction matching standard createFixtureCard component
-            const cardFixture = {
-                home_team: prediction.home_team,
-                away_team: prediction.away_team,
-                home_expected_xg: prediction.home_expected_xg,
-                away_expected_xg: prediction.away_expected_xg,
-                combined_expected_xg: prediction.combined_expected_xg,
-                home_last_xg_matches: prediction.home_last_xg_matches,
-                away_last_xg_matches: prediction.away_last_xg_matches,
-                date: 'Upcoming Prediction'
-            };
-
-            // Set dynamic scaleMax
-            const maxVal = Math.max(prediction.home_expected_xg, prediction.away_expected_xg);
-            const scaleMax = Math.max(maxVal * 1.1, 3.0);
-
-            const card = createFixtureCard(cardFixture, scaleMax, 'xg');
-            resultDiv.appendChild(card);
+            renderSemiPredictionResult(prediction, methodology, metric);
 
         } catch (err) {
             console.error(err);
@@ -863,7 +998,284 @@ function setupSemiAutoHandlers() {
             predictBtn.disabled = false;
             predictBtn.textContent = 'Calculate Prediction';
         }
+    }
+
+    function renderSemiPredictionResult(prediction, activeMethodology, activeMetric) {
+        resultDiv.innerHTML = '';
+
+        // 1. Render primary prediction card
+        const metricSuffix = activeMetric === 'xg' ? 'xg' : 'goals';
+
+        // Set dynamic scaleMax
+        const homeVal = prediction[`home_expected_${metricSuffix}`] || prediction.home_expected || 0;
+        const awayVal = prediction[`away_expected_${metricSuffix}`] || prediction.away_expected || 0;
+        const maxVal = Math.max(homeVal, awayVal);
+        const scaleMax = Math.max(maxVal * 1.1, 3.0);
+
+        const cardFixture = {
+            home_team: prediction.home_team,
+            away_team: prediction.away_team,
+            date: 'Upcoming Prediction'
+        };
+        cardFixture[`home_expected_${metricSuffix}`] = homeVal;
+        cardFixture[`away_expected_${metricSuffix}`] = awayVal;
+        cardFixture[`combined_expected_${metricSuffix}`] = homeVal + awayVal;
+
+        // Find historical matches array to show on the primary card
+        const homeMatchesArr = prediction[`home_last_${metricSuffix}_matches`] || [];
+        const awayMatchesArr = prediction[`away_last_${metricSuffix}_matches`] || [];
+
+        cardFixture[`home_last_${metricSuffix}_matches`] = homeMatchesArr;
+        cardFixture[`away_last_${metricSuffix}_matches`] = awayMatchesArr;
+
+        const card = createFixtureCard(cardFixture, scaleMax, metricSuffix);
+        resultDiv.appendChild(card);
+
+        // 2. Render comparisons 2x2 grid
+        renderComparisonsGrid(prediction.comparisons, activeMethodology, activeMetric, resultDiv);
+
+        // 3. Render interactive match-weight editor
+        renderMatchWeightEditor(prediction, activeMethodology, activeMetric, resultDiv);
+    }
+
+    function renderComparisonsGrid(comparisons, activeMethodology, activeMetric, parentEl) {
+        if (!comparisons) return;
+
+        const title = document.createElement('h3');
+        title.className = 'comparisons-grid-title';
+        title.textContent = '📊 Methodology Comparisons';
+        parentEl.appendChild(title);
+
+        const grid = document.createElement('div');
+        grid.className = 'comparisons-grid';
+
+        const items = [
+            { mId: 1, mMetric: 'xg', label: 'M1 × xG' },
+            { mId: 1, mMetric: 'goals', label: 'M1 × Goals' },
+            { mId: 2, mMetric: 'xg', label: 'M2 × xG' },
+            { mId: 2, mMetric: 'goals', label: 'M2 × Goals' }
+        ];
+
+        items.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'comparison-card';
+
+            const isActive = (item.mId === activeMethodology && item.mMetric === activeMetric);
+            if (isActive) {
+                card.classList.add('active');
+            }
+
+            const data = comparisons[`methodology_${item.mId}`]?.[item.mMetric];
+            let valuesHtml = '';
+            if (data) {
+                valuesHtml = `
+                    <div class="comparison-values">${data.home_expected.toFixed(2)} - ${data.away_expected.toFixed(2)}</div>
+                    <div class="comparison-combined">Sum: ${data.combined_expected.toFixed(2)}</div>
+                `;
+            } else {
+                valuesHtml = `<div class="comparison-values">N/A</div>`;
+            }
+
+            card.innerHTML = `
+                <div class="comparison-title">${item.label} ${isActive ? '⭐' : ''}</div>
+                ${valuesHtml}
+            `;
+
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                document.getElementById('semi-methodology-select').value = String(item.mId);
+                document.getElementById('semi-metric-select').value = item.mMetric;
+                calculateSemiPrediction(true); // Recalculate using active overrides
+            });
+
+            grid.appendChild(card);
+        });
+
+        parentEl.appendChild(grid);
+    }
+
+    function renderMatchWeightEditor(prediction, activeMethodology, activeMetric, parentEl) {
+        const metricSuffix = activeMetric === 'xg' ? 'xg' : 'goals';
+        const homeMatches = prediction[`home_last_${metricSuffix}_matches`] || [];
+        const awayMatches = prediction[`away_last_${metricSuffix}_matches`] || [];
+
+        const editorCard = document.createElement('div');
+        editorCard.className = 'weight-editor-card';
+        editorCard.id = 'semi-weight-editor-container';
+
+        editorCard.innerHTML = `
+            <h3>⚖️ Interactive Match-Weight Editor</h3>
+            <p class="step-desc">Adjust the weights of individual matches below. The remaining matches in the same tier will redistribute proportionally in real time.</p>
+            <div class="weight-editor-columns">
+                <div class="weight-editor-col" id="editor-home-col">
+                    <h4>${prediction.home_team} (Home)</h4>
+                    <div class="editor-matches-list" id="editor-home-matches-list"></div>
+                </div>
+                <div class="weight-editor-col" id="editor-away-col">
+                    <h4>${prediction.away_team} (Away)</h4>
+                    <div class="editor-matches-list" id="editor-away-matches-list"></div>
+                </div>
+            </div>
+        `;
+
+        parentEl.appendChild(editorCard);
+
+        renderEditorMatchesList(prediction, 'home', homeMatches, activeMethodology);
+        renderEditorMatchesList(prediction, 'away', awayMatches, activeMethodology);
+    }
+
+    function renderEditorMatchesList(prediction, type, matches, methodologyId) {
+        const listContainer = document.getElementById(`editor-${type}-matches-list`);
+        listContainer.innerHTML = '';
+
+        if (matches.length === 0) {
+            listContainer.innerHTML = '<div class="no-fixtures">No historical matches found.</div>';
+            return;
+        }
+
+        const overrides = type === 'home' ? homeOverrides : awayOverrides;
+        const numMatches = matches.length;
+        const defaultWeights = getDefaultWeights(methodologyId, numMatches);
+
+        matches.forEach((m, idx) => {
+            const row = document.createElement('div');
+            row.className = 'match-weight-row';
+            row.id = `editor-${type}-match-${idx}`;
+
+            const currentWeight = m.weight !== undefined ? m.weight : defaultWeights[idx];
+            const displayPercent = (currentWeight * 100).toFixed(1) + '%';
+
+            if (currentWeight === 0.0) {
+                row.classList.add('zeroed');
+            }
+
+            const tiers = getTiers(methodologyId, numMatches);
+            const matchTier = tiers.find(tier => tier.indices.includes(idx));
+            const targetTotal = matchTier ? matchTier.target_weight : 1.0;
+
+            const goalsFor = m.goals_for !== null && m.goals_for !== undefined ? m.goals_for : '-';
+            const goalsAgainst = m.goals_against !== null && m.goals_against !== undefined ? m.goals_against : '-';
+            const xgFor = m.xg_for !== null && m.xg_for !== undefined ? m.xg_for.toFixed(2) : '-';
+            const xgAgainst = m.xg_against !== null && m.xg_against !== undefined ? m.xg_against.toFixed(2) : '-';
+
+            const venueLabel = m.venue === 'home' ? 'H' : 'A';
+
+            const actionButtonHtml = (currentWeight === 0.0)
+                ? `<button class="restore-match-btn" title="Restore Match">🔄 Restore</button>`
+                : `<button class="remove-match-btn" title="Remove Match">🗑️ Remove</button>`;
+
+            row.innerHTML = `
+                <div class="match-weight-header">
+                    <span>vs ${m.opponent} (${venueLabel})</span>
+                    <span class="weight-percentage" id="percent-${type}-${idx}">${displayPercent}</span>
+                </div>
+                <div class="match-weight-details">
+                    Date: ${m.date} | Goals: ${goalsFor}-${goalsAgainst} | xG: ${xgFor}-${xgAgainst}
+                </div>
+                <div class="match-weight-controls">
+                    <input type="range" class="weight-slider" id="slider-${type}-${idx}"
+                           min="0" max="${targetTotal}" step="0.01" value="${currentWeight}">
+                    ${actionButtonHtml}
+                </div>
+            `;
+
+            const slider = row.querySelector('.weight-slider');
+            const removeRestoreBtn = row.querySelector('.remove-match-btn, .restore-match-btn');
+
+            slider.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                overrides[idx] = val;
+                updateLiveWeightRedistribution(type, matches, methodologyId);
+            });
+
+            slider.addEventListener('change', () => {
+                calculateSemiPrediction(true);
+            });
+
+            removeRestoreBtn.addEventListener('click', () => {
+                if (currentWeight === 0.0) {
+                    delete overrides[idx];
+                } else {
+                    overrides[idx] = 0.0;
+                }
+                calculateSemiPrediction(true);
+            });
+
+            listContainer.appendChild(row);
+        });
+    }
+
+    function updateLiveWeightRedistribution(type, matches, methodologyId) {
+        const overrides = type === 'home' ? homeOverrides : awayOverrides;
+        const numMatches = matches.length;
+        const defaultWeights = getDefaultWeights(methodologyId, numMatches);
+        const redistributedWeights = normalizeWeights(numMatches, defaultWeights, overrides, methodologyId);
+
+        redistributedWeights.forEach((w, idx) => {
+            const slider = document.getElementById(`slider-${type}-${idx}`);
+            const percentLabel = document.getElementById(`percent-${type}-${idx}`);
+            const row = document.getElementById(`editor-${type}-match-${idx}`);
+
+            if (percentLabel) {
+                percentLabel.textContent = (w * 100).toFixed(1) + '%';
+            }
+            if (slider) {
+                slider.value = w;
+            }
+            if (row) {
+                if (w === 0.0) {
+                    row.classList.add('zeroed');
+                    const removeBtn = row.querySelector('.remove-match-btn');
+                    if (removeBtn) {
+                        removeBtn.outerHTML = `<button class="restore-match-btn" title="Restore Match">🔄 Restore</button>`;
+                        const newBtn = row.querySelector('.restore-match-btn');
+                        newBtn.addEventListener('click', () => {
+                            delete overrides[idx];
+                            calculateSemiPrediction(true);
+                        });
+                    }
+                } else {
+                    row.classList.remove('zeroed');
+                    const restoreBtn = row.querySelector('.restore-match-btn');
+                    if (restoreBtn) {
+                        restoreBtn.outerHTML = `<button class="remove-match-btn" title="Remove Match">🗑️ Remove</button>`;
+                        const newBtn = row.querySelector('.remove-match-btn');
+                        newBtn.addEventListener('click', () => {
+                            overrides[idx] = 0.0;
+                            calculateSemiPrediction(true);
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    predictBtn.addEventListener('click', () => {
+        calculateSemiPrediction(false); // Reset overrides on direct calculation trigger
     });
+
+    const methodologySelect = document.getElementById('semi-methodology-select');
+    const metricSelect = document.getElementById('semi-metric-select');
+
+    if (methodologySelect) {
+        methodologySelect.addEventListener('change', () => {
+            const homeTeam = homeTeamSelect.value;
+            const awayTeam = awayTeamSelect.value;
+            if (homeTeam && awayTeam) {
+                calculateSemiPrediction(false); // Reset overrides on methodology change
+            }
+        });
+    }
+
+    if (metricSelect) {
+        metricSelect.addEventListener('change', () => {
+            const homeTeam = homeTeamSelect.value;
+            const awayTeam = awayTeamSelect.value;
+            if (homeTeam && awayTeam) {
+                calculateSemiPrediction(true); // Keep overrides on metric change
+            }
+        });
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
