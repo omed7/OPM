@@ -31,38 +31,65 @@
                 Predict expected xG for fixtures in leagues not fully automated. Fetch matches directly, or paste OddAlerts page source if blocked by Cloudflare.
             </p>
 
-            <div class="form-group">
-                <label for="semi-league-select">Select League:</label>
-                <select id="semi-league-select">
-                    <option value="">-- Choose a League --</option>
-                </select>
-            </div>
+            <div class="semi-auto-form-inner">
+                <div class="form-group">
+                    <label for="semi-league-select">Select League:</label>
+                    <select id="semi-league-select">
+                        <option value="">-- Choose a League --</option>
+                    </select>
+                </div>
 
-            <div class="form-group" id="html-paste-group">
-                <label for="semi-html-paste">Paste OddAlerts Page HTML (Optional / Fallback):</label>
-                <textarea id="semi-html-paste" placeholder="Right-click on OddAlerts xG page (e.g. oddalerts.com/xg/mls) -> View Page Source -> Copy All -> Paste here..."></textarea>
-            </div>
+                <div class="form-group" id="html-paste-group">
+                    <label for="semi-html-paste">Paste OddAlerts Page HTML (Optional / Fallback):</label>
+                    <textarea id="semi-html-paste" placeholder="Right-click on OddAlerts xG page (e.g. oddalerts.com/xg/mls) -> View Page Source -> Copy All -> Paste here..."></textarea>
+                </div>
 
-            <button id="semi-fetch-btn" class="action-btn">Load Teams</button>
+                <button id="semi-fetch-btn" class="action-btn">Load Teams</button>
 
-            <div id="semi-team-selection-group" class="form-group hidden">
-                <div class="team-select-row">
-                    <div class="team-select-col">
-                        <label for="semi-home-team-select">Select Home Team:</label>
-                        <select id="semi-home-team-select">
-                            <option value="">-- Choose Home Team --</option>
-                        </select>
+                <div id="semi-team-selection-group" class="form-group hidden">
+                    <div class="team-select-row">
+                        <div class="team-select-col">
+                            <label for="semi-home-team-select">Select Home Team:</label>
+                            <select id="semi-home-team-select">
+                                <option value="">-- Choose Home Team --</option>
+                            </select>
+                        </div>
+                        <div class="team-select-col">
+                            <label for="semi-away-team-select">Select Away Team:</label>
+                            <select id="semi-away-team-select">
+                                <option value="">-- Choose Away Team --</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="team-select-col">
-                        <label for="semi-away-team-select">Select Away Team:</label>
-                        <select id="semi-away-team-select">
-                            <option value="">-- Choose Away Team --</option>
-                        </select>
+                </div>
+
+                <div id="semi-config-group" class="form-group hidden">
+                    <div class="team-select-row">
+                        <div class="team-select-col">
+                            <label for="semi-methodology-select">Methodology:</label>
+                            <select id="semi-methodology-select">
+                                <option value="1">Methodology 1 (4 matches, equal)</option>
+                                <option value="2" selected>Methodology 2 (8 matches, 70/30)</option>
+                            </select>
+                        </div>
+                        <div class="team-select-col">
+                            <label for="semi-metric-select">Metric:</label>
+                            <select id="semi-metric-select">
+                                <option value="xg" selected>xG</option>
+                                <option value="goals">Goals</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <button id="semi-predict-btn" class="action-btn hidden">Calculate Prediction</button>
+            <div id="semi-weight-editor-container" class="hidden">
+                <!-- Weight editor for home & away matches will be loaded here -->
+            </div>
+
+            <div class="semi-auto-form-inner">
+                <button id="semi-predict-btn" class="action-btn hidden">Calculate Prediction</button>
+            </div>
         </section>
 
         <div id="semi-prediction-result"></div>

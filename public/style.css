@@ -278,9 +278,18 @@ footer {
     background-color: var(--card-bg);
     border-radius: 12px;
     box-shadow: var(--card-shadow);
-    padding: 20px;
+    padding: 20px 0;
     margin-bottom: 24px;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.semi-auto-form-inner {
+    padding: 0 20px;
+}
+
+.semi-auto-card h2, .semi-auto-desc {
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .semi-auto-card h2 {
@@ -415,6 +424,225 @@ footer {
     background-color: var(--accent-color);
     color: #ffffff;
     box-shadow: var(--btn-active-shadow);
+}
+
+/* Weight Editor Grid & Columns */
+#semi-weight-editor-container {
+    margin-top: 20px;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.weight-editor-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.weight-col h3 {
+    font-size: 1rem;
+    margin-top: 10px;
+    margin-bottom: 12px;
+    text-align: left;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--xg-bar-bg);
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.match-list-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.match-editor-item {
+    background-color: var(--bg-color);
+    border: 1px solid var(--xg-bar-bg);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+    box-sizing: border-box;
+    width: calc(100% - 24px);
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.match-editor-item.deleted-match {
+    opacity: 0.45;
+    background-color: rgba(231, 76, 60, 0.05);
+}
+
+.match-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+    font-size: 0.8rem;
+    min-width: 0;
+}
+
+.match-date {
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.match-detail {
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.match-score, .match-xg {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.match-weight-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.input-wrap label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.input-wrap input {
+    width: 55px;
+    padding: 6px;
+    font-size: 0.8rem;
+    border: 1px solid var(--text-secondary);
+    border-radius: 4px;
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.normalized-badge {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 4px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    min-width: 38px;
+    text-align: center;
+}
+
+.deleted-match .normalized-badge {
+    background-color: var(--text-secondary);
+}
+
+.delete-match-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 4px;
+    transition: transform 0.1s ease;
+}
+
+.delete-match-btn:hover {
+    transform: scale(1.2);
+}
+
+/* Comparisons section */
+.prediction-section-title {
+    font-size: 1.1rem;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    text-align: left;
+    color: var(--text-primary);
+}
+
+.comparisons-section {
+    margin-top: 24px;
+    width: 100%;
+}
+
+.comparisons-table-container {
+    overflow-x: auto;
+    width: 100%;
+    border: 1px solid var(--xg-bar-bg);
+    border-radius: 8px;
+}
+
+.comparisons-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--card-bg);
+    font-size: 0.8rem;
+    text-align: left;
+}
+
+.comparisons-table th, .comparisons-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--xg-bar-bg);
+}
+
+.comparisons-table th {
+    background-color: var(--bg-color);
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.comparisons-table tr.active-combo-row {
+    background-color: rgba(52, 152, 219, 0.12);
+    font-weight: 700;
+}
+
+.comparisons-table tr.active-combo-row td {
+    color: var(--accent-color);
+    border-left: 3px solid var(--accent-color);
+}
+
+@media (min-width: 768px) {
+    /* Let the columns go side-by-side on larger viewports */
+    .weight-editor-grid {
+        flex-direction: row;
+    }
+    .weight-col {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .match-editor-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .match-weight-inputs {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 8px;
+        border-top: 1px dashed var(--xg-bar-bg);
+        padding-top: 8px;
+    }
+    .match-detail {
+        white-space: normal;
+        word-break: break-word;
+    }
 }
 
 @media (max-width: 400px) {

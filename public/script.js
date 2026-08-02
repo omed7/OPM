@@ -128,9 +128,16 @@ function createFixtureCard(fixture, scaleMax, metric) {
     const homePercent = (homeExpectedVal / scaleMax) * 100;
     const awayPercent = (awayExpectedVal / scaleMax) * 100;
 
-    // Find the history keys dynamically per the required pattern
-    const homeHistoryKey = Object.keys(fixture).find(key => key.startsWith('home_last_') && key.endsWith('_matches'));
-    const awayHistoryKey = Object.keys(fixture).find(key => key.startsWith('away_last_') && key.endsWith('_matches'));
+    // Find the history keys dynamically per the required pattern and active metric
+    let homeHistoryKey = Object.keys(fixture).find(key => key.startsWith('home_last_') && key.endsWith('_matches') && key.includes(metric));
+    let awayHistoryKey = Object.keys(fixture).find(key => key.startsWith('away_last_') && key.endsWith('_matches') && key.includes(metric));
+
+    if (!homeHistoryKey) {
+        homeHistoryKey = Object.keys(fixture).find(key => key.startsWith('home_last_') && key.endsWith('_matches'));
+    }
+    if (!awayHistoryKey) {
+        awayHistoryKey = Object.keys(fixture).find(key => key.startsWith('away_last_') && key.endsWith('_matches'));
+    }
 
     const homeHistoryArr = homeHistoryKey ? fixture[homeHistoryKey] : [];
     const awayHistoryArr = awayHistoryKey ? fixture[awayHistoryKey] : [];
@@ -225,6 +232,158 @@ function setupTheme() {
 // State to track loaded teams for the currently selected league
 let fetchedTeams = [];
 
+// Storage for team matches retrieved for the selected teams
+let homeMatchesData = [];
+let awayMatchesData = [];
+
+// Current user overrides for weights { index: weight_value }
+let homeOverrides = {};
+let awayOverrides = {};
+
+function getTiers(methodologyId, numMatches) {
+    if (numMatches === 0) return [];
+    if (methodologyId === 1) {
+        return [
+            {
+                indices: Array.from({length: numMatches}, (_, i) => i),
+                target_weight: 1.0
+            }
+        ];
+    } else if (methodologyId === 2) {
+        if (numMatches <= 4) {
+            return [
+                {
+                    indices: Array.from({length: numMatches}, (_, i) => i),
+                    target_weight: 1.0
+                }
+            ];
+        } else {
+            return [
+                {
+                    indices: [0, 1, 2, 3],
+                    target_weight: 0.70
+                },
+                {
+                    indices: Array.from({length: numMatches - 4}, (_, i) => i + 4),
+                    target_weight: 0.30
+                }
+            ];
+        }
+    }
+    return [];
+}
+
+function getDefaultWeights(methodologyId, numMatches) {
+    if (numMatches === 0) return [];
+    if (methodologyId === 1) {
+        return Array(numMatches).fill(1.0 / numMatches);
+    } else if (methodologyId === 2) {
+        if (numMatches <= 4) {
+            return Array(numMatches).fill(1.0 / numMatches);
+        } else {
+            const tier1Count = 4;
+            const tier2Count = numMatches - 4;
+            const weights = [];
+            for (let i = 0; i < numMatches; i++) {
+                if (i < 4) {
+                    weights.push(0.70 / tier1Count);
+                } else {
+                    weights.push(0.30 / tier2Count);
+                }
+            }
+            return weights;
+        }
+    }
+    return [];
+}
+
+function normalizeWeightsJS(numMatches, defaultWeights, overrides, methodologyId) {
+    if (numMatches === 0) return [];
+    const weights = [...defaultWeights];
+    const tiers = getTiers(methodologyId, numMatches);
+
+    for (const tier of tiers) {
+        const tierIndices = tier.indices;
+        const targetTotal = tier.target_weight;
+
+        const overriddenIndices = [];
+        const unoverriddenIndices = [];
+
+        for (const idx of tierIndices) {
+            let hasOverride = false;
+            let overrideVal = null;
+            if (overrides !== null && overrides !== undefined) {
+                if (idx in overrides) {
+                    hasOverride = true;
+                    overrideVal = overrides[idx];
+                } else if (String(idx) in overrides) {
+                    hasOverride = true;
+                    overrideVal = overrides[String(idx)];
+                }
+            }
+
+            if (hasOverride) {
+                let val = parseFloat(overrideVal);
+                if (isNaN(val)) {
+                    val = 0.0;
+                }
+                overriddenIndices.push({ idx, val });
+            } else {
+                unoverriddenIndices.push(idx);
+            }
+        }
+
+        if (overriddenIndices.length > 0) {
+            const totalOverride = overriddenIndices.reduce((sum, item) => sum + item.val, 0);
+
+            if (unoverriddenIndices.length === 0) {
+                if (totalOverride > 0) {
+                    for (const item of overriddenIndices) {
+                        weights[item.idx] = (item.val / totalOverride) * targetTotal;
+                    }
+                } else {
+                    for (const item of overriddenIndices) {
+                        weights[item.idx] = targetTotal / overriddenIndices.length;
+                    }
+                }
+            } else {
+                if (totalOverride >= targetTotal) {
+                    for (const idx of unoverriddenIndices) {
+                        weights[idx] = 0.0;
+                    }
+                    if (totalOverride > 0) {
+                        for (const item of overriddenIndices) {
+                            weights[item.idx] = (item.val / totalOverride) * targetTotal;
+                        }
+                    } else {
+                        for (const item of overriddenIndices) {
+                            weights[item.idx] = targetTotal / overriddenIndices.length;
+                        }
+                    }
+                } else {
+                    for (const item of overriddenIndices) {
+                        weights[item.idx] = item.val;
+                    }
+                    const remainingTarget = targetTotal - totalOverride;
+                    const totalDefault = unoverriddenIndices.reduce((sum, idx) => sum + defaultWeights[idx], 0);
+
+                    if (totalDefault > 0) {
+                        for (const idx of unoverriddenIndices) {
+                            weights[idx] = (defaultWeights[idx] / totalDefault) * remainingTarget;
+                        }
+                    } else {
+                        for (const idx of unoverriddenIndices) {
+                            weights[idx] = remainingTarget / unoverriddenIndices.length;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return weights;
+}
+
 function setupModeToggle() {
     const modeBtn = document.getElementById('mode-toggle');
     const autoMain = document.getElementById('fixtures-container');
@@ -310,11 +469,17 @@ function setupSemiAutoHandlers() {
     // Reset teams when league changes
     leagueSelect.addEventListener('change', () => {
         teamGroup.classList.add('hidden');
+        document.getElementById('semi-config-group').classList.add('hidden');
+        document.getElementById('semi-weight-editor-container').classList.add('hidden');
         predictBtn.classList.add('hidden');
         homeTeamSelect.innerHTML = '<option value="">-- Choose Home Team --</option>';
         awayTeamSelect.innerHTML = '<option value="">-- Choose Away Team --</option>';
         resultDiv.innerHTML = '';
         fetchedTeams = [];
+        homeMatchesData = [];
+        awayMatchesData = [];
+        homeOverrides = {};
+        awayOverrides = {};
     });
 
     fetchBtn.addEventListener('click', async () => {
@@ -381,7 +546,6 @@ function setupSemiAutoHandlers() {
             });
 
             teamGroup.classList.remove('hidden');
-            predictBtn.classList.remove('hidden');
 
         } catch (err) {
             console.error(err);
@@ -392,10 +556,269 @@ function setupSemiAutoHandlers() {
         }
     });
 
+    // Helper to fetch and build the weight editor whenever teams, methodology, or metric change
+    async function loadMatchesForSelectedTeams() {
+        const league = leagueSelect.value;
+        const homeTeam = homeTeamSelect.value;
+        const awayTeam = awayTeamSelect.value;
+        const methodology = document.getElementById('semi-methodology-select').value;
+        const metric = document.getElementById('semi-metric-select').value;
+
+        if (!league || !homeTeam || !awayTeam) {
+            document.getElementById('semi-config-group').classList.add('hidden');
+            document.getElementById('semi-weight-editor-container').classList.add('hidden');
+            predictBtn.classList.add('hidden');
+            return;
+        }
+
+        const pastedHtml = htmlPaste.value.trim();
+
+        try {
+            // Fetch default prediction for both teams to get their balanced matches list
+            // API /api/predict handles returning matches
+            const payload = {
+                league,
+                home_team: homeTeam,
+                away_team: awayTeam,
+                methodology,
+                metric
+            };
+
+            let res;
+            if (pastedHtml) {
+                payload.html = pastedHtml;
+                res = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } else {
+                const queryStr = new URLSearchParams(payload).toString();
+                res = await fetch(`/api/predict?${queryStr}`);
+            }
+
+            if (!res.ok) {
+                throw new Error('Could not load matches for prediction configuration.');
+            }
+
+            const data = await res.json();
+
+            // Extract history matches
+            const homeKey = `home_last_${metric}_matches`;
+            const awayKey = `away_last_${metric}_matches`;
+
+            homeMatchesData = data[homeKey] || data.home_last_xg_matches || [];
+            awayMatchesData = data[awayKey] || data.away_last_xg_matches || [];
+
+            // Reset overrides if the matches list changed size
+            homeOverrides = {};
+            awayOverrides = {};
+
+            document.getElementById('semi-config-group').classList.remove('hidden');
+            renderWeightEditor();
+            predictBtn.classList.remove('hidden');
+
+        } catch (err) {
+            console.error(err);
+            showSemiAlert(`Error loading team match histories: ${err.message}`, 'error');
+        }
+    }
+
+    homeTeamSelect.addEventListener('change', loadMatchesForSelectedTeams);
+    awayTeamSelect.addEventListener('change', loadMatchesForSelectedTeams);
+    document.getElementById('semi-methodology-select').addEventListener('change', loadMatchesForSelectedTeams);
+    document.getElementById('semi-metric-select').addEventListener('change', loadMatchesForSelectedTeams);
+
+    function renderWeightEditor() {
+        const container = document.getElementById('semi-weight-editor-container');
+        if (!container) return;
+
+        const methodologyId = parseInt(document.getElementById('semi-methodology-select').value);
+        const metric = document.getElementById('semi-metric-select').value;
+
+        const homeDefaults = getDefaultWeights(methodologyId, homeMatchesData.length);
+        const awayDefaults = getDefaultWeights(methodologyId, awayMatchesData.length);
+
+        const homeNormalized = normalizeWeightsJS(homeMatchesData.length, homeDefaults, homeOverrides, methodologyId);
+        const awayNormalized = normalizeWeightsJS(awayMatchesData.length, awayDefaults, awayOverrides, methodologyId);
+
+        container.innerHTML = `
+            <div class="weight-editor-grid">
+                <div class="weight-col">
+                    <h3>🏠 ${homeTeamSelect.value} Matches</h3>
+                    <div class="match-list-editor" id="home-match-editor"></div>
+                </div>
+                <div class="weight-col">
+                    <h3>✈️ ${awayTeamSelect.value} Matches</h3>
+                    <div class="match-list-editor" id="away-match-editor"></div>
+                </div>
+            </div>
+        `;
+
+        const homeList = container.querySelector('#home-match-editor');
+        const awayList = container.querySelector('#away-match-editor');
+
+        // Render Home Matches
+        homeMatchesData.forEach((match, idx) => {
+            const normalizedW = homeNormalized[idx];
+            const displayNormalized = (normalizedW * 100).toFixed(1);
+            const userVal = homeOverrides[idx] !== undefined ? homeOverrides[idx] : '';
+
+            const item = document.createElement('div');
+            item.className = `match-editor-item ${normalizedW === 0 ? 'deleted-match' : ''}`;
+
+            const scoreFor = match.goals_for !== null && match.goals_for !== undefined ? match.goals_for : (match.xg_for !== null ? match.xg_for : 0);
+            const scoreAgainst = match.goals_against !== null && match.goals_against !== undefined ? match.goals_against : (match.xg_against !== null ? match.xg_against : 0);
+
+            item.innerHTML = `
+                <div class="match-info">
+                    <span class="match-date">${match.date}</span>
+                    <span class="match-detail">(${match.venue === 'home' ? 'H' : 'A'}) vs ${match.opponent}</span>
+                    <span class="match-score">Score: ${scoreFor} - ${scoreAgainst}</span>
+                    <span class="match-xg">xG: ${(match.xg_for || 0).toFixed(2)} - ${(match.xg_against || 0).toFixed(2)}</span>
+                </div>
+                <div class="match-weight-inputs">
+                    <div class="input-wrap">
+                        <label>Override:</label>
+                        <input type="number" step="0.01" min="0" max="1" placeholder="Auto" value="${userVal}" data-idx="${idx}" class="home-weight-input">
+                    </div>
+                    <div class="normalized-badge">
+                        <span>${displayNormalized}%</span>
+                    </div>
+                    <button class="delete-match-btn" data-idx="${idx}" title="Remove Match">❌</button>
+                </div>
+            `;
+            homeList.appendChild(item);
+        });
+
+        // Render Away Matches
+        awayMatchesData.forEach((match, idx) => {
+            const normalizedW = awayNormalized[idx];
+            const displayNormalized = (normalizedW * 100).toFixed(1);
+            const userVal = awayOverrides[idx] !== undefined ? awayOverrides[idx] : '';
+
+            const item = document.createElement('div');
+            item.className = `match-editor-item ${normalizedW === 0 ? 'deleted-match' : ''}`;
+
+            const scoreFor = match.goals_for !== null && match.goals_for !== undefined ? match.goals_for : (match.xg_for !== null ? match.xg_for : 0);
+            const scoreAgainst = match.goals_against !== null && match.goals_against !== undefined ? match.goals_against : (match.xg_against !== null ? match.xg_against : 0);
+
+            item.innerHTML = `
+                <div class="match-info">
+                    <span class="match-date">${match.date}</span>
+                    <span class="match-detail">(${match.venue === 'home' ? 'H' : 'A'}) vs ${match.opponent}</span>
+                    <span class="match-score">Score: ${scoreFor} - ${scoreAgainst}</span>
+                    <span class="match-xg">xG: ${(match.xg_for || 0).toFixed(2)} - ${(match.xg_against || 0).toFixed(2)}</span>
+                </div>
+                <div class="match-weight-inputs">
+                    <div class="input-wrap">
+                        <label>Override:</label>
+                        <input type="number" step="0.01" min="0" max="1" placeholder="Auto" value="${userVal}" data-idx="${idx}" class="away-weight-input">
+                    </div>
+                    <div class="normalized-badge">
+                        <span>${displayNormalized}%</span>
+                    </div>
+                    <button class="delete-match-btn" data-idx="${idx}" title="Remove Match">❌</button>
+                </div>
+            `;
+            awayList.appendChild(item);
+        });
+
+        // Add Input Event Listeners for real-time update
+        homeList.querySelectorAll('.home-weight-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.idx);
+                const val = e.target.value.trim();
+                if (val === '') {
+                    delete homeOverrides[idx];
+                } else {
+                    const parsed = parseFloat(val);
+                    homeOverrides[idx] = isNaN(parsed) ? 0.0 : parsed;
+                }
+                // Recalculate and update domestic weights
+                updateWeightsRealTime('home', e.target);
+            });
+        });
+
+        awayList.querySelectorAll('.away-weight-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const idx = parseInt(e.target.dataset.idx);
+                const val = e.target.value.trim();
+                if (val === '') {
+                    delete awayOverrides[idx];
+                } else {
+                    const parsed = parseFloat(val);
+                    awayOverrides[idx] = isNaN(parsed) ? 0.0 : parsed;
+                }
+                // Recalculate and update domestic weights
+                updateWeightsRealTime('away', e.target);
+            });
+        });
+
+        // Delete handlers
+        homeList.querySelectorAll('.delete-match-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const idx = parseInt(btn.dataset.idx);
+                homeOverrides[idx] = 0.0;
+                renderWeightEditor();
+            });
+        });
+
+        awayList.querySelectorAll('.delete-match-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const idx = parseInt(btn.dataset.idx);
+                awayOverrides[idx] = 0.0;
+                renderWeightEditor();
+            });
+        });
+
+        container.classList.remove('hidden');
+    }
+
+    function updateWeightsRealTime(side, activeInput) {
+        const methodologyId = parseInt(document.getElementById('semi-methodology-select').value);
+        const matchesData = side === 'home' ? homeMatchesData : awayMatchesData;
+        const overrides = side === 'home' ? homeOverrides : awayOverrides;
+
+        const defaults = getDefaultWeights(methodologyId, matchesData.length);
+        const normalized = normalizeWeightsJS(matchesData.length, defaults, overrides, methodologyId);
+
+        const listContainer = document.getElementById(`${side}-match-editor`);
+        const items = listContainer.querySelectorAll('.match-editor-item');
+
+        items.forEach((item, idx) => {
+            const w = normalized[idx];
+
+            // Toggle deletion styling
+            if (w === 0) {
+                item.classList.add('deleted-match');
+            } else {
+                item.classList.remove('deleted-match');
+            }
+
+            // Update badge value
+            const badge = item.querySelector('.normalized-badge span');
+            if (badge) {
+                badge.textContent = `${(w * 100).toFixed(1)}%`;
+            }
+
+            // Update input field if it's not the active input to prevent resetting cursor
+            const input = item.querySelector(`.${side}-weight-input`);
+            if (input && input !== activeInput) {
+                const userVal = overrides[idx];
+                input.value = userVal !== undefined ? userVal : '';
+            }
+        });
+    }
+
     predictBtn.addEventListener('click', async () => {
         const league = leagueSelect.value;
         const homeTeam = homeTeamSelect.value;
         const awayTeam = awayTeamSelect.value;
+        const methodology = document.getElementById('semi-methodology-select').value;
+        const metric = document.getElementById('semi-metric-select').value;
 
         if (!league || !homeTeam || !awayTeam) {
             showSemiAlert('Please select both Home and Away teams to calculate predictions.', 'error');
@@ -417,7 +840,11 @@ function setupSemiAutoHandlers() {
             const payload = {
                 league,
                 home_team: homeTeam,
-                away_team: awayTeam
+                away_team: awayTeam,
+                methodology,
+                metric,
+                home_overrides: JSON.stringify(homeOverrides),
+                away_overrides: JSON.stringify(awayOverrides)
             };
 
             if (pastedHtml) {
@@ -443,23 +870,85 @@ function setupSemiAutoHandlers() {
             resultDiv.innerHTML = '';
 
             // Format prediction matching standard createFixtureCard component
+            const metricKeyPart = metric === 'xg' ? 'xg' : 'goals';
             const cardFixture = {
                 home_team: prediction.home_team,
                 away_team: prediction.away_team,
-                home_expected_xg: prediction.home_expected_xg,
-                away_expected_xg: prediction.away_expected_xg,
-                combined_expected_xg: prediction.combined_expected_xg,
-                home_last_xg_matches: prediction.home_last_xg_matches,
-                away_last_xg_matches: prediction.away_last_xg_matches,
+                [`home_expected_${metricKeyPart}`]: prediction[`home_expected_${metricKeyPart}`],
+                [`away_expected_${metricKeyPart}`]: prediction[`away_expected_${metricKeyPart}`],
+                [`combined_expected_${metricKeyPart}`]: prediction[`combined_expected_${metricKeyPart}`],
+                [`home_last_${metricKeyPart}_matches`]: prediction[`home_last_${metricKeyPart}_matches`],
+                [`away_last_${metricKeyPart}_matches`]: prediction[`away_last_${metricKeyPart}_matches`],
                 date: 'Upcoming Prediction'
             };
 
             // Set dynamic scaleMax
-            const maxVal = Math.max(prediction.home_expected_xg, prediction.away_expected_xg);
+            const expectedHome = prediction[`home_expected_${metricKeyPart}`] || 0;
+            const expectedAway = prediction[`away_expected_${metricKeyPart}`] || 0;
+            const maxVal = Math.max(expectedHome, expectedAway);
             const scaleMax = Math.max(maxVal * 1.1, 3.0);
 
-            const card = createFixtureCard(cardFixture, scaleMax, 'xg');
+            // Create main result card
+            const mainCardTitle = document.createElement('h3');
+            mainCardTitle.className = 'prediction-section-title';
+            mainCardTitle.textContent = `🎯 Expected Prediction (${metric.toUpperCase()})`;
+            resultDiv.appendChild(mainCardTitle);
+
+            const card = createFixtureCard(cardFixture, scaleMax, metricKeyPart);
             resultDiv.appendChild(card);
+
+            // Show Comparisons Grid if available
+            if (prediction.comparisons) {
+                const compSection = document.createElement('div');
+                compSection.className = 'comparisons-section';
+                compSection.innerHTML = `
+                    <h3 class="prediction-section-title">📊 Multi-Methodology Comparison</h3>
+                    <div class="comparisons-table-container">
+                        <table class="comparisons-table">
+                            <thead>
+                                <tr>
+                                    <th>Methodology</th>
+                                    <th>Metric</th>
+                                    <th>Home (${prediction.home_team})</th>
+                                    <th>Away (${prediction.away_team})</th>
+                                    <th>Combined</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="${methodology == '1' && metric == 'xg' ? 'active-combo-row' : ''}">
+                                    <td>Methodology 1 (Equal)</td>
+                                    <td>xG</td>
+                                    <td>${(prediction.comparisons.methodology_1.xg?.home_expected ?? 0).toFixed(2)}</td>
+                                    <td>${(prediction.comparisons.methodology_1.xg?.away_expected ?? 0).toFixed(2)}</td>
+                                    <td><strong>${(prediction.comparisons.methodology_1.xg?.combined_expected ?? 0).toFixed(2)}</strong></td>
+                                </tr>
+                                <tr class="${methodology == '1' && metric == 'goals' ? 'active-combo-row' : ''}">
+                                    <td>Methodology 1 (Equal)</td>
+                                    <td>Goals</td>
+                                    <td>${(prediction.comparisons.methodology_1.goals?.home_expected ?? 0).toFixed(2)}</td>
+                                    <td>${(prediction.comparisons.methodology_1.goals?.away_expected ?? 0).toFixed(2)}</td>
+                                    <td><strong>${(prediction.comparisons.methodology_1.goals?.combined_expected ?? 0).toFixed(2)}</strong></td>
+                                </tr>
+                                <tr class="${methodology == '2' && metric == 'xg' ? 'active-combo-row' : ''}">
+                                    <td>Methodology 2 (70/30 Split)</td>
+                                    <td>xG</td>
+                                    <td>${(prediction.comparisons.methodology_2.xg?.home_expected ?? 0).toFixed(2)}</td>
+                                    <td>${(prediction.comparisons.methodology_2.xg?.away_expected ?? 0).toFixed(2)}</td>
+                                    <td><strong>${(prediction.comparisons.methodology_2.xg?.combined_expected ?? 0).toFixed(2)}</strong></td>
+                                </tr>
+                                <tr class="${methodology == '2' && metric == 'goals' ? 'active-combo-row' : ''}">
+                                    <td>Methodology 2 (70/30 Split)</td>
+                                    <td>Goals</td>
+                                    <td>${(prediction.comparisons.methodology_2.goals?.home_expected ?? 0).toFixed(2)}</td>
+                                    <td>${(prediction.comparisons.methodology_2.goals?.away_expected ?? 0).toFixed(2)}</td>
+                                    <td><strong>${(prediction.comparisons.methodology_2.goals?.combined_expected ?? 0).toFixed(2)}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                resultDiv.appendChild(compSection);
+            }
 
         } catch (err) {
             console.error(err);
