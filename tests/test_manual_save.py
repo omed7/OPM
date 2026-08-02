@@ -2,15 +2,30 @@ import unittest
 import json
 import os
 import sys
+from unittest.mock import patch, MagicMock
 
 # Add src and root to python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import from the newly created save_manual endpoint or helper logic
-# Since save_manual.py is a serverless handler, we can mock/instantiate its helper functions
-from api.save_manual import load_match_database, save_match_database
+from api.save_manual import load_match_database, save_match_database, get_github_config
 
 class TestSaveManual(unittest.TestCase):
+
+    def test_get_github_config(self):
+        # Test when token is not present
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertIsNone(get_github_config())
+
+        # Test when token is present
+        with patch.dict(os.environ, {"GITHUB_API_TOKEN": "test-token", "VERCEL_GIT_COMMIT_REF": "feat-branch"}, clear=True):
+            config = get_github_config()
+            self.assertIsNotNone(config)
+            self.assertEqual(config["token"], "test-token")
+            self.assertEqual(config["branch"], "feat-branch")
+            self.assertEqual(config["owner"], "omed7")
+            self.assertEqual(config["repo"], "OPM")
+            self.assertEqual(config["path"], "public/match_database.json")
 
     def test_save_manual_payload_mapping(self):
         # Sample payload mimicking what public/script.js sends
