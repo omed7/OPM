@@ -550,61 +550,52 @@ function normalizeWeights(numMatches, defaultWeights, overrides, methodologyId) 
     return weights;
 }
 
-function parsePastedLine(line, teamName, skipXG) {
-    line = line.trim();
-    if (!line) return null;
+function parsePastedLine(line1, line2, line3, teamName, skipXG) {
+    if (!line1 || !line2 || !line3) return null;
+    line1 = line1.trim();
+    line2 = line2.trim();
+    line3 = line3.trim();
 
-    // 1. Find date (YYYY-MM-DD) first and extract it to prevent hyphen collision with the score
-    const dateMatch = line.match(/\b\d{4}-\d{2}-\d{2}\b/);
-    const date = dateMatch ? dateMatch[0] : new Date().toISOString().split('T')[0];
+    // 1. From line 1: extract the opponent name (strip the trailing league-position ordinal, e.g. "6th")
+    const opponent = line1.replace(/\s+\d+(?:st|nd|rd|th)\s*$/i, '').trim() || 'Unknown Opponent';
 
-    // Remove the date from the parsing string to avoid regex confusion
-    let lineWithoutDate = line;
-    if (dateMatch) {
-        lineWithoutDate = lineWithoutDate.replace(dateMatch[0], '');
+    // 2. From line 2: extract venue from leading (H)/(A) and parse date
+    let venue = 'home';
+    const venueMatch = line2.match(/^\s*\(?(H|A)\)?/i);
+    if (venueMatch && venueMatch[1].toUpperCase() === 'A') {
+        venue = 'away';
     }
 
-    // 2. Find score/metric values (FOR-AGAINST), e.g. "1.5-2.2" or "1 - 1" or "2-1" from the date-free string
-    const scoreMatch = lineWithoutDate.match(/(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)/);
+    // Parse the date e.g. "26th Jul"
+    let date = new Date().toISOString().split('T')[0];
+    const dateMatch = line2.match(/(\d+)(?:st|nd|rd|th)\s+([A-Za-z]{3,})/i);
+    if (dateMatch) {
+        const day = parseInt(dateMatch[1]);
+        const monthAbbr = dateMatch[2].toLowerCase();
+        const months = {
+            jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
+            jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11
+        };
+        if (months[monthAbbr] !== undefined) {
+            const monthIndex = months[monthAbbr];
+            const now = new Date();
+            const currentMonthIndex = now.getMonth();
+            const currentYear = now.getFullYear();
+            let year = currentYear;
+            if (monthIndex > currentMonthIndex) {
+                year = currentYear - 1;
+            }
+            const formattedMonth = String(monthIndex + 1).padStart(2, '0');
+            const formattedDay = String(day).padStart(2, '0');
+            date = `${year}-${formattedMonth}-${formattedDay}`;
+        }
+    }
+
+    // 3. From line 3: parse score (FOR-AGAINST), e.g. "2.5-1.8"
+    const scoreMatch = line3.match(/(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)/);
     if (!scoreMatch) return null;
     const rawVal1 = parseFloat(scoreMatch[1]);
     const rawVal2 = parseFloat(scoreMatch[2]);
-    const scoreStr = scoreMatch[0];
-
-    // Find venue (H) or (A) or H or A
-    let venue = 'home';
-    const parenVenueMatch = lineWithoutDate.match(/\((H|A|home|away)\)/i);
-    if (parenVenueMatch) {
-        const v = parenVenueMatch[1].toUpperCase();
-        if (v.startsWith('A')) {
-            venue = 'away';
-        }
-    } else {
-        const generalVenueMatch = lineWithoutDate.match(/\b(H|A|home|away)\b/i);
-        if (generalVenueMatch) {
-            const v = generalVenueMatch[1].toUpperCase();
-            if (v.startsWith('A')) {
-                venue = 'away';
-            }
-        }
-    }
-
-    // Extract opponent name from the original line to keep formatting where appropriate, minus date/score/venue
-    let opponent = line;
-    opponent = opponent.replace(scoreStr, '');
-    if (dateMatch) {
-        opponent = opponent.replace(dateMatch[0], '');
-    }
-    const venueMatchStr = parenVenueMatch ? parenVenueMatch[0] : (line.match(/\b(H|A|home|away)\b/i) ? line.match(/\b(H|A|home|away)\b/i)[0] : '');
-    if (venueMatchStr) {
-        opponent = opponent.replace(venueMatchStr, '');
-    }
-    // Clean up slashes, parentheses, brackets, extra spaces
-    opponent = opponent.replace(/[/\(\)\[\]]/g, ' ');
-    opponent = opponent.replace(/\s+/g, ' ').trim();
-    if (!opponent) {
-        opponent = 'Unknown Opponent';
-    }
 
     // Apply venue flip!
     // If venue is (A), the RIGHT-hand number is this team's own value (for), left is against.
@@ -646,7 +637,7 @@ function parsePastedLine(line, teamName, skipXG) {
         rawVal1,
         rawVal2,
         warnings,
-        rawLine: line
+        rawLine: `${line1} | ${line2} | ${line3}`
     };
 }
 
@@ -812,17 +803,19 @@ function setupSemiAutoHandlers() {
         // Clear alerts
         resultDiv.innerHTML = '';
 
-        const lines = pasteVal.split('\n');
+        const lines = pasteVal.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         parsedHomeMatches = [];
-        lines.forEach(line => {
-            const parsed = parsePastedLine(line, manualHomeName.value.trim(), manualSkipXG.checked);
-            if (parsed) {
-                parsedHomeMatches.push(parsed);
+        for (let i = 0; i < lines.length; i += 3) {
+            if (i + 2 < lines.length) {
+                const parsed = parsePastedLine(lines[i], lines[i+1], lines[i+2], manualHomeName.value.trim(), manualSkipXG.checked);
+                if (parsed) {
+                    parsedHomeMatches.push(parsed);
+                }
             }
-        });
+        }
 
         if (parsedHomeMatches.length === 0) {
-            showSemiAlert('Could not parse any valid match records. Please verify format: Opponent / (H/A) date / FOR-AGAINST.', 'error');
+            showSemiAlert('Could not parse any valid match records. Please verify format (3 lines per match):\nLine 1: Opponent Name (e.g. Brann 6th)\nLine 2: Venue and Date (e.g. (A) 26th Jul)\nLine 3: Scores (e.g. 2.5-1.8)', 'error');
             return;
         }
 
@@ -852,17 +845,19 @@ function setupSemiAutoHandlers() {
         // Clear alerts
         resultDiv.innerHTML = '';
 
-        const lines = pasteVal.split('\n');
+        const lines = pasteVal.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         parsedAwayMatches = [];
-        lines.forEach(line => {
-            const parsed = parsePastedLine(line, manualAwayName.value.trim(), manualSkipXG.checked);
-            if (parsed) {
-                parsedAwayMatches.push(parsed);
+        for (let i = 0; i < lines.length; i += 3) {
+            if (i + 2 < lines.length) {
+                const parsed = parsePastedLine(lines[i], lines[i+1], lines[i+2], manualAwayName.value.trim(), manualSkipXG.checked);
+                if (parsed) {
+                    parsedAwayMatches.push(parsed);
+                }
             }
-        });
+        }
 
         if (parsedAwayMatches.length === 0) {
-            showSemiAlert('Could not parse any valid match records. Please verify format: Opponent / (H/A) date / FOR-AGAINST.', 'error');
+            showSemiAlert('Could not parse any valid match records. Please verify format (3 lines per match):\nLine 1: Opponent Name (e.g. Brann 6th)\nLine 2: Venue and Date (e.g. (A) 26th Jul)\nLine 3: Scores (e.g. 2.5-1.8)', 'error');
             return;
         }
 
