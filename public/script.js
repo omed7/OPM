@@ -116,11 +116,6 @@ function createFixtureCard(fixture, scaleMax, metric) {
     const card = document.createElement('div');
     card.className = 'fixture-card';
 
-    const homeInitials = getInitials(fixture.home_team);
-    const awayInitials = getInitials(fixture.away_team);
-    const homeColor = getColor(fixture.home_team);
-    const awayColor = getColor(fixture.away_team);
-
     const combinedVal = fixture[`combined_expected_${metric}`] || 0;
     const homeExpectedVal = fixture[`home_expected_${metric}`] || 0;
     const awayExpectedVal = fixture[`away_expected_${metric}`] || 0;
@@ -153,7 +148,7 @@ function createFixtureCard(fixture, scaleMax, metric) {
     card.innerHTML = `
         <div class="fixture-header">
             <div class="team">
-                <div class="team-badge" style="background-color: ${homeColor}">${homeInitials}</div>
+                ${renderBadgeHtml(fixture.home_team)}
                 <div class="team-name">${fixture.home_team}</div>
             </div>
             <div class="xg-center">
@@ -162,7 +157,7 @@ function createFixtureCard(fixture, scaleMax, metric) {
                 <div class="split-xg">${homeExpectedVal.toFixed(2)} - ${awayExpectedVal.toFixed(2)}</div>
             </div>
             <div class="team">
-                <div class="team-badge" style="background-color: ${awayColor}">${awayInitials}</div>
+                ${renderBadgeHtml(fixture.away_team)}
                 <div class="team-name">${fixture.away_team}</div>
             </div>
         </div>
@@ -203,6 +198,132 @@ function getColor(name) {
     }
     const hue = Math.abs(hash % 360);
     return `hsl(${hue}, 60%, 40%)`;
+}
+
+function getTeamLogo(teamName) {
+    if (!teamName) return null;
+    try {
+        const teamLogos = JSON.parse(localStorage.getItem('team_logos') || '{}');
+        return teamLogos[teamName] || null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function renderBadgeHtml(teamName) {
+    const initials = getInitials(teamName);
+    const color = getColor(teamName);
+    const logoUrl = getTeamLogo(teamName);
+    if (logoUrl) {
+        return `<div class="team-badge" data-team="${teamName}" style="background-color: transparent;" title="Click to change team logo"><img src="${logoUrl}" alt="${initials}"></div>`;
+    } else {
+        return `<div class="team-badge" data-team="${teamName}" style="background-color: ${color}" title="Click to change team logo">${initials}</div>`;
+    }
+}
+
+let allTeamNames = new Set();
+
+async function loadTeamNames() {
+    try {
+        const response = await fetch('match_database.json');
+        if (response.ok) {
+            const matches = await response.json();
+            matches.forEach(m => {
+                if (m.team) allTeamNames.add(m.team);
+                if (m.opponent) allTeamNames.add(m.opponent);
+            });
+        }
+    } catch (e) {
+        console.error('Failed to load match_database.json', e);
+    }
+
+    // Add any names that have been given a logo in localStorage
+    try {
+        const teamLogos = JSON.parse(localStorage.getItem('team_logos') || '{}');
+        Object.keys(teamLogos).forEach(name => allTeamNames.add(name));
+    } catch (e) {}
+
+    updateAutocompleteDatalist();
+}
+
+function updateAutocompleteDatalist() {
+    let datalist = document.getElementById('team-names-datalist');
+    if (!datalist) {
+        datalist = document.createElement('datalist');
+        datalist.id = 'team-names-datalist';
+        document.body.appendChild(datalist);
+    }
+
+    datalist.innerHTML = '';
+
+    // Sort team names alphabetically
+    const sortedNames = Array.from(allTeamNames).sort();
+    sortedNames.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        datalist.appendChild(option);
+    });
+
+    // Wire it up to the existing inputs if they exist
+    const homeInput = document.getElementById('manual-home-name');
+    const awayInput = document.getElementById('manual-away-name');
+    if (homeInput) {
+        homeInput.setAttribute('list', 'team-names-datalist');
+    }
+    if (awayInput) {
+        awayInput.setAttribute('list', 'team-names-datalist');
+    }
+}
+
+function setupLogoClickHandlers() {
+    document.body.addEventListener('click', (e) => {
+        const badge = e.target.closest('.team-badge');
+        if (badge) {
+            const teamName = badge.dataset.team;
+            if (!teamName) return;
+
+            let teamLogos = {};
+            try {
+                teamLogos = JSON.parse(localStorage.getItem('team_logos') || '{}');
+            } catch (err) {}
+
+            const currentLogoUrl = teamLogos[teamName] || '';
+            const newLogoUrl = prompt(`Enter custom logo URL for ${teamName} (leave blank to remove):`, currentLogoUrl);
+            if (newLogoUrl === null) return; // User cancelled
+
+            const trimmedLogoUrl = newLogoUrl.trim();
+            if (trimmedLogoUrl) {
+                teamLogos[teamName] = trimmedLogoUrl;
+            } else {
+                delete teamLogos[teamName];
+            }
+
+            try {
+                localStorage.setItem('team_logos', JSON.stringify(teamLogos));
+            } catch (err) {}
+
+            // Propagate across all badges of this team in real-time
+            const badges = document.querySelectorAll(`[data-team="${teamName}"]`);
+            const initials = getInitials(teamName);
+            badges.forEach(b => {
+                if (trimmedLogoUrl) {
+                    b.style.backgroundColor = 'transparent';
+                    b.innerHTML = `<img src="${trimmedLogoUrl}" alt="${initials}">`;
+                } else {
+                    b.style.backgroundColor = getColor(teamName);
+                    b.innerHTML = initials;
+                }
+            });
+
+            // Also add team to autocomplete Set and update datalist in case this was a newly seen team name
+            if (typeof allTeamNames !== 'undefined' && !allTeamNames.has(teamName)) {
+                allTeamNames.add(teamName);
+                if (typeof updateAutocompleteDatalist === 'function') {
+                    updateAutocompleteDatalist();
+                }
+            }
+        }
+    });
 }
 
 // Theme toggle functionality
@@ -1283,4 +1404,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupTheme();
     setupModeToggle();
     setupSemiAutoHandlers();
+    setupLogoClickHandlers();
+    loadTeamNames();
 });
