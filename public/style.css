@@ -559,6 +559,195 @@ footer {
     border-color: var(--accent-color);
 }
 
+/* Multi-methodology comparisons grid styles */
+.comparisons-grid-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.comparisons-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.comparison-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 12px;
+    border: 1.5px solid var(--xg-bar-bg);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: var(--btn-shadow);
+}
+
+.comparison-card.active {
+    border-color: var(--accent-color);
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+.comparison-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+}
+
+.comparison-card.active .comparison-title {
+    color: var(--accent-color);
+}
+
+.comparison-values {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.comparison-combined {
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+/* Interactive Weight Editor container and styles */
+.weight-editor-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 24px;
+}
+
+.weight-editor-card h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.weight-editor-columns {
+    display: flex;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .weight-editor-columns {
+        flex-direction: column;
+    }
+}
+
+.weight-editor-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.weight-editor-col h4 {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    border-bottom: 2px solid var(--xg-bar-bg);
+    padding-bottom: 6px;
+}
+
+.match-weight-row {
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.match-weight-row.zeroed {
+    opacity: 0.5;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.match-weight-row:hover {
+    border-color: var(--xg-bar-bg);
+}
+
+.match-weight-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.match-weight-details {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.match-weight-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.weight-slider {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    background: var(--xg-bar-bg);
+    outline: none;
+    border-radius: 3px;
+}
+
+.weight-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    cursor: pointer;
+}
+
+.weight-percentage {
+    font-size: 0.8rem;
+    font-weight: 700;
+    min-width: 45px;
+    text-align: right;
+}
+
+.remove-match-btn {
+    background-color: transparent;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.remove-match-btn:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.restore-match-btn {
+    background-color: transparent;
+    border: none;
+    color: #2ecc71;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
 @media (max-width: 400px) {
     .team-badge {
         width: 40px;
