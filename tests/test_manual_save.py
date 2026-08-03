@@ -8,24 +8,30 @@ from unittest.mock import patch, MagicMock
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Import from the newly created save_manual endpoint or helper logic
-from api.save_manual import load_match_database, save_match_database, get_github_config
+from api.save_manual import load_match_database, save_match_database
 
 class TestSaveManual(unittest.TestCase):
 
-    def test_get_github_config(self):
-        # Test when token is not present
-        with patch.dict(os.environ, {}, clear=True):
-            self.assertIsNone(get_github_config())
+    @patch('api.save_manual.supabase_request')
+    def test_load_match_database_success(self, mock_supabase_request):
+        # Setup mock return value for success
+        mock_data = [{"id": "1", "team": "Team A"}]
+        mock_supabase_request.return_value = (mock_data, None)
 
-        # Test when token is present
-        with patch.dict(os.environ, {"GITHUB_API_TOKEN": "test-token", "VERCEL_GIT_COMMIT_REF": "feat-branch"}, clear=True):
-            config = get_github_config()
-            self.assertIsNotNone(config)
-            self.assertEqual(config["token"], "test-token")
-            self.assertEqual(config["branch"], "feat-branch")
-            self.assertEqual(config["owner"], "omed7")
-            self.assertEqual(config["repo"], "OPM")
-            self.assertEqual(config["path"], "public/match_database.json")
+        data, _ = load_match_database()
+
+        self.assertEqual(data, mock_data)
+        mock_supabase_request.assert_called_once_with("/matches?select=*", method="GET")
+
+    @patch('api.save_manual.supabase_request')
+    def test_load_match_database_error(self, mock_supabase_request):
+        # Setup mock return value for error
+        mock_supabase_request.return_value = (None, "Some error")
+
+        data, _ = load_match_database()
+
+        self.assertEqual(data, [])
+        mock_supabase_request.assert_called_once_with("/matches?select=*", method="GET")
 
     def test_save_manual_payload_mapping(self):
         # Sample payload mimicking what public/script.js sends

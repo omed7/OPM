@@ -1,18 +1,20 @@
 import json
 import os
+import sys
+
+# Add the project root to sys.path so we can import from src
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+from src.supabase_client import supabase_request
 
 def load_match_database():
     """
-    Loads and returns the unified match database from public/match_database.json.
+    Loads and returns the unified match database from Supabase.
     """
-    db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'public', 'match_database.json'))
-    if not os.path.exists(db_path):
+    data, error = supabase_request("/matches?select=*", method="GET")
+    if error:
+        print(f"Error loading match database from Supabase: {error}")
         return []
-    try:
-        with open(db_path, 'r') as f:
-            return json.load(f)
-    except Exception:
-        return []
+    return data or []
 
 def get_team_matches(database, team_name, league_id, venue=None, limit=None):
     """
