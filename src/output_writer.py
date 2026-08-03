@@ -5,11 +5,12 @@ import subprocess
 import urllib.request
 from datetime import datetime, timezone
 
-# Add the project root to sys.path so we can import from api
+# Add the project root to sys.path so we can import from api and src modules
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from fetch.understat_common import get_upcoming_fixtures, get_team_matches, get_played_matches, get_current_season
-from compute.xg_formula import calculate_expected_xg, SAMPLE_SIZE as XG_SAMPLE_SIZE
+from src.fetch.understat_common import get_upcoming_fixtures, get_team_matches, get_played_matches, get_current_season
+from src.compute.xg_formula import calculate_expected_xg, SAMPLE_SIZE as XG_SAMPLE_SIZE
+from src.supabase_client import supabase_request
 
 UNDERSTAT_LEAGUES = [
     {"code": "EPL", "name": "Premier League", "output_id": "premier_league"},
@@ -186,15 +187,6 @@ def map_oddalerts_to_db(matches, league_id):
 def map_understat_to_db(matches, league_id):
     records = []
     for m in matches:
-        # Expected structure of played match from understatapi:
-        # {
-        #   'id': '26602', 'isResult': True,
-        #   'h': {'id': '89', 'title': 'Manchester United', 'short_title': 'MUN'},
-        #   'a': {'id': '228', 'title': 'Fulham', 'short_title': 'FLH'},
-        #   'goals': {'h': '1', 'a': '0'},
-        #   'xG': {'h': '2.04268', 'a': '0.418711'},
-        #   'datetime': '2024-08-16 19:00:00'
-        # }
         home_team = m['h']['title']
         away_team = m['a']['title']
 
@@ -258,6 +250,45 @@ def map_understat_to_db(matches, league_id):
 
     return records
 
+def save_matches_to_supabase(db_records):
+    """
+    Saves a list of match records to Supabase.
+    Uses UPSERT (ON CONFLICT DO NOTHING) via Prefer header to avoid duplicates.
+    Requires a unique constraint on (team, opponent, date, league, venue) in Supabase.
+    """
+    if not db_records:
+        return
+
+    # Send in chunks of 1000 to avoid request size limits
+    chunk_size = 1000
+    for i in range(0, len(db_records), chunk_size):
+        chunk = db_records[i:i + chunk_size]
+
+        url, key = os.environ.get("SUPABASE_URL") or os.environ.get("SUPERBASE_URL"), os.environ.get("SUPABASE_KEY") or os.environ.get("SUPERBASE_KEY")
+        if not url or not key:
+            print("Supabase credentials missing, skipping match sync.")
+            return
+
+        url = url.rstrip('/')
+        full_url = url + "/rest/v1/matches"
+
+        # Prefer: resolution=ignore-duplicates instructs Supabase to ignore conflicts
+        headers = {
+            "apikey": key,
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json",
+            "Prefer": "resolution=ignore-duplicates"
+        }
+
+        req_data = json.dumps(chunk).encode("utf-8")
+        req = urllib.request.Request(full_url, data=req_data, headers=headers, method="POST")
+
+        try:
+            with urllib.request.urlopen(req, timeout=30) as response:
+                print(f"Successfully upserted chunk of {len(chunk)} matches to Supabase.")
+        except Exception as e:
+            print(f"Failed to upsert chunk to Supabase: {e}")
+
 def main():
     db_records = []
 
@@ -293,21 +324,28 @@ def main():
     # Ensure public directory exists
     os.makedirs('public', exist_ok=True)
 
-    # 3. Write consolidated match database
+    # 3. Write consolidated match database to Supabase (instead of local JSON)
     try:
-        with open('public/match_database.json', 'w') as f:
-            json.dump(db_records, f, indent=2)
-        print(f"Successfully wrote {len(db_records)} records to public/match_database.json")
+        print(f"Upserting {len(db_records)} records to Supabase...")
+        save_matches_to_supabase(db_records)
     except Exception as e:
-        print(f"Failed to write match database: {e}")
+        print(f"Failed to write match database to Supabase: {e}")
 
-    # 4. Remove public/oddalerts_mls.json if it exists (since it is superseded)
+    # 4. Remove public/match_database.json if it exists (since it is migrated)
+    if os.path.exists('public/match_database.json'):
+        try:
+            os.remove('public/match_database.json')
+            print("Successfully deleted public/match_database.json (migrated to Supabase).")
+        except Exception as e:
+            print(f"Failed to delete public/match_database.json: {e}")
+
+    # Remove public/oddalerts_mls.json if it exists (since it is superseded)
     if os.path.exists('public/oddalerts_mls.json'):
         try:
             os.remove('public/oddalerts_mls.json')
             print("Successfully deleted public/oddalerts_mls.json (superseded).")
         except Exception as e:
-            print(f"Failed to delete public/oddalerts_mls.json: {e}")
+            pass
 
     # 5. Prepare and write final data.json output structure (preserving original behavior)
     output = {

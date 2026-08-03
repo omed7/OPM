@@ -30,35 +30,36 @@ When computing a prediction, the engine also silently computes comparison projec
 - **Fully automated (5 leagues)**: Understat.com, scraped using the `understatapi` package. Supported leagues: Premier League (`EPL`), La Liga (`La_Liga`), Serie A (`Serie_A`), Bundesliga (`Bundesliga`), and Ligue 1 (`Ligue_1`). RFPL (Russia) is deliberately excluded. Be a polite scraper (use rate limiting).
 - **Semi-automatic / Unified database**: OddAlerts.com. Free pages only — robots.txt blocks `/UpdateLiveFeed`, `/UpdateLiveStats`, `/app/`; everything else public is fair game. "Recent Results with xG" on `/xg/<league>` pages is server-rendered and scrapeable. "Upcoming Fixtures" on those same pages is Vue-rendered client-side and invisible to a plain fetch — don't build against it. Active semi-automatic leagues include MLS, Eliteserien, Premiership, and Superliga.
 
-## Unified Match Database
-- `public/match_database.json`: Consolidates played team-matches from both Understat and OddAlerts.
-- Structure per entry:
-  ```json
-  {
-    "team": "Team Name",
-    "opponent": "Opponent Name",
-    "date": "Date of match",
-    "venue": "home" or "away",
-    "goals_for": integer or null,
-    "goals_against": integer or null,
-    "xg_for": float or null,
-    "xg_against": float or null,
-    "source": "understat" or "oddalerts",
-    "league": "league_id",
-    "weight": 1.0
-  }
+## Unified Match Database (Supabase)
+- Match data is stored in a Supabase PostgreSQL database table called `matches`. The legacy flat file `public/match_database.json` has been removed.
+- Structure per entry (Supabase Table Schema):
+  ```sql
+  team: text
+  opponent: text
+  date: text
+  venue: text (home or away)
+  goals_for: integer (nullable)
+  goals_against: integer (nullable)
+  xg_for: numeric (nullable)
+  xg_against: numeric (nullable)
+  source: text (understat, oddalerts, manual, pasted_html)
+  league: text (league_id)
+  weight: numeric (default 1.0)
   ```
+  *(A unique constraint is required on `team, opponent, date, venue, league` for upserting).*
 
 ## Stack
 
-- **Automated pipeline**: Python fetch/compute → `public/data.json` (includes the 4 underlying matches per team) → static HTML/CSS/JS frontend → Vercel. Daily cron plus manual `workflow_dispatch`. Also consolidates all Understat played matches and OddAlerts leagues into `public/match_database.json`.
+- **Automated pipeline**: Python fetch/compute → `public/data.json` (includes the 4 underlying matches per team) → static HTML/CSS/JS frontend → Vercel. Daily cron plus manual `workflow_dispatch`. Also consolidates all Understat played matches and OddAlerts leagues and upserts them directly into Supabase.
 - **Semi-automatic**: On-demand Python serverless functions under `/api` (Vercel), called live from the frontend — separate from the daily pipeline. Uses a direct team-picker UI. Supports direct scraping of OddAlerts or manual HTML copy-paste input to bypass Cloudflare protection.
 
 ## Environment Variables
 
 - `SEASON` (Optional): Override automatic season detection for testing.
 - `MOCK_UPCOMING` (Optional): Enable fallback mock fixture generation in `src/fetch/understat_common.py` when no live future fixtures exist.
-- No API keys are currently required — every active data source is scraped.
+- `SUPERBASE_URL` or `SUPABASE_URL`: URL for the Supabase REST API (Required for both serverless and cron).
+- `SUPERBASE_KEY` or `SUPABASE_KEY`: Supabase service role key or anon key with write access (Required for both serverless and cron).
+- No API keys are currently required for scrapers — every active data source is scraped.
 
 ## Frontend
 - **Fixture card**: Team badges on either side (CSS-based initials in colored shapes, no external images), combined value between them, a bar under each team on a shared scale, and the 4 underlying matches listed below.
