@@ -15,7 +15,7 @@
     <header>
         <h1>Football Predictions</h1>
         <div class="header-right">
-            <button id="mode-toggle" class="mode-toggle-btn">🔮 Semi-Auto</button>
+
             <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">🌙</button>
         </div>
     </header>
@@ -24,75 +24,7 @@
         <div class="loading">Loading fixtures...</div>
     </main>
 
-    <main id="semi-auto-container" class="hidden">
-        <section class="semi-auto-card">
-            <h2>🔮 Semi-Automatic Prediction</h2>
-            <p class="semi-auto-desc">
-                Predict expected xG for fixtures in leagues not fully automated. Fetch matches directly, or paste OddAlerts page source if blocked by Cloudflare.
-            </p>
 
-            <div class="form-group">
-                <label for="semi-league-select">Select League:</label>
-                <select id="semi-league-select">
-                    <option value="">-- Choose a League --</option>
-                </select>
-            </div>
-
-            <!-- Methodology & Metric Selection -->
-            <div class="team-select-row">
-                <div class="team-select-col">
-                    <div class="form-group">
-                        <label for="semi-methodology-select">Methodology:</label>
-                        <select id="semi-methodology-select">
-                            <option value="1">Methodology 1 (Last 4: 2H + 2A, Equal)</option>
-                            <option value="2" selected>Methodology 2 (Last 8: 4H + 4A, 70/30 Split)</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="team-select-col">
-                    <div class="form-group">
-                        <label for="semi-metric-select">Metric:</label>
-                        <select id="semi-metric-select">
-                            <option value="xg" selected>xG (Expected Goals)</option>
-                            <option value="goals">Goals (Actual Goals)</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Standard Semi-Auto UI -->
-            <div id="semi-standard-fields">
-                <div class="form-group" id="html-paste-group">
-                    <label for="semi-html-paste">Paste OddAlerts Page HTML (Optional / Fallback):</label>
-                    <textarea id="semi-html-paste" placeholder="Right-click on OddAlerts xG page (e.g. oddalerts.com/xg/mls) -> View Page Source -> Copy All -> Paste here..."></textarea>
-                </div>
-
-                <button id="semi-fetch-btn" class="action-btn">Load Teams</button>
-
-                <div id="semi-team-selection-group" class="form-group hidden">
-                    <div class="team-select-row">
-                        <div class="team-select-col">
-                            <label for="semi-home-team-select">Select Home Team:</label>
-                            <select id="semi-home-team-select">
-                                <option value="">-- Choose Home Team --</option>
-                            </select>
-                        </div>
-                        <div class="team-select-col">
-                            <label for="semi-away-team-select">Select Away Team:</label>
-                            <select id="semi-away-team-select">
-                                <option value="">-- Choose Away Team --</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <button id="semi-predict-btn" class="action-btn hidden">Calculate Prediction</button>
-            </div>
-
-        </section>
-
-        <div id="semi-prediction-result"></div>
-    </main>
 
     <footer>
         <p id="version-tag"></p>

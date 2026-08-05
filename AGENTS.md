@@ -28,7 +28,7 @@ When computing a prediction, the engine also silently computes comparison projec
 ## Data sources
 
 - **Fully automated (5 leagues)**: Understat.com, scraped using the `understatapi` package. Supported leagues: Premier League (`EPL`), La Liga (`La_Liga`), Serie A (`Serie_A`), Bundesliga (`Bundesliga`), and Ligue 1 (`Ligue_1`). RFPL (Russia) is deliberately excluded. Be a polite scraper (use rate limiting).
-- **Semi-automatic / Unified database**: OddAlerts.com. Free pages only — robots.txt blocks `/UpdateLiveFeed`, `/UpdateLiveStats`, `/app/`; everything else public is fair game. "Recent Results with xG" on `/xg/<league>` pages is server-rendered and scrapeable. "Upcoming Fixtures" on those same pages is Vue-rendered client-side and invisible to a plain fetch — don't build against it. Active semi-automatic leagues include MLS, Eliteserien, Premiership, and Superliga.
+- **OddAlerts Automated Data**: OddAlerts.com. Free pages only — robots.txt blocks `/UpdateLiveFeed`, `/UpdateLiveStats`, `/app/`; everything else public is fair game. "Recent Results with xG" on `/xg/<league>` pages is server-rendered and scrapeable. "Upcoming Fixtures" on `/leagues/<country>/<league>/fixtures` pages are server-rendered and scrapeable. 20 valid leagues (including MLS, Eliteserien, Premiership, Superliga, Veikkausliiga) are fully automated. Note: Iceland and Canada do not have scrapeable server-rendered fixtures.
 
 ## Unified Match Database (Supabase)
 - Match data is stored in a Supabase PostgreSQL database table called `matches`. The legacy flat file `public/match_database.json` has been removed.
@@ -51,7 +51,7 @@ When computing a prediction, the engine also silently computes comparison projec
 ## Stack
 
 - **Automated pipeline**: Python fetch/compute → `public/data.json` (includes the 4 underlying matches per team) → static HTML/CSS/JS frontend → Vercel. Daily cron plus manual `workflow_dispatch`. Also consolidates all Understat played matches and OddAlerts leagues and upserts them directly into Supabase.
-- **Semi-automatic**: On-demand Python serverless functions under `/api` (Vercel), called live from the frontend — separate from the daily pipeline. Uses a direct team-picker UI. Supports direct scraping of OddAlerts HTML to bypass Cloudflare protection.
+- Note: The Semi-Automatic manual prediction UI and its `/api` backend have been completely removed, as fixture detection is now fully automated.
 - **Deployment Configuration**: Vercel deployment relies on `.vercelignore` to deploy only the essential directories (`public`, `api`, `src`) and files (`requirements.txt`).
 
 ## Environment Variables

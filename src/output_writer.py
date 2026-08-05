@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.fetch.understat_common import get_upcoming_fixtures, get_team_matches, get_played_matches, get_current_season
+from src.fetch.oddalerts import parse_upcoming_fixtures, parse_recent_results
 from src.compute.xg_formula import calculate_expected_xg, SAMPLE_SIZE as XG_SAMPLE_SIZE
 from src.supabase_client import supabase_request
 
@@ -21,10 +22,26 @@ UNDERSTAT_LEAGUES = [
 ]
 
 ODDALERTS_LEAGUES = [
-    {"id": "mls", "name": "Major League Soccer", "slug": "mls"},
-    {"id": "eliteserien", "name": "Eliteserien", "slug": "eliteserien"},
-    {"id": "premiership", "name": "Premiership", "slug": "premiership"},
-    {"id": "superliga-denmark", "name": "Superliga", "slug": "superliga-denmark"}
+    {"id": "superliga-argentina", "name": "Superliga", "slug": "superliga-argentina", "fixtures_path": "/leagues/argentina/liga-profesional-de-futbol/fixtures"},
+    {"id": "admiral-bundesliga", "name": "Admiral Bundesliga", "slug": "admiral-bundesliga", "fixtures_path": "/leagues/austria/admiral-bundesliga/fixtures"},
+    {"id": "pro-league-belgium", "name": "Pro League", "slug": "pro-league-belgium", "fixtures_path": "/leagues/belgium/pro-league/fixtures"},
+    {"id": "serie-a-brazil", "name": "Serie A Brazil", "slug": "serie-a-brazil", "fixtures_path": "/leagues/brazil/serie-a/fixtures"},
+    {"id": "superliga-denmark", "name": "Superliga Denmark", "slug": "superliga-denmark", "fixtures_path": "/leagues/denmark/superliga/fixtures"},
+    {"id": "league-one", "name": "League One", "slug": "league-one", "fixtures_path": "/leagues/scotland/league-one/fixtures"},
+    {"id": "2-bundesliga", "name": "2. Bundesliga", "slug": "2-bundesliga", "fixtures_path": "/leagues/germany/2.-bundesliga/fixtures"},
+    {"id": "copa-libertadores", "name": "Copa Libertadores", "slug": "copa-libertadores", "fixtures_path": "/leagues/south-america/copa-libertadores/fixtures"},
+    {"id": "j-league", "name": "J-League", "slug": "j-league", "fixtures_path": "/leagues/japan/j1-league/fixtures"},
+    {"id": "liga-mx", "name": "Liga MX", "slug": "liga-mx", "fixtures_path": "/leagues/mexico/liga-mx/fixtures"},
+    {"id": "eredivisie", "name": "Eredivisie", "slug": "eredivisie", "fixtures_path": "/leagues/netherlands/eredivisie/fixtures"},
+    {"id": "eerste-divisie", "name": "Eerste Divisie", "slug": "eerste-divisie", "fixtures_path": "/leagues/netherlands/eerste-divisie/fixtures"},
+    {"id": "eliteserien", "name": "Eliteserien", "slug": "eliteserien", "fixtures_path": "/leagues/norway/eliteserien/fixtures"},
+    {"id": "liga-portugal", "name": "Liga Portugal", "slug": "liga-portugal", "fixtures_path": "/leagues/portugal/liga-portugal/fixtures"},
+    {"id": "pro-league-saudi", "name": "Pro League Saudi", "slug": "pro-league-saudi", "fixtures_path": "/leagues/saudi-arabia/pro-league/fixtures"},
+    {"id": "premiership", "name": "Premiership", "slug": "premiership", "fixtures_path": "/leagues/scotland/premiership/fixtures"},
+    {"id": "allsvenskan", "name": "Allsvenskan", "slug": "allsvenskan", "fixtures_path": "/leagues/sweden/allsvenskan/fixtures"},
+    {"id": "super-lig", "name": "Super Lig", "slug": "super-lig", "fixtures_path": "/leagues/turkiye/super-lig/fixtures"},
+    {"id": "mls", "name": "Major League Soccer", "slug": "mls", "fixtures_path": "/leagues/united-states/major-league-soccer/fixtures"},
+    {"id": "veikkausliiga", "name": "Veikkausliiga", "slug": "veikkausliiga", "fixtures_path": "/leagues/finland/veikkausliiga/fixtures"}
 ]
 
 def get_version():
@@ -94,6 +111,78 @@ def process_understat_league(league_code, league_name, output_id):
         "fixtures": output_fixtures
     }
 
+
+def process_oddalerts_league(league_id, league_name, fixtures_path, db_records):
+    print(f"Fetching upcoming {league_name} fixtures from OddAlerts...")
+
+    fixtures = []
+    try:
+        url = f"https://www.oddalerts.com{fixtures_path}"
+        req = urllib.request.Request(
+            url,
+            headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+        )
+        with urllib.request.urlopen(req, timeout=10) as response:
+            html_content = response.read().decode('utf-8')
+            fixtures = parse_upcoming_fixtures(html_content)
+    except Exception as e:
+        pass
+
+    output_fixtures = []
+    league_matches = [m for m in db_records if m.get('league') == league_id]
+
+    for fixture in fixtures:
+        home_team = fixture['home_team']
+        away_team = fixture['away_team']
+        try:
+            home_team_matches = [m for m in league_matches if m['team'] == home_team]
+            away_team_matches = [m for m in league_matches if m['team'] == away_team]
+            home_team_matches.sort(key=lambda x: x['date'], reverse=True)
+            away_team_matches.sort(key=lambda x: x['date'], reverse=True)
+
+            home_matches_needed = XG_SAMPLE_SIZE // 2
+            away_matches_needed = XG_SAMPLE_SIZE // 2
+
+            def get_balanced(team_matches, h_need, a_need):
+                s = []
+                h = 0
+                a = 0
+                for m in team_matches:
+                    if h == h_need and a == a_need: break
+                    if m['venue'] == 'home' and h < h_need:
+                        s.append(m)
+                        h += 1
+                    elif m['venue'] == 'away' and a < a_need:
+                        s.append(m)
+                        a += 1
+                return s
+
+            home_matches = get_balanced(home_team_matches, home_matches_needed, away_matches_needed)
+            away_matches = get_balanced(away_team_matches, home_matches_needed, away_matches_needed)
+
+            formatted_home = []
+            for m in home_matches:
+                formatted_home.append({'opponent': m['opponent'], 'date': m['date'], 'venue': m['venue'], 'xg_for': m['xg_for'], 'xg_against': m['xg_against']})
+
+            formatted_away = []
+            for m in away_matches:
+                formatted_away.append({'opponent': m['opponent'], 'date': m['date'], 'venue': m['venue'], 'xg_for': m['xg_for'], 'xg_against': m['xg_against']})
+
+            stats = calculate_expected_xg(formatted_home, formatted_away)
+
+            output_fixtures.append({
+                "home_team": home_team, "away_team": away_team, "date": fixture['date'],
+                "combined_expected_xg": round(stats['team_a_expected_xg'] + stats['team_b_expected_xg'], 2),
+                "home_expected_xg": round(stats['team_a_expected_xg'], 2),
+                "away_expected_xg": round(stats['team_b_expected_xg'], 2),
+                f"home_last_{XG_SAMPLE_SIZE}_matches": formatted_home,
+                f"away_last_{XG_SAMPLE_SIZE}_matches": formatted_away
+            })
+        except:
+            pass
+
+    return {"id": league_id, "name": league_name, "metric": "xg", "fixtures": output_fixtures}
+
 def fetch_and_parse_oddalerts_league(league_id, slug, name):
     print(f"Fetching {name} ({league_id}) matches from OddAlerts...")
     url = f"https://www.oddalerts.com/xg/{slug}"
@@ -112,7 +201,6 @@ def fetch_and_parse_oddalerts_league(league_id, slug, name):
 
     parsed_matches = []
     if html_content:
-        from api.predict import parse_recent_results
         try:
             parsed_matches = parse_recent_results(html_content)
             print(f"Parsed {len(parsed_matches)} matches for {league_id} successfully.")
@@ -300,7 +388,15 @@ def main():
         except Exception as e:
             print(f"Failed to fetch or parse OddAlerts league {league['name']}: {e}")
 
+
     leagues_data = []
+
+    for league in ODDALERTS_LEAGUES:
+        try:
+            data = process_oddalerts_league(league["id"], league["name"], league["fixtures_path"], db_records)
+            if data["fixtures"]:
+                leagues_data.append(data)
+        except: pass
 
     # 2. Fetch Understat leagues
     for league in UNDERSTAT_LEAGUES:
