@@ -339,6 +339,80 @@ let homeOverrides = {};
 let awayOverrides = {};
 let currentPrediction = null;
 
+function setupLogoClickHandlers() {
+    document.body.addEventListener('click', (e) => {
+        const badge = e.target.closest('.team-badge');
+        if (badge) {
+            const teamName = badge.dataset.team;
+            if (!teamName) return;
+
+            let teamLogos = {};
+            try {
+                teamLogos = JSON.parse(localStorage.getItem('team_logos') || '{}');
+            } catch (err) {}
+
+            const currentLogoUrl = teamLogos[teamName] || '';
+            const newLogoUrl = prompt(`Enter custom logo URL for ${teamName} (leave blank to remove):`, currentLogoUrl);
+            if (newLogoUrl === null) return; // User cancelled
+
+            const trimmedLogoUrl = newLogoUrl.trim();
+            if (trimmedLogoUrl) {
+                teamLogos[teamName] = trimmedLogoUrl;
+            } else {
+                delete teamLogos[teamName];
+            }
+
+            try {
+                localStorage.setItem('team_logos', JSON.stringify(teamLogos));
+            } catch (err) {}
+
+            // Propagate across all badges of this team in real-time
+            const badges = document.querySelectorAll(`[data-team="${teamName}"]`);
+            const initials = getInitials(teamName);
+            badges.forEach(b => {
+                if (trimmedLogoUrl) {
+                    b.style.backgroundColor = 'transparent';
+                    b.innerHTML = `<img src="${trimmedLogoUrl}" alt="${initials}">`;
+                } else {
+                    b.style.backgroundColor = getColor(teamName);
+                    b.innerHTML = initials;
+                }
+            });
+
+            // Also add team to autocomplete Set and update datalist in case this was a newly seen team name
+            if (typeof allTeamNames !== 'undefined' && !allTeamNames.has(teamName)) {
+                allTeamNames.add(teamName);
+                if (typeof updateAutocompleteDatalist === 'function') {
+                    updateAutocompleteDatalist();
+                }
+            }
+        }
+    });
+}
+
+// Theme toggle functionality
+function setupTheme() {
+    const toggleBtn = document.getElementById('theme-toggle');
+    if (!toggleBtn) return;
+
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    toggleBtn.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+
+    toggleBtn.addEventListener('click', () => {
+        const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+    });
+}
+
+// State to track loaded teams for the currently selected league
+let fetchedTeams = [];
+let homeOverrides = {};
+let awayOverrides = {};
+let currentPrediction = null;
+
 function setupModeToggle() {
     const modeBtn = document.getElementById('mode-toggle');
     const autoMain = document.getElementById('fixtures-container');
@@ -1296,8 +1370,6 @@ function parsePastedLine(line1, line2, line3, teamName, skipXG) {
 document.addEventListener('DOMContentLoaded', () => {
     init();
     setupTheme();
-    setupModeToggle();
-    setupSemiAutoHandlers();
     setupLogoClickHandlers();
     loadTeamNames();
 });
