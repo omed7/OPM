@@ -35,7 +35,6 @@
                 <label for="semi-league-select">Select League:</label>
                 <select id="semi-league-select">
                     <option value="">-- Choose a League --</option>
-                    <option value="manual">✍️ Other League (Manual Paste)</option>
                 </select>
             </div>
 
@@ -90,84 +89,6 @@
                 <button id="semi-predict-btn" class="action-btn hidden">Calculate Prediction</button>
             </div>
 
-            <!-- Manual Paste Flow UI Wizard (initially hidden) -->
-            <div id="semi-manual-wizard" class="hidden">
-                <!-- Step 1: Info -->
-                <div id="manual-step-1" class="manual-step">
-                    <h3>Step 1: League & Team Info</h3>
-                    <div class="form-group">
-                        <label for="manual-league-name">Custom League Name:</label>
-                        <input type="text" id="manual-league-name" placeholder="e.g. Eredivisie">
-                    </div>
-                    <div class="team-select-row">
-                        <div class="team-select-col">
-                            <div class="form-group">
-                                <label for="manual-home-name">Home Team Name:</label>
-                                <input type="text" id="manual-home-name" placeholder="e.g. Ajax">
-                            </div>
-                        </div>
-                        <div class="team-select-col">
-                            <div class="form-group">
-                                <label for="manual-away-name">Away Team Name:</label>
-                                <input type="text" id="manual-away-name" placeholder="e.g. Feyenoord">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group checkbox-group">
-                        <label for="manual-skip-xg" class="checkbox-label">
-                            <input type="checkbox" id="manual-skip-xg">
-                            <span>Skip xG (Predict Goals directly)</span>
-                        </label>
-                    </div>
-                    <button id="manual-to-step-2" class="action-btn">Next: Home Team History</button>
-                </div>
-
-                <!-- Step 2: Home Paste -->
-                <div id="manual-step-2" class="manual-step hidden">
-                    <h3 id="manual-home-title">Step 2: Home Team History</h3>
-                    <p class="step-desc">Paste lines of recent matches. Format: <code>Opponent / (H/A) date / FOR-AGAINST</code> per line.</p>
-                    <div class="form-group">
-                        <textarea id="manual-home-paste" placeholder="e.g.&#10;Feyenoord (A) 2026-07-31 / 1.5-2.2&#10;Ajax (H) 2026-07-24 / 2.0-1.0"></textarea>
-                    </div>
-                    <div class="wizard-buttons">
-                        <button id="manual-back-to-step-1" class="action-btn secondary-btn">Back</button>
-                        <button id="manual-to-step-3" class="action-btn">Parse & Review</button>
-                    </div>
-                </div>
-
-                <!-- Step 3: Home Confirmation -->
-                <div id="manual-step-3" class="manual-step hidden">
-                    <h3 id="manual-home-confirm-title">Confirm Home Matches</h3>
-                    <div id="manual-home-parsed-list" class="parsed-list-container"></div>
-                    <div class="wizard-buttons">
-                        <button id="manual-back-to-step-2" class="action-btn secondary-btn">Back to Paste</button>
-                        <button id="manual-to-step-4" class="action-btn">Confirm & Next: Away Team</button>
-                    </div>
-                </div>
-
-                <!-- Step 4: Away Paste -->
-                <div id="manual-step-4" class="manual-step hidden">
-                    <h3 id="manual-away-title">Step 4: Away Team History</h3>
-                    <p class="step-desc">Paste lines of recent matches. Format: <code>Opponent / (H/A) date / FOR-AGAINST</code> per line.</p>
-                    <div class="form-group">
-                        <textarea id="manual-away-paste" placeholder="e.g.&#10;Ajax (H) 2026-07-31 / 1.5-2.2&#10;Feyenoord (A) 2026-07-24 / 1.0-2.0"></textarea>
-                    </div>
-                    <div class="wizard-buttons">
-                        <button id="manual-back-to-step-3" class="action-btn secondary-btn">Back</button>
-                        <button id="manual-to-step-5" class="action-btn">Parse & Review</button>
-                    </div>
-                </div>
-
-                <!-- Step 5: Away Confirmation -->
-                <div id="manual-step-5" class="manual-step hidden">
-                    <h3 id="manual-away-confirm-title">Confirm Away Matches</h3>
-                    <div id="manual-away-parsed-list" class="parsed-list-container"></div>
-                    <div class="wizard-buttons">
-                        <button id="manual-back-to-step-4" class="action-btn secondary-btn">Back to Paste</button>
-                        <button id="manual-save-predict" class="action-btn">Save & Predict</button>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <div id="semi-prediction-result"></div>

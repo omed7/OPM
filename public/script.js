@@ -264,16 +264,6 @@ function updateAutocompleteDatalist() {
         datalist.appendChild(option);
     });
 
-    // Wire it up to the existing inputs if they exist
-    const homeInput = document.getElementById('manual-home-name');
-    const awayInput = document.getElementById('manual-away-name');
-    if (homeInput) {
-        homeInput.setAttribute('list', 'team-names-datalist');
-    }
-    if (awayInput) {
-        awayInput.setAttribute('list', 'team-names-datalist');
-    }
-}
 
 function setupLogoClickHandlers() {
     document.body.addEventListener('click', (e) => {
@@ -383,14 +373,11 @@ async function initSemiAuto() {
     if (!leagueSelect || leagueSelect.querySelector('option[value="mls"]')) return; // Already loaded
 
     function populateLeagues(leagues) {
-        // Insert leagues before the manual option
-        const manualOpt = leagueSelect.querySelector('option[value="manual"]');
         leagues.forEach(l => {
             const opt = document.createElement('option');
             opt.value = l.id;
             opt.textContent = `${l.flag} ${l.name}`;
-            if (manualOpt) {
-                leagueSelect.insertBefore(opt, manualOpt);
+        });
             } else {
                 leagueSelect.appendChild(opt);
             }
@@ -559,143 +546,12 @@ function normalizeWeights(numMatches, defaultWeights, overrides, methodologyId) 
 function parsePastedLine(line1, line2, line3, teamName, skipXG) {
     if (!line1 || !line2 || !line3) return null;
     line1 = line1.trim();
-    line2 = line2.trim();
-    line3 = line3.trim();
-
-    // 1. From line 1: extract the opponent name (strip the trailing league-position ordinal, e.g. "6th")
-    const opponent = line1.replace(/\s+\d+(?:st|nd|rd|th)\s*$/i, '').trim() || 'Unknown Opponent';
-
-    // 2. From line 2: extract venue from leading (H)/(A) and parse date
-    let venue = 'home';
-    const venueMatch = line2.match(/^\s*\(?(H|A)\)?/i);
-    if (venueMatch && venueMatch[1].toUpperCase() === 'A') {
-        venue = 'away';
-    }
-
-    // Parse the date e.g. "26th Jul"
-    let date = new Date().toISOString().split('T')[0];
-    const dateMatch = line2.match(/(\d+)(?:st|nd|rd|th)\s+([A-Za-z]{3,})/i);
-    if (dateMatch) {
-        const day = parseInt(dateMatch[1]);
-        const monthAbbr = dateMatch[2].toLowerCase();
-        const months = {
-            jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
-            jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11
-        };
-        if (months[monthAbbr] !== undefined) {
-            const monthIndex = months[monthAbbr];
-            const now = new Date();
-            const currentMonthIndex = now.getMonth();
-            const currentYear = now.getFullYear();
-            let year = currentYear;
-            if (monthIndex > currentMonthIndex) {
-                year = currentYear - 1;
-            }
-            const formattedMonth = String(monthIndex + 1).padStart(2, '0');
-            const formattedDay = String(day).padStart(2, '0');
-            date = `${year}-${formattedMonth}-${formattedDay}`;
-        }
-    }
-
-    // 3. From line 3: parse score (FOR-AGAINST), e.g. "2.5-1.8"
-    const scoreMatch = line3.match(/(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)/);
-    if (!scoreMatch) return null;
-    const rawVal1 = parseFloat(scoreMatch[1]);
-    const rawVal2 = parseFloat(scoreMatch[2]);
-
-    // Apply venue flip!
-    // If venue is (A), the RIGHT-hand number is this team's own value (for), left is against.
-    // If (H), left is for, right is against.
-    let valFor, valAgainst;
-    let flipApplied = false;
-    if (venue === 'away') {
-        valFor = rawVal2;
-        valAgainst = rawVal1;
-        flipApplied = true;
-    } else {
-        valFor = rawVal1;
-        valAgainst = rawVal2;
-    }
-
-    // Sanity checks
-    const warnings = [];
-    if (valFor < 0 || valAgainst < 0) {
-        warnings.push('Negative numbers are implausible.');
-    }
-    if (skipXG) {
-        if (valFor > 12) warnings.push(`Implausibly high Goals for: ${valFor}`);
-        if (valAgainst > 12) warnings.push(`Implausibly high Goals against: ${valAgainst}`);
-        if (!Number.isInteger(valFor) || !Number.isInteger(valAgainst)) {
-            warnings.push('Goals are typically integers.');
-        }
-    } else {
-        if (valFor > 7.0) warnings.push(`Implausibly high xG for: ${valFor}`);
-        if (valAgainst > 7.0) warnings.push(`Implausibly high xG against: ${valAgainst}`);
-    }
-
-    return {
-        opponent,
-        venue,
-        date,
-        valFor,
-        valAgainst,
-        flipApplied,
-        rawVal1,
-        rawVal2,
-        warnings,
-        rawLine: `${line1} | ${line2} | ${line3}`
-    };
-}
-
-function renderParsedMatches(parsedMatches, containerEl, teamName, skipXG) {
-    containerEl.innerHTML = '';
-    if (parsedMatches.length === 0) {
-        containerEl.innerHTML = '<div class="no-matches-parsed">No valid matches parsed. Please check the paste format.</div>';
-        return;
-    }
-
-    parsedMatches.forEach((m, idx) => {
-        const item = document.createElement('div');
-        item.className = 'parsed-match-item';
-
-        let warningsHtml = '';
-        if (m.warnings.length > 0) {
-            warningsHtml = `
-                <div class="parsed-warnings">
-                    ⚠️ Warning: ${m.warnings.join(' ')}
-                </div>
-            `;
-        }
-
-        const metricLabel = skipXG ? 'Goals' : 'xG';
-        const flipText = m.flipApplied
-            ? `<strong>Venue flip applied (Away Match):</strong> Right-hand value (${m.rawVal2}) is FOR, left-hand value (${m.rawVal1}) is AGAINST.`
-            : `<strong>No flip applied (Home Match):</strong> Left-hand value (${m.rawVal1}) is FOR, right-hand value (${m.rawVal2}) is AGAINST.`;
-
-        item.innerHTML = `
-            <div class="parsed-match-header">
-                <span class="match-index">Match #${idx + 1}</span>
-                <span class="match-date">${m.date}</span>
-            </div>
-            <div class="parsed-match-details">
-                <p>Opponent: <strong>${m.opponent}</strong></p>
-                <p>Venue: <strong>${m.venue.charAt(0).toUpperCase() + m.venue.slice(1)}</strong></p>
-                <p>Derived ${metricLabel} FOR: <strong class="derived-value">${m.valFor.toFixed(2)}</strong></p>
-                <p>Derived ${metricLabel} AGAINST: <strong class="derived-value">${m.valAgainst.toFixed(2)}</strong></p>
-                <p class="flip-explanation">${flipText}</p>
-            </div>
-            ${warningsHtml}
-        `;
-        containerEl.appendChild(item);
-    });
-}
-
-function setupSemiAutoHandlers() {
-    const leagueSelect = document.getElementById('semi-league-select');
-    const htmlPaste = document.getElementById('semi-html-paste');
-    const fetchBtn = document.getElementById('semi-fetch-btn');
-    const teamGroup = document.getElementById('semi-team-selection-group');
-    const homeTeamSelect = document.getElementById('semi-home-team-select');
+        teamGroup.classList.add('hidden');
+        predictBtn.classList.add('hidden');
+        homeTeamSelect.innerHTML = '<option value="">-- Choose Home Team --</option>';
+        awayTeamSelect.innerHTML = '<option value="">-- Choose Away Team --</option>';
+        resultDiv.innerHTML = '';
+        fetchedTeams = [];
     const awayTeamSelect = document.getElementById('semi-away-team-select');
     const predictBtn = document.getElementById('semi-predict-btn');
     const resultDiv = document.getElementById('semi-prediction-result');
@@ -838,20 +694,6 @@ function setupSemiAutoHandlers() {
     });
 
     manualBackToStep3Btn.addEventListener('click', () => {
-        showStep(3);
-    });
-
-    manualToStep5Btn.addEventListener('click', () => {
-        const pasteVal = manualAwayPaste.value.trim();
-        if (!pasteVal) {
-            showSemiAlert('Please paste Away Team matches history.', 'error');
-            return;
-        }
-
-        // Clear alerts
-        resultDiv.innerHTML = '';
-
-        const lines = pasteVal.split('\n').map(l => l.trim()).filter(l => l.length > 0);
         parsedAwayMatches = [];
         for (let i = 0; i < lines.length; i += 3) {
             if (i + 2 < lines.length) {
