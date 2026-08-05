@@ -400,7 +400,13 @@ async function initSemiAuto() {
     try {
         const res = await fetch('/api/leagues');
         if (!res.ok) throw new Error('Failed to fetch leagues list');
-        const leagues = await res.json();
+        let leagues;
+        const contentType = res.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            leagues = await res.json();
+        } else {
+            throw new Error(`Invalid response format: HTTP ${res.status} ${res.statusText}`);
+        }
         populateLeagues(leagues);
     } catch (err) {
         console.warn('API /api/leagues not reachable. Using fallback leagues list.', err);
@@ -896,8 +902,19 @@ function setupSemiAutoHandlers() {
             });
 
             if (!saveRes.ok) {
-                const saveError = await saveRes.json();
-                throw new Error(saveError.error || 'Server error saving matches');
+                let errorMsg = `HTTP ${saveRes.status} ${saveRes.statusText}`;
+                try {
+                    const contentType = saveRes.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        const saveError = await saveRes.json();
+                        errorMsg = saveError.error || errorMsg;
+                    } else {
+                        await saveRes.text(); // consume body
+                    }
+                } catch (e) {
+                    // Ignore parse errors
+                }
+                throw new Error(`Failed to save matches: ${errorMsg}`);
             }
 
             manualSavePredictBtn.textContent = 'Calculating Prediction...';
@@ -917,11 +934,28 @@ function setupSemiAutoHandlers() {
             });
 
             if (!predRes.ok) {
-                const predError = await predRes.json();
-                throw new Error(predError.error || 'Server error computing prediction');
+                let errorMsg = `HTTP ${predRes.status} ${predRes.statusText}`;
+                try {
+                    const contentType = predRes.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        const predError = await predRes.json();
+                        errorMsg = predError.error || errorMsg;
+                    } else {
+                        await predRes.text(); // consume body
+                    }
+                } catch (e) {
+                    // Ignore parse errors
+                }
+                throw new Error(`Failed to compute prediction: ${errorMsg}`);
             }
 
-            const prediction = await predRes.json();
+            let prediction;
+            const predContentType = predRes.headers.get('content-type');
+            if (predContentType && predContentType.includes('application/json')) {
+                prediction = await predRes.json();
+            } else {
+                throw new Error(`Invalid response format: HTTP ${predRes.status} ${predRes.statusText}`);
+            }
             resultDiv.innerHTML = '';
 
             // Render prediction beautifully!
@@ -1002,7 +1036,13 @@ function setupSemiAutoHandlers() {
                 return;
             }
 
-            const data = await res.json();
+            let data;
+            const resContentType = res.headers.get('content-type');
+            if (resContentType && resContentType.includes('application/json')) {
+                data = await res.json();
+            } else {
+                throw new Error(`Invalid response format: HTTP ${res.status} ${res.statusText}`);
+            }
             fetchedTeams = data.teams || [];
 
             if (fetchedTeams.length === 0) {
@@ -1098,11 +1138,28 @@ function setupSemiAutoHandlers() {
             });
 
             if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.error || 'Server error computing prediction');
+                let errorMsg = `HTTP ${res.status} ${res.statusText}`;
+                try {
+                    const contentType = res.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        const errorData = await res.json();
+                        errorMsg = errorData.error || errorMsg;
+                    } else {
+                        await res.text(); // consume body
+                    }
+                } catch (e) {
+                    // Ignore parse errors
+                }
+                throw new Error(`Server error computing prediction: ${errorMsg}`);
             }
 
-            const prediction = await res.json();
+            let prediction;
+            const predContentType2 = res.headers.get('content-type');
+            if (predContentType2 && predContentType2.includes('application/json')) {
+                prediction = await res.json();
+            } else {
+                throw new Error(`Invalid response format: HTTP ${res.status} ${res.statusText}`);
+            }
             currentPrediction = prediction;
 
             renderSemiPredictionResult(prediction, methodology, metric);
