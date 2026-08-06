@@ -264,6 +264,7 @@ function updateAutocompleteDatalist() {
         datalist.appendChild(option);
     });
 
+}
 
 function setupLogoClickHandlers() {
     document.body.addEventListener('click', (e) => {
