@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "0e189ed",
-    "generated_at": "2026-08-05T22:38:01Z"
+    "version": "526dc15",
+    "generated_at": "2026-08-06T08:48:57Z"
   },
   "leagues": [
     {
@@ -9,60 +9,6 @@
       "name": "Superliga",
       "metric": "xg",
       "fixtures": [
-        {
-          "home_team": "Tigre",
-          "away_team": "Belgrano",
-          "date": "2026-08-06",
-          "combined_expected_xg": 2.22,
-          "home_expected_xg": 1.25,
-          "away_expected_xg": 0.97,
-          "home_last_4_matches": [
-            {
-              "opponent": "Racing Club",
-              "date": "2026-08-01",
-              "venue": "away",
-              "xg_for": 0.85,
-              "xg_against": 0.57
-            },
-            {
-              "opponent": "Estudiantes de R\u00edo Cuarto",
-              "date": "2026-07-25",
-              "venue": "away",
-              "xg_for": 1.31,
-              "xg_against": 0.88
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Argentinos Juniors",
-              "date": "2026-08-01",
-              "venue": "home",
-              "xg_for": 0.64,
-              "xg_against": 0.91
-            },
-            {
-              "opponent": "Rosario Central",
-              "date": "2026-07-23",
-              "venue": "home",
-              "xg_for": 1.83,
-              "xg_against": 1.23
-            },
-            {
-              "opponent": "River Plate",
-              "date": "2026-05-24",
-              "venue": "away",
-              "xg_for": 1.47,
-              "xg_against": 1.3
-            },
-            {
-              "opponent": "Argentinos Juniors",
-              "date": "2026-05-17",
-              "venue": "away",
-              "xg_for": 0.89,
-              "xg_against": 2.27
-            }
-          ]
-        },
         {
           "home_team": "Uni\u00f3n Santa Fe",
           "away_team": "Lan\u00fas",
@@ -276,9 +222,9 @@
           "home_team": "Deportivo Riestra",
           "away_team": "Estudiantes",
           "date": "2026-08-08",
-          "combined_expected_xg": 2.93,
-          "home_expected_xg": 1.45,
-          "away_expected_xg": 1.48,
+          "combined_expected_xg": 2.58,
+          "home_expected_xg": 1.33,
+          "away_expected_xg": 1.26,
           "home_last_4_matches": [
             {
               "opponent": "Barracas Central",
@@ -304,6 +250,13 @@
           ],
           "away_last_4_matches": [
             {
+              "opponent": "Boca Juniors",
+              "date": "2026-08-05",
+              "venue": "away",
+              "xg_for": 0.52,
+              "xg_against": 1.0
+            },
+            {
               "opponent": "Defensa y Justicia",
               "date": "2026-08-01",
               "venue": "home",
@@ -323,10 +276,17 @@
           "home_team": "Tigre",
           "away_team": "River Plate",
           "date": "2026-08-08",
-          "combined_expected_xg": 1.91,
-          "home_expected_xg": 1.02,
-          "away_expected_xg": 0.89,
+          "combined_expected_xg": 2.19,
+          "home_expected_xg": 1.26,
+          "away_expected_xg": 0.93,
           "home_last_4_matches": [
+            {
+              "opponent": "Belgrano",
+              "date": "2026-08-06",
+              "venue": "home",
+              "xg_for": 2.51,
+              "xg_against": 0.97
+            },
             {
               "opponent": "Racing Club",
               "date": "2026-08-01",
@@ -370,10 +330,17 @@
           "home_team": "Boca Juniors",
           "away_team": "V\u00e9lez Sarsfield",
           "date": "2026-08-08",
-          "combined_expected_xg": 2.38,
-          "home_expected_xg": 1.44,
-          "away_expected_xg": 0.94,
+          "combined_expected_xg": 2.28,
+          "home_expected_xg": 1.41,
+          "away_expected_xg": 0.87,
           "home_last_4_matches": [
+            {
+              "opponent": "Estudiantes",
+              "date": "2026-08-05",
+              "venue": "home",
+              "xg_for": 1.0,
+              "xg_against": 0.52
+            },
             {
               "opponent": "Newell's Old Boys",
               "date": "2026-08-02",
@@ -708,9 +675,9 @@
           "home_team": "Banfield",
           "away_team": "Belgrano",
           "date": "2026-08-10",
-          "combined_expected_xg": 2.49,
-          "home_expected_xg": 1.28,
-          "away_expected_xg": 1.21,
+          "combined_expected_xg": 2.53,
+          "home_expected_xg": 1.31,
+          "away_expected_xg": 1.22,
           "home_last_4_matches": [
             {
               "opponent": "Estudiantes de R\u00edo Cuarto",
@@ -736,6 +703,13 @@
           ],
           "away_last_4_matches": [
             {
+              "opponent": "Tigre",
+              "date": "2026-08-06",
+              "venue": "away",
+              "xg_for": 0.97,
+              "xg_against": 2.51
+            },
+            {
               "opponent": "Argentinos Juniors",
               "date": "2026-08-01",
               "venue": "home",
@@ -755,13 +729,6 @@
               "venue": "away",
               "xg_for": 1.47,
               "xg_against": 1.3
-            },
-            {
-              "opponent": "Argentinos Juniors",
-              "date": "2026-05-17",
-              "venue": "away",
-              "xg_for": 0.89,
-              "xg_against": 2.27
             }
           ]
         },
@@ -1526,74 +1493,6 @@
           ]
         },
         {
-          "home_team": "Sporting Charleroi",
-          "away_team": "OH Leuven",
-          "date": "2026-08-09",
-          "combined_expected_xg": 2.49,
-          "home_expected_xg": 1.35,
-          "away_expected_xg": 1.15,
-          "home_last_4_matches": [
-            {
-              "opponent": "Standard Li\u00e8ge",
-              "date": "2026-05-23",
-              "venue": "away",
-              "xg_for": 1.76,
-              "xg_against": 0.67
-            },
-            {
-              "opponent": "OH Leuven",
-              "date": "2026-05-19",
-              "venue": "home",
-              "xg_for": 1.6,
-              "xg_against": 0.96
-            },
-            {
-              "opponent": "Westerlo",
-              "date": "2026-05-16",
-              "venue": "home",
-              "xg_for": 1.19,
-              "xg_against": 1.12
-            },
-            {
-              "opponent": "Antwerp",
-              "date": "2026-05-10",
-              "venue": "away",
-              "xg_for": 0.74,
-              "xg_against": 1.64
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Genk",
-              "date": "2026-05-23",
-              "venue": "home",
-              "xg_for": 1.44,
-              "xg_against": 1.4
-            },
-            {
-              "opponent": "Sporting Charleroi",
-              "date": "2026-05-19",
-              "venue": "away",
-              "xg_for": 0.96,
-              "xg_against": 1.6
-            },
-            {
-              "opponent": "Antwerp",
-              "date": "2026-05-15",
-              "venue": "home",
-              "xg_for": 1.08,
-              "xg_against": 1.07
-            },
-            {
-              "opponent": "Standard Li\u00e8ge",
-              "date": "2026-05-08",
-              "venue": "away",
-              "xg_for": 1.29,
-              "xg_against": 1.42
-            }
-          ]
-        },
-        {
           "home_team": "Zulte-Waregem",
           "away_team": "Genk",
           "date": "2026-08-09",
@@ -1658,6 +1557,74 @@
               "venue": "home",
               "xg_for": 1.2,
               "xg_against": 1.74
+            }
+          ]
+        },
+        {
+          "home_team": "Sporting Charleroi",
+          "away_team": "OH Leuven",
+          "date": "2026-08-09",
+          "combined_expected_xg": 2.49,
+          "home_expected_xg": 1.35,
+          "away_expected_xg": 1.15,
+          "home_last_4_matches": [
+            {
+              "opponent": "Standard Li\u00e8ge",
+              "date": "2026-05-23",
+              "venue": "away",
+              "xg_for": 1.76,
+              "xg_against": 0.67
+            },
+            {
+              "opponent": "OH Leuven",
+              "date": "2026-05-19",
+              "venue": "home",
+              "xg_for": 1.6,
+              "xg_against": 0.96
+            },
+            {
+              "opponent": "Westerlo",
+              "date": "2026-05-16",
+              "venue": "home",
+              "xg_for": 1.19,
+              "xg_against": 1.12
+            },
+            {
+              "opponent": "Antwerp",
+              "date": "2026-05-10",
+              "venue": "away",
+              "xg_for": 0.74,
+              "xg_against": 1.64
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Genk",
+              "date": "2026-05-23",
+              "venue": "home",
+              "xg_for": 1.44,
+              "xg_against": 1.4
+            },
+            {
+              "opponent": "Sporting Charleroi",
+              "date": "2026-05-19",
+              "venue": "away",
+              "xg_for": 0.96,
+              "xg_against": 1.6
+            },
+            {
+              "opponent": "Antwerp",
+              "date": "2026-05-15",
+              "venue": "home",
+              "xg_for": 1.08,
+              "xg_against": 1.07
+            },
+            {
+              "opponent": "Standard Li\u00e8ge",
+              "date": "2026-05-08",
+              "venue": "away",
+              "xg_for": 1.29,
+              "xg_against": 1.42
             }
           ]
         },
@@ -3109,74 +3076,6 @@
           ]
         },
         {
-          "home_team": "Karlsruher SC",
-          "away_team": "DSC Arminia Bielefeld",
-          "date": "2026-08-08",
-          "combined_expected_xg": 3.49,
-          "home_expected_xg": 1.61,
-          "away_expected_xg": 1.89,
-          "home_last_4_matches": [
-            {
-              "opponent": "VfL Bochum 1848",
-              "date": "2026-05-17",
-              "venue": "home",
-              "xg_for": 3.28,
-              "xg_against": 1.06
-            },
-            {
-              "opponent": "Paderborn",
-              "date": "2026-05-08",
-              "venue": "away",
-              "xg_for": 0.79,
-              "xg_against": 2.41
-            },
-            {
-              "opponent": "Darmstadt 98",
-              "date": "2026-05-03",
-              "venue": "home",
-              "xg_for": 2.34,
-              "xg_against": 1.27
-            },
-            {
-              "opponent": "Elversberg",
-              "date": "2026-04-17",
-              "venue": "away",
-              "xg_for": 0.78,
-              "xg_against": 1.82
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Hertha BSC",
-              "date": "2026-05-17",
-              "venue": "home",
-              "xg_for": 4.2,
-              "xg_against": 1.2
-            },
-            {
-              "opponent": "Kaiserslautern",
-              "date": "2026-05-08",
-              "venue": "away",
-              "xg_for": 1.74,
-              "xg_against": 1.6
-            },
-            {
-              "opponent": "VfL Bochum 1848",
-              "date": "2026-05-02",
-              "venue": "home",
-              "xg_for": 1.14,
-              "xg_against": 0.55
-            },
-            {
-              "opponent": "Preu\u00dfen M\u00fcnster",
-              "date": "2026-04-25",
-              "venue": "away",
-              "xg_for": 1.44,
-              "xg_against": 2.33
-            }
-          ]
-        },
-        {
           "home_team": "Darmstadt 98",
           "away_team": "Holstein Kiel",
           "date": "2026-08-08",
@@ -3241,6 +3140,74 @@
               "venue": "away",
               "xg_for": 0.38,
               "xg_against": 1.9
+            }
+          ]
+        },
+        {
+          "home_team": "Karlsruher SC",
+          "away_team": "DSC Arminia Bielefeld",
+          "date": "2026-08-08",
+          "combined_expected_xg": 3.49,
+          "home_expected_xg": 1.61,
+          "away_expected_xg": 1.89,
+          "home_last_4_matches": [
+            {
+              "opponent": "VfL Bochum 1848",
+              "date": "2026-05-17",
+              "venue": "home",
+              "xg_for": 3.28,
+              "xg_against": 1.06
+            },
+            {
+              "opponent": "Paderborn",
+              "date": "2026-05-08",
+              "venue": "away",
+              "xg_for": 0.79,
+              "xg_against": 2.41
+            },
+            {
+              "opponent": "Darmstadt 98",
+              "date": "2026-05-03",
+              "venue": "home",
+              "xg_for": 2.34,
+              "xg_against": 1.27
+            },
+            {
+              "opponent": "Elversberg",
+              "date": "2026-04-17",
+              "venue": "away",
+              "xg_for": 0.78,
+              "xg_against": 1.82
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Hertha BSC",
+              "date": "2026-05-17",
+              "venue": "home",
+              "xg_for": 4.2,
+              "xg_against": 1.2
+            },
+            {
+              "opponent": "Kaiserslautern",
+              "date": "2026-05-08",
+              "venue": "away",
+              "xg_for": 1.74,
+              "xg_against": 1.6
+            },
+            {
+              "opponent": "VfL Bochum 1848",
+              "date": "2026-05-02",
+              "venue": "home",
+              "xg_for": 1.14,
+              "xg_against": 0.55
+            },
+            {
+              "opponent": "Preu\u00dfen M\u00fcnster",
+              "date": "2026-04-25",
+              "venue": "away",
+              "xg_for": 1.44,
+              "xg_against": 2.33
             }
           ]
         },
@@ -3884,221 +3851,6 @@
               "venue": "away",
               "xg_for": 0.23,
               "xg_against": 0.76
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "j-league",
-      "name": "J-League",
-      "metric": "xg",
-      "fixtures": [
-        {
-          "home_team": "Yokohama F. Marinos",
-          "away_team": "Kashima Antlers",
-          "date": "2026-08-07",
-          "combined_expected_xg": 1.22,
-          "home_expected_xg": 0.12,
-          "away_expected_xg": 1.1,
-          "home_last_4_matches": [
-            {
-              "opponent": "Kashima Antlers",
-              "date": "2026-12-06",
-              "venue": "away",
-              "xg_for": 0.12,
-              "xg_against": 1.1
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Yokohama F. Marinos",
-              "date": "2026-12-06",
-              "venue": "home",
-              "xg_for": 1.1,
-              "xg_against": 0.12
-            }
-          ]
-        },
-        {
-          "home_team": "Gamba Osaka",
-          "away_team": "Urawa Reds",
-          "date": "2026-08-07",
-          "combined_expected_xg": 3.23,
-          "home_expected_xg": 1.33,
-          "away_expected_xg": 1.9,
-          "home_last_4_matches": [
-            {
-              "opponent": "Tokyo Verdy",
-              "date": "2026-12-06",
-              "venue": "home",
-              "xg_for": 2.18,
-              "xg_against": 1.2
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Kawasaki Frontale",
-              "date": "2026-12-06",
-              "venue": "home",
-              "xg_for": 2.59,
-              "xg_against": 0.49
-            }
-          ]
-        },
-        {
-          "home_team": "FC Tokyo",
-          "away_team": "Machida Zelvia",
-          "date": "2026-08-08",
-          "combined_expected_xg": 1.48,
-          "home_expected_xg": 0.84,
-          "away_expected_xg": 0.64,
-          "home_last_4_matches": [
-            {
-              "opponent": "Albirex Niigata",
-              "date": "2026-12-06",
-              "venue": "home",
-              "xg_for": 0.97,
-              "xg_against": 0.7
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Kashiwa Reysol",
-              "date": "2026-12-06",
-              "venue": "away",
-              "xg_for": 0.57,
-              "xg_against": 0.71
-            }
-          ]
-        },
-        {
-          "home_team": "Avispa Fukuoka",
-          "away_team": "Vissel Kobe",
-          "date": "2026-08-08",
-          "combined_expected_xg": 1.98,
-          "home_expected_xg": 0.79,
-          "away_expected_xg": 1.19,
-          "home_last_4_matches": [
-            {
-              "opponent": "Nagoya Grampus",
-              "date": "2026-12-06",
-              "venue": "away",
-              "xg_for": 0.6,
-              "xg_against": 1.32
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Kyoto Sanga",
-              "date": "2026-12-06",
-              "venue": "away",
-              "xg_for": 1.06,
-              "xg_against": 0.99
-            }
-          ]
-        },
-        {
-          "home_team": "Nagoya Grampus",
-          "away_team": "Shimizu S-Pulse",
-          "date": "2026-08-08",
-          "combined_expected_xg": 2.63,
-          "home_expected_xg": 1.55,
-          "away_expected_xg": 1.08,
-          "home_last_4_matches": [
-            {
-              "opponent": "Avispa Fukuoka",
-              "date": "2026-12-06",
-              "venue": "home",
-              "xg_for": 1.32,
-              "xg_against": 0.6
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Fagiano Okayama",
-              "date": "2026-12-06",
-              "venue": "home",
-              "xg_for": 1.57,
-              "xg_against": 1.78
-            }
-          ]
-        },
-        {
-          "home_team": "Cerezo Osaka",
-          "away_team": "Fagiano Okayama",
-          "date": "2026-08-08",
-          "combined_expected_xg": 3.42,
-          "home_expected_xg": 1.78,
-          "away_expected_xg": 1.64,
-          "home_last_4_matches": [
-            {
-              "opponent": "Yokohama",
-              "date": "2026-12-06",
-              "venue": "home",
-              "xg_for": 1.99,
-              "xg_against": 1.5
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Shimizu S-Pulse",
-              "date": "2026-12-06",
-              "venue": "away",
-              "xg_for": 1.78,
-              "xg_against": 1.57
-            }
-          ]
-        },
-        {
-          "home_team": "Tokyo Verdy",
-          "away_team": "Kawasaki Frontale",
-          "date": "2026-08-09",
-          "combined_expected_xg": 3.23,
-          "home_expected_xg": 1.9,
-          "away_expected_xg": 1.33,
-          "home_last_4_matches": [
-            {
-              "opponent": "Gamba Osaka",
-              "date": "2026-12-06",
-              "venue": "away",
-              "xg_for": 1.2,
-              "xg_against": 2.18
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Urawa Reds",
-              "date": "2026-12-06",
-              "venue": "away",
-              "xg_for": 0.49,
-              "xg_against": 2.59
-            }
-          ]
-        },
-        {
-          "home_team": "Tokyo Verdy",
-          "away_team": "Kashiwa Reysol",
-          "date": "2026-08-14",
-          "combined_expected_xg": 2.33,
-          "home_expected_xg": 0.89,
-          "away_expected_xg": 1.45,
-          "home_last_4_matches": [
-            {
-              "opponent": "Gamba Osaka",
-              "date": "2026-12-06",
-              "venue": "away",
-              "xg_for": 1.2,
-              "xg_against": 2.18
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Machida Zelvia",
-              "date": "2026-12-06",
-              "venue": "home",
-              "xg_for": 0.71,
-              "xg_against": 0.57
             }
           ]
         }
