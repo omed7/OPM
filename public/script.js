@@ -340,3 +340,4 @@ document.addEventListener('DOMContentLoaded', () => {
     setupLogoClickHandlers();
     loadTeamNames();
 });
+function deliberateSyntaxError() {
