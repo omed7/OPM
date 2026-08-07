@@ -340,4 +340,3 @@ document.addEventListener('DOMContentLoaded', () => {
     setupLogoClickHandlers();
     loadTeamNames();
 });
-const x =
