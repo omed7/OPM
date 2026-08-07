@@ -8,16 +8,17 @@ const LEAGUE_FLAGS = {
     'ligue_1': '🇫🇷'
 };
 
+
 async function init() {
     const container = document.getElementById('fixtures-container');
     const versionTag = document.getElementById('version-tag');
+    const dateStrip = document.getElementById('date-strip');
 
     try {
         const response = await fetch('data.json');
         if (!response.ok) throw new Error('Failed to fetch data');
         const data = await response.json();
 
-        // Update version tag
         try {
             const versionResponse = await fetch('version.json');
             if (versionResponse.ok) {
@@ -33,88 +34,156 @@ async function init() {
             return;
         }
 
-        // Create tab container and insert above the fixtures container
-        const tabContainer = document.createElement('div');
-        tabContainer.className = 'tab-container';
-        container.parentNode.insertBefore(tabContainer, container);
+        // Build a mapping of all fixtures with normalized dates
+        let allFixtures = [];
+        data.leagues.forEach(league => {
+            if (league.fixtures) {
+                league.fixtures.forEach(fixture => {
 
-        let activeLeagueId = data.leagues[0].id;
+                    let d;
+                    if (fixture.date.length === 10) {
+                        d = new Date(fixture.date + "T00:00:00");
+                    } else {
+                        d = new Date(fixture.date.replace(' ', 'T') + "Z");
+                    }
+                    // normalize to local date string YYYY-MM-DD
+                    const localDateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                    allFixtures.push({
+                        ...fixture,
+                        leagueId: league.id,
+                        leagueName: league.name,
+                        metric: league.metric || 'xg',
+                        localDateStr: localDateStr,
+                        timeObj: d
+                    });
+                });
+            }
+        });
 
-        function renderTabs() {
-            tabContainer.innerHTML = '';
-            data.leagues.forEach(league => {
-                const btn = document.createElement('button');
-                btn.className = 'tab-button';
-                if (league.id === activeLeagueId) {
+        const today = new Date();
+        const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+        let activeDateStr = todayStr;
+
+        function renderDateStrip() {
+            dateStrip.innerHTML = '';
+            // 7 days window: today - 3 to today + 3
+            for (let i = -3; i <= 3; i++) {
+                const d = new Date(today);
+                d.setDate(today.getDate() + i);
+
+                const dStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+
+                const btn = document.createElement('div');
+                btn.className = 'date-button';
+                if (dStr === activeDateStr) {
                     btn.classList.add('active');
                 }
-                const flag = LEAGUE_FLAGS[league.id] || '';
-                btn.textContent = flag ? `${flag} ${league.name}` : league.name;
+
+                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                const dayName = days[d.getDay()];
+                const dayNum = d.getDate();
+
+                btn.innerHTML = `<div class="day-name">${dayName}</div><div class="day-num">${dayNum}</div>`;
+
                 btn.addEventListener('click', () => {
-                    if (activeLeagueId === league.id) return;
-                    activeLeagueId = league.id;
-
-                    // Update active class on buttons
-                    tabContainer.querySelectorAll('.tab-button').forEach(b => {
-                        b.classList.toggle('active', b === btn);
-                    });
-
-                    // Render fixtures for active league
-                    renderLeague(league);
+                    if (activeDateStr === dStr) return;
+                    activeDateStr = dStr;
+                    renderDateStrip(); // re-render to update active class
+                    renderFixturesForDate(activeDateStr);
                 });
-                tabContainer.appendChild(btn);
-            });
+
+                dateStrip.appendChild(btn);
+            }
         }
 
-        function renderLeague(league) {
+        function renderFixturesForDate(dateStr) {
             container.innerHTML = '';
 
-            if (!league.fixtures || league.fixtures.length === 0) {
-                container.innerHTML = `<div class="no-fixtures">No upcoming ${league.name} fixtures found.</div>`;
+            const fixturesOnDate = allFixtures.filter(f => f.localDateStr === dateStr);
+
+            if (fixturesOnDate.length === 0) {
+                container.innerHTML = '<div class="no-fixtures">No fixtures on this date.</div>';
                 return;
             }
 
-            // Copy, sort chronologically per league, and cap at FIXTURE_LIMIT
-            const sortedFixtures = [...league.fixtures]
-                .sort((a, b) => new Date(a.date) - new Date(b.date))
-                .slice(0, FIXTURE_LIMIT);
-
-            const metric = league.metric || 'xg';
-
-            // Find max expected_{metric} for scale
-            let maxSingleMetric = 0;
-            sortedFixtures.forEach(f => {
-                const homeVal = f[`home_expected_${metric}`];
-                const awayVal = f[`away_expected_${metric}`];
-                if (typeof homeVal === 'number') {
-                    maxSingleMetric = Math.max(maxSingleMetric, homeVal);
-                }
-                if (typeof awayVal === 'number') {
-                    maxSingleMetric = Math.max(maxSingleMetric, awayVal);
-                }
+            // Group by league
+            const grouped = {};
+            fixturesOnDate.forEach(f => {
+                if (!grouped[f.leagueName]) grouped[f.leagueName] = [];
+                grouped[f.leagueName].push(f);
             });
 
-            // Add a bit of buffer (same as original, scaleMax has fallback to 3.0)
-            const scaleMax = Math.max(maxSingleMetric * 1.1, 3.0);
+            // Sort fixtures in each group chronologically
+            for (const leagueName in grouped) {
+                grouped[leagueName].sort((a, b) => a.timeObj - b.timeObj);
+            }
 
-            sortedFixtures.forEach(fixture => {
-                container.appendChild(createFixtureCard(fixture, scaleMax, metric));
-            });
+            // Render
+            for (const leagueName in grouped) {
+                const leagueHeader = document.createElement('div');
+                leagueHeader.className = 'league-header';
+                const leagueId = grouped[leagueName][0].leagueId;
+                const flag = LEAGUE_FLAGS[leagueId] || '';
+                leagueHeader.textContent = flag ? `${flag} ${leagueName}` : leagueName;
+                container.appendChild(leagueHeader);
+
+                const leagueFixtures = grouped[leagueName];
+
+                const metric = leagueFixtures[0].metric;
+                let maxSingleMetric = 0;
+                leagueFixtures.forEach(f => {
+                    const homeVal = f[`home_expected_${metric}`];
+                    const awayVal = f[`away_expected_${metric}`];
+                    if (typeof homeVal === 'number') maxSingleMetric = Math.max(maxSingleMetric, homeVal);
+                    if (typeof awayVal === 'number') maxSingleMetric = Math.max(maxSingleMetric, awayVal);
+                });
+
+                const scaleMax = Math.max(maxSingleMetric * 1.1, 3.0);
+
+                leagueFixtures.forEach(fixture => {
+                    container.appendChild(createFixtureCard(fixture, scaleMax, metric));
+                });
+            }
         }
 
-        // Initial setup
-        renderTabs();
-        renderLeague(data.leagues[0]);
+        renderDateStrip();
+        renderFixturesForDate(activeDateStr);
 
     } catch (error) {
         console.error(error);
         container.innerHTML = '<div class="no-fixtures">Error loading fixtures. Please try again later.</div>';
     }
 }
-
 function createFixtureCard(fixture, scaleMax, metric) {
     const card = document.createElement('div');
     card.className = 'fixture-card';
+
+    if (fixture.status === 'FINISHED') {
+        const homeGoals = fixture.home_goals !== null ? fixture.home_goals : '-';
+        const awayGoals = fixture.away_goals !== null ? fixture.away_goals : '-';
+        const homeXg = fixture.home_xg !== null && fixture.home_xg !== undefined ? fixture.home_xg.toFixed(2) : '-';
+        const awayXg = fixture.away_xg !== null && fixture.away_xg !== undefined ? fixture.away_xg.toFixed(2) : '-';
+
+        card.innerHTML = `
+            <div class="fixture-header">
+                <div class="team">
+                    ${renderBadgeHtml(fixture.home_team)}
+                    <div class="team-name">${fixture.home_team}</div>
+                </div>
+                <div class="xg-center result-center">
+                    <div class="combined-xg-label">FT Score</div>
+                    <div class="combined-xg">${homeGoals} - ${awayGoals}</div>
+                    <div class="split-xg">xG: ${homeXg} - ${awayXg}</div>
+                </div>
+                <div class="team">
+                    ${renderBadgeHtml(fixture.away_team)}
+                    <div class="team-name">${fixture.away_team}</div>
+                </div>
+            </div>
+        `;
+        return card;
+    }
 
     const combinedVal = fixture[`combined_expected_${metric}`] || 0;
     const homeExpectedVal = fixture[`home_expected_${metric}`] || 0;
