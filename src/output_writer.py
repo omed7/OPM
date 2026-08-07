@@ -377,6 +377,32 @@ def save_matches_to_supabase(db_records):
         except Exception as e:
             print(f"Failed to upsert chunk to Supabase: {e}")
 
+
+from datetime import timedelta
+
+def get_past_matches(db_records, league_id):
+    now = datetime.now(timezone.utc)
+    # We want matches from today-4 to today+1 (to account for timezones)
+    start_date = (now - timedelta(days=4)).strftime('%Y-%m-%d')
+    end_date = (now + timedelta(days=1)).strftime('%Y-%m-%d')
+
+    past_matches = []
+    for r in db_records:
+        if r.get("league") == league_id and r.get("venue") == "home" and r.get("goals_for") is not None and r.get("date"):
+            date_str = r["date"][:10]
+            if start_date <= date_str <= end_date:
+                past_matches.append({
+                    "home_team": r["team"],
+                    "away_team": r["opponent"],
+                    "date": r["date"],
+                    "home_goals": r["goals_for"],
+                    "away_goals": r["goals_against"],
+                    "home_xg": r.get("xg_for"),
+                    "away_xg": r.get("xg_against"),
+                    "status": "FINISHED"
+                })
+    return past_matches
+
 def main():
     db_records = []
 
@@ -416,6 +442,14 @@ def main():
             print(f"Mapped {len(played_matches)} played matches for Understat league {league['name']}.")
         except Exception as e:
             print(f"Failed to process Understat league {league['name']} for match database: {e}")
+
+
+    # 3. Add past matches to each league from db_records
+    for league_data in leagues_data:
+        league_id = league_data["id"]
+        past_fixtures = get_past_matches(db_records, league_id)
+        # Append to existing upcoming fixtures
+        league_data["fixtures"].extend(past_fixtures)
 
     # Ensure public directory exists
     os.makedirs('public', exist_ok=True)

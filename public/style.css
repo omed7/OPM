@@ -260,3 +260,84 @@ footer {
         font-size: 0.8rem;
     }
 }
+
+/* Date Strip Styling */
+.date-strip {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+}
+.date-strip::-webkit-scrollbar {
+    height: 4px;
+}
+.date-strip::-webkit-scrollbar-track {
+    background: transparent;
+}
+.date-strip::-webkit-scrollbar-thumb {
+    background-color: var(--text-secondary);
+    border-radius: 4px;
+}
+.date-button {
+    flex: 0 0 auto;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: var(--btn-shadow);
+    transition: all 0.2s ease;
+    scroll-snap-align: center;
+}
+.date-button:hover {
+    box-shadow: var(--btn-active-shadow);
+}
+.date-button.active {
+    background-color: var(--accent-color);
+    color: #fff;
+    box-shadow: var(--btn-active-shadow);
+    transform: scale(1.05);
+}
+.date-button.active .day-name, .date-button.active .day-num {
+    color: #fff;
+}
+.day-name {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+.day-num {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.league-header {
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 16px 0 12px 0;
+    color: var(--text-primary);
+    text-align: left;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 4px;
+}
+
+.result-center .combined-xg-label {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+.result-center .combined-xg {
+    color: var(--text-primary);
+}

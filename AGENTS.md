@@ -64,7 +64,7 @@ When computing a prediction, the engine also silently computes comparison projec
 
 ## Frontend
 - **Fixture card**: Team badges on either side (CSS-based initials in colored shapes, no external images), combined value between them, a bar under each team on a shared scale, and the 4 underlying matches listed below.
-- **Layout & Navigation**: Tab bar scrolls horizontally on mobile. Fixture lists are capped at a maximum of 10 matches (enforced via `FIXTURE_LIMIT` in JS). Footer shows an auto-incrementing version.
+- **Layout & Navigation**: A horizontal scrolling date strip (7 days: today ± 3) is the primary navigation. Fixtures are grouped by league within the selected date. Fixture lists are capped at a maximum of 10 matches per league. Footer shows an auto-incrementing version.
 - **Theme**: Supports a persistent Dark Mode mapped via `[data-theme="dark"]` in `public/style.css` and saved in `localStorage`.
 
 ## Conventions
