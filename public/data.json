@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "530e458",
-    "generated_at": "2026-08-08T00:17:20Z"
+    "version": "9dc702e",
+    "generated_at": "2026-08-08T07:05:01Z"
   },
   "leagues": [
     {
@@ -9,60 +9,6 @@
       "name": "Superliga",
       "metric": "xg",
       "fixtures": [
-        {
-          "home_team": "Independiente Rivadavia",
-          "away_team": "Estudiantes de R\u00edo Cuarto",
-          "date": "2026-08-08",
-          "combined_expected_xg": 2.35,
-          "home_expected_xg": 1.67,
-          "away_expected_xg": 0.67,
-          "home_last_4_matches": [
-            {
-              "opponent": "Sarmiento",
-              "date": "2026-08-03",
-              "venue": "away",
-              "xg_for": 2.03,
-              "xg_against": 0.69
-            },
-            {
-              "opponent": "Hurac\u00e1n",
-              "date": "2026-07-30",
-              "venue": "home",
-              "xg_for": 2.37,
-              "xg_against": 1.08
-            },
-            {
-              "opponent": "Atl\u00e9tico Tucum\u00e1n",
-              "date": "2026-07-26",
-              "venue": "away",
-              "xg_for": 0.98,
-              "xg_against": 0.23
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Banfield",
-              "date": "2026-08-01",
-              "venue": "home",
-              "xg_for": 0.44,
-              "xg_against": 1.44
-            },
-            {
-              "opponent": "Argentinos Juniors",
-              "date": "2026-07-29",
-              "venue": "away",
-              "xg_for": 0.73,
-              "xg_against": 1.9
-            },
-            {
-              "opponent": "Tigre",
-              "date": "2026-07-25",
-              "venue": "home",
-              "xg_for": 0.88,
-              "xg_against": 1.31
-            }
-          ]
-        },
         {
           "home_team": "Atl\u00e9tico Tucum\u00e1n",
           "away_team": "Sarmiento",
@@ -1511,9 +1457,9 @@
           "home_team": "Sturm Graz",
           "away_team": "Rheindorf Altach",
           "date": "2026-08-15",
-          "combined_expected_xg": 2.52,
-          "home_expected_xg": 1.41,
-          "away_expected_xg": 1.11,
+          "combined_expected_xg": 2.65,
+          "home_expected_xg": 1.44,
+          "away_expected_xg": 1.21,
           "home_last_4_matches": [
             {
               "opponent": "WSG Tirol",
@@ -1546,6 +1492,13 @@
           ],
           "away_last_4_matches": [
             {
+              "opponent": "WSG Tirol",
+              "date": "2026-08-07",
+              "venue": "home",
+              "xg_for": 1.5,
+              "xg_against": 0.99
+            },
+            {
               "opponent": "SK Rapid",
               "date": "2026-08-02",
               "venue": "away",
@@ -1565,15 +1518,18 @@
               "venue": "away",
               "xg_for": 0.81,
               "xg_against": 1.21
-            },
-            {
-              "opponent": "Wolfsberger AC",
-              "date": "2026-05-04",
-              "venue": "home",
-              "xg_for": 0.71,
-              "xg_against": 0.77
             }
           ]
+        },
+        {
+          "home_team": "Rheindorf Altach",
+          "away_team": "WSG Tirol",
+          "date": "2026-08-07",
+          "home_goals": 3,
+          "away_goals": 1,
+          "home_xg": 1.5,
+          "away_xg": 0.99,
+          "status": "FINISHED"
         }
       ]
     },
@@ -7241,10 +7197,17 @@
           "home_team": "KFUM",
           "away_team": "Lillestr\u00f8m",
           "date": "2026-08-15",
-          "combined_expected_xg": 2.34,
-          "home_expected_xg": 1.04,
-          "away_expected_xg": 1.3,
+          "combined_expected_xg": 2.5,
+          "home_expected_xg": 1.19,
+          "away_expected_xg": 1.31,
           "home_last_4_matches": [
+            {
+              "opponent": "Sandefjord",
+              "date": "2026-08-07",
+              "venue": "away",
+              "xg_for": 1.92,
+              "xg_against": 1.76
+            },
             {
               "opponent": "Kristiansund",
               "date": "2026-08-02",
@@ -7297,6 +7260,16 @@
               "xg_against": 1.37
             }
           ]
+        },
+        {
+          "home_team": "Sandefjord",
+          "away_team": "KFUM",
+          "date": "2026-08-07",
+          "home_goals": 0,
+          "away_goals": 1,
+          "home_xg": 1.76,
+          "away_xg": 1.92,
+          "status": "FINISHED"
         }
       ]
     },
@@ -7916,6 +7889,16 @@
               "xg_against": 1.43
             }
           ]
+        },
+        {
+          "home_team": "Estoril",
+          "away_team": "Famalic\u00e3o",
+          "date": "2026-08-07",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 0.87,
+          "away_xg": 1.29,
+          "status": "FINISHED"
         }
       ]
     },
