@@ -387,6 +387,25 @@ def get_past_matches(db_records, league_id):
     end_date = (now + timedelta(days=1)).strftime('%Y-%m-%d')
 
     past_matches = []
+
+    # Check supabase first if available
+    endpoint = f"/matches?league=eq.{league_id}&venue=eq.home&date=gte.{start_date}&date=lte.{end_date}&goals_for=not.is.null"
+    res, err = supabase_request(endpoint)
+    if err is None and res:
+        for r in res:
+            past_matches.append({
+                "home_team": r["team"],
+                "away_team": r["opponent"],
+                "date": r["date"],
+                "home_goals": r["goals_for"],
+                "away_goals": r["goals_against"],
+                "home_xg": r.get("xg_for"),
+                "away_xg": r.get("xg_against"),
+                "status": "FINISHED"
+            })
+        return past_matches
+
+    # Fallback to local db_records if supabase fetch fails
     for r in db_records:
         if r.get("league") == league_id and r.get("venue") == "home" and r.get("goals_for") is not None and r.get("date"):
             date_str = r["date"][:10]
@@ -401,7 +420,14 @@ def get_past_matches(db_records, league_id):
                     "away_xg": r.get("xg_against"),
                     "status": "FINISHED"
                 })
-    return past_matches
+
+    # Deduplicate fallback matches
+    unique_matches = {}
+    for m in past_matches:
+        key = f"{m['home_team']}-{m['away_team']}-{m['date'][:10]}"
+        unique_matches[key] = m
+    return list(unique_matches.values())
+
 
 def main():
     db_records = []
