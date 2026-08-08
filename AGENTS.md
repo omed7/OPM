@@ -32,7 +32,7 @@ When computing a prediction, the engine also silently computes comparison projec
 
 ## Unified Match Database (Supabase)
 - Match data is stored in a Supabase PostgreSQL database table called `matches`. The legacy flat file `public/match_database.json` has been removed.
-- Structure per entry (Supabase Table Schema):
+- Structure per match entry (`matches` table):
   ```sql
   team: text
   opponent: text
@@ -47,6 +47,24 @@ When computing a prediction, the engine also silently computes comparison projec
   weight: numeric (default 1.0)
   ```
   *(A unique constraint is required on `team, opponent, date, venue, league` for upserting).*
+
+- **Calibration Tracking**: Predictions for upcoming matches are continuously upserted on every cron run into the `predictions` table. This allows the latest predictions to be durably logged immediately before a match begins. Once the match finishes, the logged prediction is fetched and attached to the past-days result card.
+- Structure per prediction entry (`predictions` table):
+  ```sql
+  home_team: text
+  away_team: text
+  date: text
+  league: text (league_id)
+  home_expected_xg: numeric
+  away_expected_xg: numeric
+  combined_expected_xg: numeric
+  home_expected_goals: numeric
+  away_expected_goals: numeric
+  combined_expected_goals: numeric
+  created_at: timestamptz
+  updated_at: timestamptz
+  ```
+  *(A unique constraint is required on `home_team, away_team, date, league` for upserting).*
 
 ## Stack
 

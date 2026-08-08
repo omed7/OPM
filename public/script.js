@@ -165,6 +165,21 @@ function createFixtureCard(fixture, scaleMax, metric) {
         const homeXg = fixture.home_xg !== null && fixture.home_xg !== undefined ? fixture.home_xg.toFixed(2) : '-';
         const awayXg = fixture.away_xg !== null && fixture.away_xg !== undefined ? fixture.away_xg.toFixed(2) : '-';
 
+        let predictionHtml = '';
+        if (fixture.home_expected_xg !== undefined && fixture.home_expected_xg !== null) {
+            const predHomeXg = fixture.home_expected_xg.toFixed(2);
+            const predAwayXg = fixture.away_expected_xg.toFixed(2);
+            let predHtml = `Pred xG: ${predHomeXg} - ${predAwayXg}`;
+
+            if (fixture.home_expected_goals !== undefined && fixture.home_expected_goals !== null) {
+                const predHomeGoals = fixture.home_expected_goals.toFixed(2);
+                const predAwayGoals = fixture.away_expected_goals.toFixed(2);
+                predHtml = `Pred Goals: ${predHomeGoals} - ${predAwayGoals} | ` + predHtml;
+            }
+
+            predictionHtml = `<div class="prediction-history" style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 8px; text-align: center; border-top: 1px dashed var(--xg-bar-bg); padding-top: 8px;">${predHtml}</div>`;
+        }
+
         card.innerHTML = `
             <div class="fixture-header">
                 <div class="team">
@@ -174,13 +189,14 @@ function createFixtureCard(fixture, scaleMax, metric) {
                 <div class="xg-center result-center">
                     <div class="combined-xg-label">FT Score</div>
                     <div class="combined-xg">${homeGoals} - ${awayGoals}</div>
-                    <div class="split-xg">xG: ${homeXg} - ${awayXg}</div>
+                    <div class="split-xg">Act xG: ${homeXg} - ${awayXg}</div>
                 </div>
                 <div class="team">
                     ${renderBadgeHtml(fixture.away_team)}
                     <div class="team-name">${fixture.away_team}</div>
                 </div>
             </div>
+            ${predictionHtml}
         `;
         return card;
     }
