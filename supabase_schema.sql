@@ -17,3 +17,23 @@ CREATE TABLE public.matches (
 
 -- Add a unique constraint to avoid duplicate matches during bulk upserts from the cron script
 ALTER TABLE public.matches ADD CONSTRAINT matches_unique_constraint UNIQUE (team, opponent, date, venue, league);
+
+-- Create the predictions table
+CREATE TABLE public.predictions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    home_team TEXT NOT NULL,
+    away_team TEXT NOT NULL,
+    date TEXT NOT NULL,
+    league TEXT NOT NULL,
+    home_expected_xg NUMERIC,
+    away_expected_xg NUMERIC,
+    combined_expected_xg NUMERIC,
+    home_expected_goals NUMERIC,
+    away_expected_goals NUMERIC,
+    combined_expected_goals NUMERIC,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+-- Add a unique constraint to avoid duplicate predictions and support continuous upserts
+ALTER TABLE public.predictions ADD CONSTRAINT predictions_unique_constraint UNIQUE (home_team, away_team, date, league);

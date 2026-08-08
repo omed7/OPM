@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from src.fetch.understat_common import get_upcoming_fixtures, get_team_matches, get_played_matches, get_current_season
 from src.fetch.oddalerts import parse_upcoming_fixtures, parse_recent_results
 from src.compute.xg_formula import calculate_expected_xg, SAMPLE_SIZE as XG_SAMPLE_SIZE
+from src.compute.goals_formula import calculate_expected_goals
 from src.supabase_client import supabase_request
 
 UNDERSTAT_LEAGUES = [
@@ -87,17 +88,47 @@ def process_understat_league(league_code, league_name, output_id):
                 if ' ' in m['date']:
                     m['date'] = m['date'].split(' ')[0]
 
-            # Calculate expected xG using existing compute module
-            stats = calculate_expected_xg(home_matches, away_matches)
+            # Calculate expected metrics
+            xg_stats = calculate_expected_xg(home_matches, away_matches)
+
+            # Since Understat matches don't have 'goals_for' explicitly in the dictionary returned by get_team_matches...
+            # Wait, let's check if they do. Let's look at get_team_matches. No, it only has xg_for/xg_against.
+            # So for understat we might only have xG unless we fetch goals. Let's just wrap it.
+            try:
+                goals_stats = calculate_expected_goals(home_matches, away_matches)
+            except Exception:
+                goals_stats = None
+
+            home_expected_xg = round(xg_stats['team_a_expected_xg'], 2)
+            away_expected_xg = round(xg_stats['team_b_expected_xg'], 2)
+            combined_expected_xg = round(xg_stats['team_a_expected_xg'] + xg_stats['team_b_expected_xg'], 2)
+
+            home_expected_goals = round(goals_stats['team_a_expected_goals'], 2) if goals_stats else None
+            away_expected_goals = round(goals_stats['team_b_expected_goals'], 2) if goals_stats else None
+            combined_expected_goals = round(goals_stats['team_a_expected_goals'] + goals_stats['team_b_expected_goals'], 2) if goals_stats else None
+
+            # Collect prediction to db_predictions globally
+            global_db_predictions.append({
+                "home_team": home_team,
+                "away_team": away_team,
+                "date": fixture['date'],
+                "league": league_code,
+                "home_expected_xg": home_expected_xg,
+                "away_expected_xg": away_expected_xg,
+                "combined_expected_xg": combined_expected_xg,
+                "home_expected_goals": home_expected_goals,
+                "away_expected_goals": away_expected_goals,
+                "combined_expected_goals": combined_expected_goals
+            })
 
             # Assemble fixture data
             output_fixtures.append({
                 "home_team": home_team,
                 "away_team": away_team,
                 "date": fixture['date'],
-                "combined_expected_xg": round(stats['team_a_expected_xg'] + stats['team_b_expected_xg'], 2),
-                "home_expected_xg": round(stats['team_a_expected_xg'], 2),
-                "away_expected_xg": round(stats['team_b_expected_xg'], 2),
+                "combined_expected_xg": combined_expected_xg,
+                "home_expected_xg": home_expected_xg,
+                "away_expected_xg": away_expected_xg,
                 f"home_last_{XG_SAMPLE_SIZE}_matches": home_matches,
                 f"away_last_{XG_SAMPLE_SIZE}_matches": away_matches
             })
@@ -168,13 +199,38 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records):
             for m in away_matches:
                 formatted_away.append({'opponent': m['opponent'], 'date': m['date'], 'venue': m['venue'], 'xg_for': m['xg_for'], 'xg_against': m['xg_against']})
 
-            stats = calculate_expected_xg(formatted_home, formatted_away)
+            xg_stats = calculate_expected_xg(formatted_home, formatted_away)
+            try:
+                goals_stats = calculate_expected_goals(home_matches, away_matches)
+            except Exception:
+                goals_stats = None
+
+            home_expected_xg = round(xg_stats['team_a_expected_xg'], 2)
+            away_expected_xg = round(xg_stats['team_b_expected_xg'], 2)
+            combined_expected_xg = round(xg_stats['team_a_expected_xg'] + xg_stats['team_b_expected_xg'], 2)
+
+            home_expected_goals = round(goals_stats['team_a_expected_goals'], 2) if goals_stats else None
+            away_expected_goals = round(goals_stats['team_b_expected_goals'], 2) if goals_stats else None
+            combined_expected_goals = round(goals_stats['team_a_expected_goals'] + goals_stats['team_b_expected_goals'], 2) if goals_stats else None
+
+            global_db_predictions.append({
+                "home_team": home_team,
+                "away_team": away_team,
+                "date": fixture['date'],
+                "league": league_id,
+                "home_expected_xg": home_expected_xg,
+                "away_expected_xg": away_expected_xg,
+                "combined_expected_xg": combined_expected_xg,
+                "home_expected_goals": home_expected_goals,
+                "away_expected_goals": away_expected_goals,
+                "combined_expected_goals": combined_expected_goals
+            })
 
             output_fixtures.append({
                 "home_team": home_team, "away_team": away_team, "date": fixture['date'],
-                "combined_expected_xg": round(stats['team_a_expected_xg'] + stats['team_b_expected_xg'], 2),
-                "home_expected_xg": round(stats['team_a_expected_xg'], 2),
-                "away_expected_xg": round(stats['team_b_expected_xg'], 2),
+                "combined_expected_xg": combined_expected_xg,
+                "home_expected_xg": home_expected_xg,
+                "away_expected_xg": away_expected_xg,
                 f"home_last_{XG_SAMPLE_SIZE}_matches": formatted_home,
                 f"away_last_{XG_SAMPLE_SIZE}_matches": formatted_away
             })
@@ -378,6 +434,39 @@ def save_matches_to_supabase(db_records):
             print(f"Failed to upsert chunk to Supabase: {e}")
 
 
+
+def save_predictions_to_supabase(predictions):
+    if not predictions:
+        return
+
+    chunk_size = 1000
+    for i in range(0, len(predictions), chunk_size):
+        chunk = predictions[i:i + chunk_size]
+
+        url, key = os.environ.get("SUPABASE_URL") or os.environ.get("SUPERBASE_URL"), os.environ.get("SUPABASE_KEY") or os.environ.get("SUPERBASE_KEY")
+        if not url or not key:
+            print("Supabase credentials missing, skipping predictions sync.")
+            return
+
+        url = url.rstrip('/')
+        full_url = url + "/rest/v1/predictions"
+
+        headers = {
+            "apikey": key,
+            "Authorization": f"Bearer {key}",
+            "Content-Type": "application/json",
+            "Prefer": "resolution=merge-duplicates"
+        }
+
+        req_data = json.dumps(chunk).encode("utf-8")
+        req = urllib.request.Request(full_url, data=req_data, headers=headers, method="POST")
+
+        try:
+            with urllib.request.urlopen(req, timeout=30) as response:
+                print(f"Successfully upserted chunk of {len(chunk)} predictions to Supabase.")
+        except Exception as e:
+            print(f"Failed to upsert predictions chunk to Supabase: {e}")
+
 from datetime import timedelta
 
 def get_past_matches(db_records, league_id):
@@ -388,11 +477,22 @@ def get_past_matches(db_records, league_id):
 
     past_matches = []
 
-    # Check supabase first if available
+    # 1. Fetch predictions for this league and timeframe
+    predictions_endpoint = f"/predictions?league=eq.{league_id}&date=gte.{start_date}&date=lte.{end_date}"
+    pred_res, pred_err = supabase_request(predictions_endpoint)
+    predictions_map = {}
+    if pred_err is None and pred_res:
+        for p in pred_res:
+            key = f"{p['home_team']}-{p['away_team']}-{p['date'][:10]}"
+            predictions_map[key] = p
+
+    # 2. Check supabase first if available
     endpoint = f"/matches?league=eq.{league_id}&venue=eq.home&date=gte.{start_date}&date=lte.{end_date}&goals_for=not.is.null"
     res, err = supabase_request(endpoint)
     if err is None and res:
         for r in res:
+            key = f"{r['team']}-{r['opponent']}-{r['date'][:10]}"
+            pred = predictions_map.get(key, {})
             past_matches.append({
                 "home_team": r["team"],
                 "away_team": r["opponent"],
@@ -401,6 +501,12 @@ def get_past_matches(db_records, league_id):
                 "away_goals": r["goals_against"],
                 "home_xg": r.get("xg_for"),
                 "away_xg": r.get("xg_against"),
+                "home_expected_xg": pred.get("home_expected_xg"),
+                "away_expected_xg": pred.get("away_expected_xg"),
+                "combined_expected_xg": pred.get("combined_expected_xg"),
+                "home_expected_goals": pred.get("home_expected_goals"),
+                "away_expected_goals": pred.get("away_expected_goals"),
+                "combined_expected_goals": pred.get("combined_expected_goals"),
                 "status": "FINISHED"
             })
         return past_matches
@@ -410,6 +516,8 @@ def get_past_matches(db_records, league_id):
         if r.get("league") == league_id and r.get("venue") == "home" and r.get("goals_for") is not None and r.get("date"):
             date_str = r["date"][:10]
             if start_date <= date_str <= end_date:
+                key = f"{r['team']}-{r['opponent']}-{date_str}"
+                pred = predictions_map.get(key, {})
                 past_matches.append({
                     "home_team": r["team"],
                     "away_team": r["opponent"],
@@ -418,6 +526,12 @@ def get_past_matches(db_records, league_id):
                     "away_goals": r["goals_against"],
                     "home_xg": r.get("xg_for"),
                     "away_xg": r.get("xg_against"),
+                    "home_expected_xg": pred.get("home_expected_xg"),
+                    "away_expected_xg": pred.get("away_expected_xg"),
+                    "combined_expected_xg": pred.get("combined_expected_xg"),
+                    "home_expected_goals": pred.get("home_expected_goals"),
+                    "away_expected_goals": pred.get("away_expected_goals"),
+                    "combined_expected_goals": pred.get("combined_expected_goals"),
                     "status": "FINISHED"
                 })
 
@@ -428,6 +542,8 @@ def get_past_matches(db_records, league_id):
         unique_matches[key] = m
     return list(unique_matches.values())
 
+
+global_db_predictions = []
 
 def main():
     db_records = []
@@ -482,10 +598,16 @@ def main():
 
     # 3. Write consolidated match database to Supabase (instead of local JSON)
     try:
-        print(f"Upserting {len(db_records)} records to Supabase...")
+        print(f"Upserting {len(db_records)} match records to Supabase...")
         save_matches_to_supabase(db_records)
     except Exception as e:
         print(f"Failed to write match database to Supabase: {e}")
+
+    try:
+        print(f"Upserting {len(global_db_predictions)} predictions to Supabase...")
+        save_predictions_to_supabase(global_db_predictions)
+    except Exception as e:
+        print(f"Failed to write predictions to Supabase: {e}")
 
     # 4. Remove public/match_database.json if it exists (since it is migrated)
     if os.path.exists('public/match_database.json'):
