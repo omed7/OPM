@@ -431,7 +431,7 @@ def save_matches_to_supabase(db_records):
             with urllib.request.urlopen(req, timeout=30) as response:
                 print(f"Successfully upserted chunk of {len(chunk)} matches to Supabase.")
         except Exception as e:
-            print(f"Failed to upsert chunk to Supabase: {e}")
+            raise RuntimeError(f"Failed to upsert matches chunk to Supabase: {e}") from e
 
 
 
@@ -465,7 +465,7 @@ def save_predictions_to_supabase(predictions):
             with urllib.request.urlopen(req, timeout=30) as response:
                 print(f"Successfully upserted chunk of {len(chunk)} predictions to Supabase.")
         except Exception as e:
-            print(f"Failed to upsert predictions chunk to Supabase: {e}")
+            raise RuntimeError(f"Failed to upsert predictions chunk to Supabase: {e}") from e
 
 from datetime import timedelta
 
@@ -597,17 +597,11 @@ def main():
     os.makedirs('public', exist_ok=True)
 
     # 3. Write consolidated match database to Supabase (instead of local JSON)
-    try:
-        print(f"Upserting {len(db_records)} match records to Supabase...")
-        save_matches_to_supabase(db_records)
-    except Exception as e:
-        print(f"Failed to write match database to Supabase: {e}")
+    print(f"Upserting {len(db_records)} match records to Supabase...")
+    save_matches_to_supabase(db_records)
 
-    try:
-        print(f"Upserting {len(global_db_predictions)} predictions to Supabase...")
-        save_predictions_to_supabase(global_db_predictions)
-    except Exception as e:
-        print(f"Failed to write predictions to Supabase: {e}")
+    print(f"Upserting {len(global_db_predictions)} predictions to Supabase...")
+    save_predictions_to_supabase(global_db_predictions)
 
     # 4. Remove public/match_database.json if it exists (since it is migrated)
     if os.path.exists('public/match_database.json'):

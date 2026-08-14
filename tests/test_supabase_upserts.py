@@ -1,5 +1,6 @@
 import json
 import os
+import tempfile
 import unittest
 from unittest.mock import MagicMock, patch
 
@@ -71,6 +72,75 @@ class TestSupabaseUpserts(unittest.TestCase):
         self.assertEqual(request.get_method(), "POST")
         self.assertEqual(request.get_header("Prefer"), "resolution=merge-duplicates")
         self.assertEqual(json.loads(request.data.decode("utf-8")), predictions)
+
+    @patch.dict(
+        os.environ,
+        {
+            "SUPABASE_URL": "https://example.supabase.co/",
+            "SUPABASE_KEY": "test-key",
+        },
+        clear=True,
+    )
+    @patch("src.output_writer.urllib.request.urlopen", side_effect=OSError("network down"))
+    def test_failed_match_upsert_raises(self, _mock_urlopen):
+        records = [
+            {
+                "team": "Home Team",
+                "opponent": "Away Team",
+                "date": "2026-08-14",
+                "venue": "home",
+                "league": "league-id",
+            }
+        ]
+
+        with self.assertRaisesRegex(RuntimeError, "matches"):
+            output_writer.save_matches_to_supabase(records)
+
+    @patch.dict(
+        os.environ,
+        {
+            "SUPABASE_URL": "https://example.supabase.co/",
+            "SUPABASE_KEY": "test-key",
+        },
+        clear=True,
+    )
+    @patch("src.output_writer.urllib.request.urlopen", side_effect=OSError("network down"))
+    def test_failed_prediction_upsert_raises(self, _mock_urlopen):
+        predictions = [
+            {
+                "home_team": "Home Team",
+                "away_team": "Away Team",
+                "date": "2026-08-14",
+                "league": "league-id",
+            }
+        ]
+
+        with self.assertRaisesRegex(RuntimeError, "predictions"):
+            output_writer.save_predictions_to_supabase(predictions)
+
+    @patch("src.output_writer.urllib.request.urlopen")
+    def test_empty_upserts_are_no_ops(self, mock_urlopen):
+        output_writer.save_matches_to_supabase([])
+        output_writer.save_predictions_to_supabase([])
+
+        mock_urlopen.assert_not_called()
+
+    @patch.object(output_writer, "UNDERSTAT_LEAGUES", [])
+    @patch.object(output_writer, "ODDALERTS_LEAGUES", [])
+    @patch.object(
+        output_writer,
+        "save_matches_to_supabase",
+        side_effect=RuntimeError("matches persistence failed"),
+    )
+    def test_main_propagates_match_persistence_failure(self, _mock_save_matches):
+        original_cwd = os.getcwd()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            os.chdir(temp_dir)
+            try:
+                with self.assertRaisesRegex(RuntimeError, "matches persistence failed"):
+                    output_writer.main()
+            finally:
+                os.chdir(original_cwd)
 
 
 if __name__ == "__main__":
