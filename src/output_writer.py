@@ -197,6 +197,9 @@ def process_understat_league(league_code, league_name, output_id, source_health=
                 "combined_expected_xg": combined_expected_xg,
                 "home_expected_xg": home_expected_xg,
                 "away_expected_xg": away_expected_xg,
+                "home_expected_goals": home_expected_goals,
+                "away_expected_goals": away_expected_goals,
+                "combined_expected_goals": combined_expected_goals,
                 f"home_last_{XG_SAMPLE_SIZE}_matches": home_matches,
                 f"away_last_{XG_SAMPLE_SIZE}_matches": away_matches
             })
@@ -317,6 +320,9 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
                 "combined_expected_xg": combined_expected_xg,
                 "home_expected_xg": home_expected_xg,
                 "away_expected_xg": away_expected_xg,
+                "home_expected_goals": home_expected_goals,
+                "away_expected_goals": away_expected_goals,
+                "combined_expected_goals": combined_expected_goals,
                 f"home_last_{XG_SAMPLE_SIZE}_matches": formatted_home,
                 f"away_last_{XG_SAMPLE_SIZE}_matches": formatted_away
             })
