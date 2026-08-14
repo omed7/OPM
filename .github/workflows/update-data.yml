@@ -28,7 +28,15 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run pipeline
-        run: python3 src/output_writer.py
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ]; then
+            echo "::error::Required Supabase Actions secrets are not configured."
+            exit 1
+          fi
+          python3 src/output_writer.py
 
       - name: Check if fixtures changed
         id: check_changed
