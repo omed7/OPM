@@ -140,7 +140,7 @@ def parse_upcoming_fixtures(html):
     dates_matches = []
 
     # Extract date strings and positions from fixtures
-    for m in re.finditer(r'<article class="competition-fixture">(.*?)</article>', html, re.DOTALL):
+    for m in re.finditer(r'<article\b[^>]*\bclass="[^"]*\bcompetition-fixture\b[^"]*"[^>]*>(.*?)</article>', html, re.DOTALL):
         article_html = m.group(1)
 
         time_m = re.search(r'<div class="competition-fixture__time">\s*(.*?)\s*</div>', article_html, re.DOTALL)

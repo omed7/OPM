@@ -1,12 +1,17 @@
 import unittest
 import sys
+from unittest.mock import patch
 import os
 from datetime import datetime
 
 # Add src and root to python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.fetch.oddalerts import resolve_oddalerts_dates, parse_recent_results
+from src.fetch.oddalerts import (
+    parse_recent_results,
+    parse_upcoming_fixtures,
+    resolve_oddalerts_dates,
+)
 
 class TestPredictDates(unittest.TestCase):
 
@@ -48,6 +53,39 @@ class TestPredictDates(unittest.TestCase):
         self.assertEqual(resolved[20], '2027-01-04')
         self.assertEqual(resolved[30], '2026-12-31')
         self.assertEqual(resolved[40], '2026-12-30')
+
+class TestOddAlertsUpcomingFixtures(unittest.TestCase):
+
+    def test_parses_trailing_whitespace_fixture_class_and_filters_next_gameweek(self):
+        html = """
+        <article class="competition-fixture ">
+            <div class="competition-fixture__time">Sat 16 Aug, 20:30</div>
+            <div class="competition-fixture__team"><span>Home &amp; Co</span></div>
+            <div class="competition-fixture__team"><span>Away FC</span></div>
+        </article>
+        <article class="competition-fixture ">
+            <div class="competition-fixture__time">Sun 24 Aug, 18:00</div>
+            <div class="competition-fixture__team"><span>Later Home</span></div>
+            <div class="competition-fixture__team"><span>Later Away</span></div>
+        </article>
+        """
+
+        with patch("src.fetch.oddalerts.datetime") as mock_datetime:
+            mock_datetime.now.return_value = datetime(2026, 8, 1)
+            mock_datetime.strptime.side_effect = datetime.strptime
+            fixtures = parse_upcoming_fixtures(html)
+
+        self.assertEqual(
+            fixtures,
+            [
+                {
+                    "home_team": "Home & Co",
+                    "away_team": "Away FC",
+                    "date": "2026-08-16",
+                }
+            ],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
