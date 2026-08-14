@@ -119,9 +119,14 @@ def get_played_matches(league_code, season=None):
 
     return [m for m in league_matches if m.get('isResult')]
 
-def get_upcoming_fixtures(league_code, season=None):
+def get_upcoming_fixtures(league_code, season=None, include_health=False):
     if season is None:
         season = os.environ.get('SEASON', get_current_season())
+
+    def result(fixtures, status, detail=None):
+        if include_health:
+            return fixtures, status, detail
+        return fixtures
 
     client = UnderstatClient()
     # Be a polite scraper
@@ -131,7 +136,7 @@ def get_upcoming_fixtures(league_code, season=None):
         league_matches = client.league(league=league_code).get_match_data(season)
     except Exception as e:
         print(f"Error fetching league matches for {league_code}: {e}")
-        return []
+        return result([], "fetch_failed", str(e))
 
     upcoming = [m for m in league_matches if not m.get('isResult')]
 
@@ -143,14 +148,14 @@ def get_upcoming_fixtures(league_code, season=None):
             played = [m for m in league_matches if m.get('isResult')]
             if played:
                 played.sort(key=lambda x: x['datetime'], reverse=True)
-                mock_matches = played[:5]
-                return [{
+                mock_matches = [{
                     'home_team': m['h']['title'],
                     'away_team': m['a']['title'],
                     'date': m['datetime']
-                } for m in mock_matches]
+                } for m in played[:5]]
+                return result(mock_matches, "success_with_fixtures")
 
-        return []
+        return result([], "success_empty")
 
     # Sort by datetime
     upcoming.sort(key=lambda x: x['datetime'])
@@ -181,4 +186,4 @@ def get_upcoming_fixtures(league_code, season=None):
         else:
             break
 
-    return next_gameweek_matches
+    return result(next_gameweek_matches, "success_with_fixtures")

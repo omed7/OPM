@@ -55,15 +55,83 @@ def get_version():
     except Exception:
         return "local"
 
-def process_understat_league(league_code, league_name, output_id):
-    season = os.environ.get('SEASON', get_current_season())
+
+def fixture_count(leagues):
+    return sum(len(league.get("fixtures", [])) for league in leagues)
+
+
+def previous_fixture_count(path="public/data.json"):
+    try:
+        with open(path, encoding="utf-8") as artifact:
+            payload = json.load(artifact)
+        return fixture_count(payload.get("leagues", []))
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return 0
+
+
+def empty_fixture_override_enabled():
+    return os.environ.get("ALLOW_EMPTY_FIXTURES", "").lower() in {"1", "true", "yes"}
+
+
+def enforce_fixture_health(previous_count, generated_count):
+    if generated_count == 0 and previous_count > 0:
+        if empty_fixture_override_enabled():
+            print("Warning: ALLOW_EMPTY_FIXTURES override permits populated-to-zero artifact replacement.")
+            return
+        raise RuntimeError(
+            "Generated zero fixtures while the committed artifact contains fixtures; "
+            "refusing to replace populated public data without ALLOW_EMPTY_FIXTURES=true."
+        )
+
+
+def record_source_health(results, provider, league_id, status, detail=None):
+    result = {"provider": provider, "league": league_id, "status": status}
+    if detail:
+        result["detail"] = detail
+    results.append(result)
+
+
+def print_source_health_summary(results):
+    statuses = {}
+    for result in results:
+        key = f"{result['provider']}:{result['status']}"
+        statuses[key] = statuses.get(key, 0) + 1
+    summary = ", ".join(f"{key}={count}" for key, count in sorted(statuses.items()))
+    print(f"Source health summary: {summary or 'no configured fixture sources'}")
+
+    for result in results:
+        if result["status"] in {"fetch_failed", "parse_failed", "fixture_failed"}:
+            detail = f": {result['detail']}" if result.get("detail") else ""
+            print(
+                f"Warning: {result['provider']} {result['league']} "
+                f"{result['status']}{detail}"
+            )
+
+
+def enforce_source_health(results, configured_providers):
+    if not configured_providers:
+        return
+    healthy_providers = {
+        result["provider"]
+        for result in results
+        if result["status"] in {"success_with_fixtures", "success_empty"}
+    }
+    if not healthy_providers.intersection(configured_providers):
+        raise RuntimeError("All configured fixture source groups failed; refusing to publish generated data.")
+
+def process_understat_league(league_code, league_name, output_id, source_health=None):
+    season = os.environ.get('SEASON') or get_current_season()
     print(f"Fetching upcoming {league_name} fixtures for season {season}...")
 
     try:
-        fixtures = get_upcoming_fixtures(league_code, season=season)
+        fixtures, status, detail = get_upcoming_fixtures(
+            league_code, season=season, include_health=True
+        )
     except Exception as e:
-        print(f"Error fetching upcoming fixtures for {league_name}: {e}")
-        fixtures = []
+        fixtures, status, detail = [], "fetch_failed", str(e)
+
+    if source_health is not None:
+        record_source_health(source_health, "understat", output_id, status, detail)
 
     if not fixtures:
         print(f"No upcoming {league_name} fixtures found.")
@@ -133,6 +201,14 @@ def process_understat_league(league_code, league_name, output_id):
                 f"away_last_{XG_SAMPLE_SIZE}_matches": away_matches
             })
         except Exception as e:
+            if source_health is not None:
+                record_source_health(
+                    source_health,
+                    "understat",
+                    output_id,
+                    "fixture_failed",
+                    f"{home_team} vs {away_team}: {e}",
+                )
             print(f"Error processing {league_name} fixture {home_team} vs {away_team}: {e}")
 
     return {
@@ -143,21 +219,31 @@ def process_understat_league(league_code, league_name, output_id):
     }
 
 
-def process_oddalerts_league(league_id, league_name, fixtures_path, db_records):
+def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, source_health=None):
     print(f"Fetching upcoming {league_name} fixtures from OddAlerts...")
 
     fixtures = []
+    status = "success_empty"
+    detail = None
+    url = f"https://www.oddalerts.com{fixtures_path}"
+    req = urllib.request.Request(
+        url,
+        headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+    )
     try:
-        url = f"https://www.oddalerts.com{fixtures_path}"
-        req = urllib.request.Request(
-            url,
-            headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-        )
         with urllib.request.urlopen(req, timeout=10) as response:
             html_content = response.read().decode('utf-8')
-            fixtures = parse_upcoming_fixtures(html_content)
     except Exception as e:
-        pass
+        status, detail = "fetch_failed", str(e)
+    else:
+        try:
+            fixtures = parse_upcoming_fixtures(html_content)
+            status = "success_with_fixtures" if fixtures else "success_empty"
+        except Exception as e:
+            status, detail = "parse_failed", str(e)
+
+    if source_health is not None:
+        record_source_health(source_health, "oddalerts", league_id, status, detail)
 
     output_fixtures = []
     league_matches = [m for m in db_records if m.get('league') == league_id]
@@ -234,8 +320,15 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records):
                 f"home_last_{XG_SAMPLE_SIZE}_matches": formatted_home,
                 f"away_last_{XG_SAMPLE_SIZE}_matches": formatted_away
             })
-        except:
-            pass
+        except Exception as e:
+            if source_health is not None:
+                record_source_health(
+                    source_health,
+                    "oddalerts",
+                    league_id,
+                    "fixture_failed",
+                    f"{home_team} vs {away_team}: {e}",
+                )
 
     return {"id": league_id, "name": league_name, "metric": "xg", "fixtures": output_fixtures}
 
@@ -547,6 +640,12 @@ global_db_predictions = []
 
 def main():
     db_records = []
+    source_health = []
+    configured_providers = set()
+    if ODDALERTS_LEAGUES:
+        configured_providers.add("oddalerts")
+    if UNDERSTAT_LEAGUES:
+        configured_providers.add("understat")
 
     # 1. Fetch OddAlerts leagues
     for league in ODDALERTS_LEAGUES:
@@ -561,23 +660,28 @@ def main():
 
     for league in ODDALERTS_LEAGUES:
         try:
-            data = process_oddalerts_league(league["id"], league["name"], league["fixtures_path"], db_records)
+            data = process_oddalerts_league(
+                league["id"], league["name"], league["fixtures_path"], db_records, source_health
+            )
             if data["fixtures"]:
                 leagues_data.append(data)
-        except: pass
+        except Exception as e:
+            record_source_health(source_health, "oddalerts", league["id"], "fetch_failed", str(e))
 
     # 2. Fetch Understat leagues
     for league in UNDERSTAT_LEAGUES:
         # Process for existing data.json output
         try:
-            data = process_understat_league(league["code"], league["name"], league["output_id"])
+            data = process_understat_league(
+                league["code"], league["name"], league["output_id"], source_health
+            )
             leagues_data.append(data)
         except Exception as e:
-            print(f"Failed to process Understat league {league['name']} for data.json: {e}")
+            record_source_health(source_health, "understat", league["output_id"], "fetch_failed", str(e))
 
         # Fetch and process for the match database
         try:
-            season = os.environ.get('SEASON', get_current_season())
+            season = os.environ.get('SEASON') or get_current_season()
             print(f"Fetching all played matches for Understat league {league['name']} (season {season})...")
             played_matches = get_played_matches(league["code"], season=season)
             db_records.extend(map_understat_to_db(played_matches, league["output_id"]))
@@ -585,6 +689,9 @@ def main():
         except Exception as e:
             print(f"Failed to process Understat league {league['name']} for match database: {e}")
 
+
+    print_source_health_summary(source_health)
+    enforce_source_health(source_health, configured_providers)
 
     # 3. Add past matches to each league from db_records
     for league_data in leagues_data:
@@ -595,6 +702,10 @@ def main():
 
     # Ensure public directory exists
     os.makedirs('public', exist_ok=True)
+
+    previous_count = previous_fixture_count()
+    generated_count = fixture_count(leagues_data)
+    enforce_fixture_health(previous_count, generated_count)
 
     # 3. Write consolidated match database to Supabase (instead of local JSON)
     print(f"Upserting {len(db_records)} match records to Supabase...")
@@ -631,8 +742,7 @@ def main():
     with open('public/data.json', 'w') as f:
         json.dump(output, f, indent=2)
 
-    total_fixtures = sum(len(l['fixtures']) for l in leagues_data)
-    print(f"Successfully wrote {total_fixtures} total fixtures to public/data.json")
+    print(f"Successfully wrote {generated_count} total fixtures to public/data.json")
 
 if __name__ == "__main__":
     main()
