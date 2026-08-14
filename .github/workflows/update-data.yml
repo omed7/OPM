@@ -46,6 +46,9 @@ jobs:
           fi
           GITHUB_SHA="$(git rev-parse HEAD)" python3 src/output_writer.py
 
+      - name: Validate generated public data
+        run: python3 src/validate_public_data.py public/data.json
+
       - name: Check if fixtures changed
         id: check_changed
         run: |
