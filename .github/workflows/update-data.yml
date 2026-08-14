@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: '0 6 * * *'
   workflow_dispatch:
+    inputs:
+      allow_empty_fixtures:
+        description: 'Allow a populated public artifact to be replaced with zero fixtures'
+        required: false
+        type: boolean
+        default: false
 
 concurrency:
   group: opm-main-writers
@@ -39,6 +45,7 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          ALLOW_EMPTY_FIXTURES: ${{ inputs.allow_empty_fixtures || 'false' }}
         run: |
           if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ]; then
             echo "::error::Required Supabase Actions secrets are not configured."

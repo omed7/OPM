@@ -1,3 +1,4 @@
+import io
 import json
 import os
 import tempfile
@@ -139,6 +140,158 @@ class TestSupabaseUpserts(unittest.TestCase):
             try:
                 with self.assertRaisesRegex(RuntimeError, "matches persistence failed"):
                     output_writer.main()
+            finally:
+                os.chdir(original_cwd)
+
+    @patch.object(output_writer, "UNDERSTAT_LEAGUES", [])
+    @patch.object(output_writer, "ODDALERTS_LEAGUES", [])
+    @patch.object(output_writer, "save_predictions_to_supabase")
+    @patch.object(output_writer, "save_matches_to_supabase")
+    def test_main_rejects_populated_to_zero_before_persistence(
+        self, mock_save_matches, mock_save_predictions
+    ):
+        original_cwd = os.getcwd()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            os.chdir(temp_dir)
+            try:
+                os.makedirs("public")
+                with open("public/data.json", "w", encoding="utf-8") as artifact:
+                    json.dump(
+                        {
+                            "meta": {"version": "previous", "generated_at": "2026-08-14T00:00:00Z"},
+                            "leagues": [
+                                {
+                                    "id": "mls",
+                                    "name": "Major League Soccer",
+                                    "metric": "xg",
+                                    "fixtures": [
+                                        {
+                                            "home_team": "Home FC",
+                                            "away_team": "Away FC",
+                                            "date": "2026-08-16",
+                                        }
+                                    ],
+                                }
+                            ],
+                        },
+                        artifact,
+                    )
+
+                with self.assertRaisesRegex(RuntimeError, "zero fixtures"):
+                    output_writer.main()
+
+                mock_save_matches.assert_not_called()
+                mock_save_predictions.assert_not_called()
+            finally:
+                os.chdir(original_cwd)
+
+    @patch.dict(os.environ, {"ALLOW_EMPTY_FIXTURES": "true"}, clear=True)
+    @patch.object(output_writer, "UNDERSTAT_LEAGUES", [])
+    @patch.object(output_writer, "ODDALERTS_LEAGUES", [])
+    @patch.object(output_writer, "save_predictions_to_supabase")
+    @patch.object(output_writer, "save_matches_to_supabase")
+    def test_main_allows_populated_to_zero_with_manual_override(
+        self, mock_save_matches, mock_save_predictions
+    ):
+        original_cwd = os.getcwd()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            os.chdir(temp_dir)
+            try:
+                os.makedirs("public")
+                with open("public/data.json", "w", encoding="utf-8") as artifact:
+                    json.dump(
+                        {
+                            "meta": {"version": "previous", "generated_at": "2026-08-14T00:00:00Z"},
+                            "leagues": [{"id": "mls", "name": "Major League Soccer", "metric": "xg", "fixtures": [{"home_team": "Home FC", "away_team": "Away FC", "date": "2026-08-16"}]}],
+                        },
+                        artifact,
+                    )
+
+                output_writer.main()
+
+                mock_save_matches.assert_called_once_with([])
+                mock_save_predictions.assert_called_once_with([])
+                with open("public/data.json", encoding="utf-8") as artifact:
+                    self.assertEqual(json.load(artifact)["leagues"], [])
+            finally:
+                os.chdir(original_cwd)
+
+    @patch.dict(os.environ, {"SEASON": "2025"}, clear=True)
+    @patch.object(output_writer, "ODDALERTS_LEAGUES", [])
+    @patch.object(
+        output_writer,
+        "UNDERSTAT_LEAGUES",
+        [
+            {"code": "EPL", "name": "Premier League", "output_id": "premier_league"},
+            {"code": "La_Liga", "name": "La Liga", "output_id": "la_liga"},
+        ],
+    )
+    @patch.object(output_writer, "get_past_matches", return_value=[])
+    @patch.object(output_writer, "get_played_matches", return_value=[])
+    @patch.object(
+        output_writer,
+        "get_upcoming_fixtures",
+        side_effect=[
+            ([], "fetch_failed", "network down"),
+            ([], "success_empty", None),
+        ],
+    )
+    @patch.object(output_writer, "save_predictions_to_supabase")
+    @patch.object(output_writer, "save_matches_to_supabase")
+    def test_main_warns_but_continues_when_one_league_fails_and_another_is_empty(
+        self,
+        mock_save_matches,
+        mock_save_predictions,
+        _mock_upcoming,
+        _mock_played_matches,
+        _mock_past_matches,
+    ):
+        original_cwd = os.getcwd()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            os.chdir(temp_dir)
+            try:
+                with patch("sys.stdout", new_callable=io.StringIO) as stdout:
+                    output_writer.main()
+
+                self.assertIn("understat:fetch_failed=1", stdout.getvalue())
+                self.assertIn("understat:success_empty=1", stdout.getvalue())
+                self.assertIn("Warning: understat premier_league fetch_failed: network down", stdout.getvalue())
+                mock_save_matches.assert_called_once_with([])
+                mock_save_predictions.assert_called_once_with([])
+            finally:
+                os.chdir(original_cwd)
+
+    @patch.dict(os.environ, {"SEASON": "2025"}, clear=True)
+    @patch.object(output_writer, "ODDALERTS_LEAGUES", [])
+    @patch.object(
+        output_writer,
+        "UNDERSTAT_LEAGUES",
+        [{"code": "EPL", "name": "Premier League", "output_id": "premier_league"}],
+    )
+    @patch.object(output_writer, "get_played_matches", return_value=[])
+    @patch.object(
+        output_writer,
+        "get_upcoming_fixtures",
+        return_value=([], "fetch_failed", "network down"),
+    )
+    @patch.object(output_writer, "save_predictions_to_supabase")
+    @patch.object(output_writer, "save_matches_to_supabase")
+    def test_main_rejects_all_fixture_source_groups_failing(
+        self,
+        mock_save_matches,
+        mock_save_predictions,
+        _mock_upcoming,
+        _mock_played_matches,
+    ):
+        original_cwd = os.getcwd()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            os.chdir(temp_dir)
+            try:
+                with self.assertRaisesRegex(RuntimeError, "All configured fixture source groups failed"):
+                    output_writer.main()
+
+                mock_save_matches.assert_not_called()
+                mock_save_predictions.assert_not_called()
             finally:
                 os.chdir(original_cwd)
 
