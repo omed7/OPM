@@ -37,3 +37,13 @@ CREATE TABLE public.predictions (
 
 -- Add a unique constraint to avoid duplicate predictions and support continuous upserts
 ALTER TABLE public.predictions ADD CONSTRAINT predictions_unique_constraint UNIQUE (home_team, away_team, date, league);
+
+-- Restrict tables in the exposed public schema to trusted server-side access.
+ALTER TABLE public.matches ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.predictions ENABLE ROW LEVEL SECURITY;
+
+REVOKE ALL PRIVILEGES ON TABLE public.matches FROM anon, authenticated;
+REVOKE ALL PRIVILEGES ON TABLE public.predictions FROM anon, authenticated;
+
+GRANT SELECT, INSERT ON TABLE public.matches TO service_role;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.predictions TO service_role;

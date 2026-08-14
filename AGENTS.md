@@ -77,7 +77,7 @@ When computing a prediction, the engine also silently computes comparison projec
 - `SEASON` (Optional): Override automatic season detection for testing.
 - `MOCK_UPCOMING` (Optional): Enable fallback mock fixture generation in `src/fetch/understat_common.py` when no live future fixtures exist.
 - `SUPERBASE_URL` or `SUPABASE_URL`: URL for the Supabase REST API (Required for both serverless and cron).
-- `SUPERBASE_KEY` or `SUPABASE_KEY`: Supabase service role key or anon key with write access (Required for both serverless and cron).
+- `SUPERBASE_KEY` or `SUPABASE_KEY`: Server-side Supabase Secret/service-role key only; never use an anon or publishable key. Required for trusted cron and server-side maintenance only.
 - No API keys are currently required for scrapers — every active data source is scraped.
 
 ## Frontend
