@@ -69,6 +69,7 @@ When computing a prediction, the engine also silently computes comparison projec
 ## Stack
 
 - **Automated pipeline**: Python fetch/compute → `public/data.json` (includes the 4 underlying matches per team) → static HTML/CSS/JS frontend → Vercel. Daily cron plus manual `workflow_dispatch`. Also consolidates all Understat played matches and OddAlerts leagues and upserts them directly into Supabase.
+- **Upcoming-fixture metrics**: Every upcoming fixture exposes the expected-xG and expected-goals triplets. `league.metric` remains `xg`, so the current frontend displays xG; expected-goals values are additive public data and may be `null` when source goal inputs are unavailable.
 - Note: The Semi-Automatic manual prediction UI and its `/api` backend have been completely removed, as fixture detection is now fully automated.
 - **Deployment Configuration**: Vercel deployment relies on `.vercelignore` to deploy only the essential directories (`public`, `api`, `src`) and files (`requirements.txt`).
 
