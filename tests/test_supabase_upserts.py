@@ -3,12 +3,118 @@ import json
 import os
 import tempfile
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, call, patch
 
 from src import output_writer
 
 
 class TestSupabaseUpserts(unittest.TestCase):
+    @patch.dict(os.environ, {}, clear=True)
+    @patch("src.output_writer.urllib.request.urlopen")
+    def test_missing_credentials_do_not_issue_persistence_requests(self, mock_urlopen):
+        records = [
+            {
+                "team": "Home Team",
+                "opponent": "Away Team",
+                "date": "2026-08-14",
+                "venue": "home",
+                "league": "league-id",
+            }
+        ]
+        predictions = [
+            {
+                "home_team": "Home Team",
+                "away_team": "Away Team",
+                "date": "2026-08-14",
+                "league": "league-id",
+            }
+        ]
+
+        output_writer.save_matches_to_supabase(records)
+        output_writer.save_predictions_to_supabase(predictions)
+
+        mock_urlopen.assert_not_called()
+
+    @patch.dict(
+        os.environ,
+        {
+            "SUPABASE_URL": "https://example.supabase.co/",
+            "SUPABASE_KEY": "test-key",
+        },
+        clear=True,
+    )
+    @patch("src.output_writer.urllib.request.urlopen")
+    def test_repeated_match_write_reuses_natural_key_request(self, mock_urlopen):
+        mock_urlopen.return_value.__enter__.return_value = MagicMock()
+        records = [
+            {
+                "team": "Home Team",
+                "opponent": "Away Team",
+                "date": "2026-08-14",
+                "venue": "home",
+                "league": "league-id",
+            }
+        ]
+
+        output_writer.save_matches_to_supabase(records)
+        output_writer.save_matches_to_supabase(records)
+
+        requests = [call.args[0] for call in mock_urlopen.call_args_list]
+        self.assertEqual(len(requests), 2)
+        self.assertEqual(
+            [request.full_url for request in requests],
+            [
+                "https://example.supabase.co/rest/v1/matches?on_conflict=team,opponent,date,venue,league",
+                "https://example.supabase.co/rest/v1/matches?on_conflict=team,opponent,date,venue,league",
+            ],
+        )
+        self.assertEqual([json.loads(request.data.decode("utf-8")) for request in requests], [records, records])
+        self.assertTrue(all(request.get_header("Prefer") == "resolution=ignore-duplicates" for request in requests))
+
+    @patch.dict(
+        os.environ,
+        {
+            "SUPABASE_URL": "https://example.supabase.co/",
+            "SUPABASE_KEY": "test-key",
+        },
+        clear=True,
+    )
+    @patch("src.output_writer.urllib.request.urlopen")
+    def test_changed_prediction_write_reuses_identity_and_merges_new_values(self, mock_urlopen):
+        mock_urlopen.return_value.__enter__.return_value = MagicMock()
+        original_prediction = {
+            "home_team": "Home Team",
+            "away_team": "Away Team",
+            "date": "2026-08-14",
+            "league": "league-id",
+            "home_expected_xg": 1.25,
+            "away_expected_xg": 0.75,
+        }
+        updated_prediction = {**original_prediction, "home_expected_xg": 1.5}
+
+        output_writer.save_predictions_to_supabase([original_prediction])
+        output_writer.save_predictions_to_supabase([updated_prediction])
+
+        requests = [call.args[0] for call in mock_urlopen.call_args_list]
+        payloads = [json.loads(request.data.decode("utf-8"))[0] for request in requests]
+        self.assertEqual(len(requests), 2)
+        self.assertTrue(
+            all(
+                request.full_url
+                == "https://example.supabase.co/rest/v1/predictions?on_conflict=home_team,away_team,date,league"
+                for request in requests
+            )
+        )
+        self.assertTrue(all(request.get_header("Prefer") == "resolution=merge-duplicates" for request in requests))
+        self.assertEqual(
+            [{key: payload[key] for key in ("home_team", "away_team", "date", "league")} for payload in payloads],
+            [
+                {key: original_prediction[key] for key in ("home_team", "away_team", "date", "league")},
+                {key: original_prediction[key] for key in ("home_team", "away_team", "date", "league")},
+            ],
+        )
+        self.assertEqual([payload["home_expected_xg"] for payload in payloads], [1.25, 1.5])
+
     @patch.dict(
         os.environ,
         {
