@@ -414,7 +414,7 @@ def save_matches_to_supabase(db_records):
             return
 
         url = url.rstrip('/')
-        full_url = url + "/rest/v1/matches"
+        full_url = url + "/rest/v1/matches?on_conflict=team,opponent,date,venue,league"
 
         # Prefer: resolution=ignore-duplicates instructs Supabase to ignore conflicts
         headers = {
@@ -449,7 +449,7 @@ def save_predictions_to_supabase(predictions):
             return
 
         url = url.rstrip('/')
-        full_url = url + "/rest/v1/predictions"
+        full_url = url + "/rest/v1/predictions?on_conflict=home_team,away_team,date,league"
 
         headers = {
             "apikey": key,
