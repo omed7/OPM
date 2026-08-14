@@ -306,51 +306,6 @@ function renderBadgeHtml(teamName) {
     }
 }
 
-let allTeamNames = new Set();
-
-async function loadTeamNames() {
-    try {
-        const response = await fetch('match_database.json');
-        if (response.ok) {
-            const matches = await response.json();
-            matches.forEach(m => {
-                if (m.team) allTeamNames.add(m.team);
-                if (m.opponent) allTeamNames.add(m.opponent);
-            });
-        }
-    } catch (e) {
-        console.error('Failed to load match_database.json', e);
-    }
-
-    // Add any names that have been given a logo in localStorage
-    try {
-        const teamLogos = JSON.parse(localStorage.getItem('team_logos') || '{}');
-        Object.keys(teamLogos).forEach(name => allTeamNames.add(name));
-    } catch (e) {}
-
-    updateAutocompleteDatalist();
-}
-
-function updateAutocompleteDatalist() {
-    let datalist = document.getElementById('team-names-datalist');
-    if (!datalist) {
-        datalist = document.createElement('datalist');
-        datalist.id = 'team-names-datalist';
-        document.body.appendChild(datalist);
-    }
-
-    datalist.innerHTML = '';
-
-    // Sort team names alphabetically
-    const sortedNames = Array.from(allTeamNames).sort();
-    sortedNames.forEach(name => {
-        const option = document.createElement('option');
-        option.value = name;
-        datalist.appendChild(option);
-    });
-
-}
-
 function setupLogoClickHandlers() {
     document.body.addEventListener('click', (e) => {
         const badge = e.target.closest('.team-badge');
@@ -391,13 +346,6 @@ function setupLogoClickHandlers() {
                 }
             });
 
-            // Also add team to autocomplete Set and update datalist in case this was a newly seen team name
-            if (typeof allTeamNames !== 'undefined' && !allTeamNames.has(teamName)) {
-                allTeamNames.add(teamName);
-                if (typeof updateAutocompleteDatalist === 'function') {
-                    updateAutocompleteDatalist();
-                }
-            }
         }
     });
 }
@@ -423,5 +371,4 @@ document.addEventListener('DOMContentLoaded', () => {
     init();
     setupTheme();
     setupLogoClickHandlers();
-    loadTeamNames();
 });
