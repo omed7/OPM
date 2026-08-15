@@ -98,12 +98,13 @@ function response(ok, payload) {
     };
 }
 
-async function boot({ data, dataOk = true, version = 'test-version', initialStorage = {} }) {
+async function boot({ data, dataOk = true, badges = { badges: {} }, badgesOk = true, version = 'test-version', initialStorage = {} }) {
     const elements = {
         'fixtures-container': new Element('main'),
         'version-tag': new Element('p'),
         'date-strip': new Element('div'),
         'theme-toggle': new Element('button'),
+        'badge-attribution': new Element('p'),
     };
     const storage = createStorage(initialStorage);
     const errors = [];
@@ -148,6 +149,9 @@ async function boot({ data, dataOk = true, version = 'test-version', initialStor
             if (url === 'data.json') {
                 return response(dataOk, data);
             }
+            if (url === 'team_badges.json') {
+                return response(badgesOk, badges);
+            }
             if (url === 'version.json') {
                 return response(true, { version });
             }
@@ -160,8 +164,9 @@ async function boot({ data, dataOk = true, version = 'test-version', initialStor
 
     vm.runInNewContext(scriptSource, context, { filename: scriptPath });
     readyHandler();
-    await new Promise(resolve => setImmediate(resolve));
-    await new Promise(resolve => setImmediate(resolve));
+    for (let i = 0; i < 6; i++) {
+        await new Promise(resolve => setImmediate(resolve));
+    }
 
     return { document, elements, storage, errors };
 }
@@ -230,6 +235,63 @@ async function testPopulatedMetricFinishedNavigationAndTheme() {
     elements['theme-toggle'].click();
     assert.strictEqual(document.documentElement.getAttribute('data-theme'), 'dark');
     assert.strictEqual(storage.getItem('theme'), 'dark');
+    assert.deepStrictEqual(errors, []);
+}
+
+async function testStaticBadgeManifestAttributionAndFallback() {
+    const app = await boot({
+        data: {
+            leagues: [{
+                id: 'premier_league',
+                name: 'Premier League',
+                metric: 'xg',
+                fixtures: [predictionFixture()],
+            }],
+        },
+        badges: {
+            source: {
+                name: 'TheSportsDB',
+                url: 'https://www.thesportsdb.com/',
+                attribution: 'Team badges: TheSportsDB',
+            },
+            badges: {
+                premier_league: {
+                    'Home FC': {
+                        badge_url: 'https://r2.thesportsdb.com/images/home-fc.png',
+                        source_url: 'https://www.thesportsdb.com/team/home-fc',
+                    },
+                },
+            },
+        },
+    });
+    const { elements, errors } = app;
+    const cardHtml = elements['fixtures-container'].children[0].children[1].children[0].innerHTML;
+
+    assert.match(cardHtml, /https:\/\/r2\.thesportsdb\.com\/images\/home-fc\.png/);
+    assert.match(cardHtml, /alt="Home FC badge"/);
+    assert.match(cardHtml, /data-team="Away FC"[^>]*>AF<\/div>/);
+    assert.strictEqual(elements['badge-attribution'].textContent, 'Team badges: TheSportsDB');
+    assert.deepStrictEqual(errors, []);
+}
+
+async function testUnavailableBadgeManifestFallsBackToInitials() {
+    const app = await boot({
+        data: {
+            leagues: [{
+                id: 'premier_league',
+                name: 'Premier League',
+                metric: 'xg',
+                fixtures: [predictionFixture()],
+            }],
+        },
+        badgesOk: false,
+    });
+    const { elements, errors } = app;
+    const cardHtml = elements['fixtures-container'].children[0].children[1].children[0].innerHTML;
+
+    assert.match(cardHtml, /data-team="Home FC"[^>]*>HF<\/div>/);
+    assert.match(cardHtml, /data-team="Away FC"[^>]*>AF<\/div>/);
+    assert.strictEqual(elements['badge-attribution'].textContent, '');
     assert.deepStrictEqual(errors, []);
 }
 
@@ -313,6 +375,8 @@ async function testDataLoadError() {
 
 (async () => {
     await testPopulatedMetricFinishedNavigationAndTheme();
+    await testStaticBadgeManifestAttributionAndFallback();
+    await testUnavailableBadgeManifestFallsBackToInitials();
     await testCollapsedLeagueSectionsFlagsAndPersistence();
     await testEmptyArtifact();
     await testDataLoadError();

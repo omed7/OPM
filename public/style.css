@@ -129,7 +129,7 @@ h1 {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .team-name {
@@ -235,6 +235,10 @@ footer {
     font-size: 0.7rem;
     color: var(--text-secondary);
     text-align: center;
+}
+
+#badge-attribution {
+    margin: 4px 0 0;
 }
 
 .loading, .no-fixtures {
