@@ -449,3 +449,361 @@ footer {
 .result-center .combined-xg {
     color: var(--text-primary);
 }
+
+/* Tab navigation and compact fixture presentation */
+body {
+    padding-bottom: 92px;
+}
+
+.bottom-nav {
+    position: fixed;
+    z-index: 20;
+    bottom: 0;
+    left: 50%;
+    width: min(100%, 520px);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    box-sizing: border-box;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    background: color-mix(in srgb, var(--card-bg) 94%, transparent);
+    border-top: 1px solid var(--xg-bar-bg);
+    backdrop-filter: blur(12px);
+}
+
+.bottom-nav-item,
+.favorite-toggle,
+.back-button,
+.pa-view-button,
+.season-selector-toggle,
+.season-option,
+.league-directory-item {
+    font: inherit;
+    cursor: pointer;
+}
+
+.bottom-nav-item {
+    min-height: 42px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-weight: 700;
+}
+
+.bottom-nav-item.active {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+.bottom-nav-item:focus-visible,
+.favorite-toggle:focus-visible,
+.back-button:focus-visible,
+.pa-view-button:focus-visible,
+.season-selector-toggle:focus-visible,
+.season-option:focus-visible,
+.league-directory-item:focus-visible,
+.fixture-card:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+.fixture-card {
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.fixture-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(100px, 1.15fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 8px;
+}
+
+.fixture-summary .team-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.fixture-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    text-align: center;
+}
+
+.fixture-time strong {
+    color: var(--text-primary);
+    font-size: 0.78rem;
+}
+
+.fixture-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--xg-bar-bg);
+}
+
+.favorite-toggle {
+    min-height: 32px;
+    padding: 5px 10px;
+    border: 1px solid var(--accent-color);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--accent-color);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.favorite-toggle[aria-pressed="true"] {
+    background: var(--accent-color);
+    color: #fff;
+}
+
+.fixture-detail-hint {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.fixture-details {
+    margin-top: 12px;
+}
+
+.fixture-detail-result {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.fixture-detail-result > div,
+.fixture-detail-prediction {
+    padding: 10px;
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--accent-color) 8%, var(--card-bg));
+    text-align: center;
+}
+
+.fixture-detail-result span,
+.detail-metric-label {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+.fixture-detail-result strong,
+.detail-metric-value {
+    display: block;
+    margin-top: 4px;
+    color: var(--accent-color);
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.detail-metric-split {
+    margin-top: 4px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.prediction-history {
+    margin-top: 10px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.home-bar-container .xg-bar {
+    position: absolute;
+    right: 0;
+}
+
+.away-bar-container .xg-bar {
+    position: absolute;
+    left: 0;
+}
+
+.tab-heading {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.tab-description,
+.pa-legend,
+.season-unavailable-note {
+    margin: 8px 0 16px;
+    color: var(--text-secondary);
+    font-size: 0.86rem;
+    line-height: 1.45;
+}
+
+.league-directory {
+    display: grid;
+    gap: 10px;
+}
+
+.league-directory-item {
+    width: 100%;
+    min-height: 52px;
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--xg-bar-bg);
+    border-radius: 10px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    box-shadow: var(--btn-shadow);
+    text-align: left;
+}
+
+.league-detail-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.back-button {
+    min-height: 32px;
+    padding: 5px 9px;
+    border: 1px solid var(--xg-bar-bg);
+    border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 0.78rem;
+}
+
+.season-selector {
+    position: relative;
+    width: min(100%, 220px);
+    margin-bottom: 12px;
+}
+
+.season-selector-toggle {
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 12px;
+    border: 1px solid var(--accent-color);
+    border-radius: 9px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-weight: 700;
+    text-align: left;
+}
+
+.season-selector-menu {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    display: grid;
+    gap: 2px;
+    padding: 6px;
+    border: 1px solid var(--xg-bar-bg);
+    border-radius: 9px;
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+}
+
+.season-option {
+    min-height: 36px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-primary);
+    text-align: left;
+}
+
+.season-option[aria-pressed="true"],
+.season-option:hover {
+    background: color-mix(in srgb, var(--accent-color) 14%, transparent);
+}
+
+.pa-view-controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-bottom: 14px;
+}
+
+.pa-view-button {
+    min-height: 38px;
+    border: 1px solid var(--xg-bar-bg);
+    border-radius: 8px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.pa-view-button.active {
+    border-color: var(--accent-color);
+    background: var(--accent-color);
+    color: #fff;
+}
+
+.season-unavailable-note {
+    padding: 10px 12px;
+    border-left: 3px solid var(--accent-color);
+    border-radius: 0 8px 8px 0;
+    background: color-mix(in srgb, var(--accent-color) 8%, var(--card-bg));
+}
+
+.standings-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--xg-bar-bg);
+    border-radius: 10px;
+    background: var(--card-bg);
+}
+
+.standings-table {
+    width: 100%;
+    min-width: 650px;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+}
+
+.standings-table th,
+.standings-table td {
+    padding: 10px 9px;
+    border-bottom: 1px solid var(--xg-bar-bg);
+    text-align: left;
+    white-space: nowrap;
+}
+
+.standings-table thead th {
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+.standings-table tbody tr:last-child th,
+.standings-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+@media (max-width: 400px) {
+    body {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .fixture-summary {
+        grid-template-columns: minmax(0, 1fr) 92px minmax(0, 1fr);
+    }
+
+    .fixture-time strong {
+        font-size: 0.7rem;
+    }
+}

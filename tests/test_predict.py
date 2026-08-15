@@ -78,11 +78,13 @@ class TestOddAlertsUpcomingFixtures(unittest.TestCase):
                     "home_team": "CF Montréal",
                     "away_team": "Home & Co",
                     "date": "2026-12-29",
+                    "kickoff_time": "19:00",
                 },
                 {
                     "home_team": "Future United",
                     "away_team": "Away FC",
                     "date": "2027-01-01",
+                    "kickoff_time": "20:00",
                 },
             ],
         )
@@ -113,6 +115,7 @@ class TestOddAlertsUpcomingFixtures(unittest.TestCase):
                     "home_team": "Scheduled Home",
                     "away_team": "Scheduled Away",
                     "date": "2026-12-30",
+                    "kickoff_time": "20:00",
                 }
             ],
         )
