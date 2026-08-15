@@ -22,6 +22,7 @@ from src.compute.venue_weighted_methodology import (
     calculate_fixture_expectation,
 )
 from src.compute.season_policy import summarize_history_filter
+from src.compute.league_standings import build_standings_artifact
 from src.supabase_client import supabase_request
 
 METHODOLOGY_HISTORY_SIZES = {
@@ -32,6 +33,17 @@ METHODOLOGY_HISTORY_SIZES = {
 
 def active_history_size():
     return METHODOLOGY_HISTORY_SIZES[ACTIVE_METHODOLOGY]
+
+
+def fixture_date_and_kickoff_time(fixture):
+    """Return the date-only fixture identity and its source-provided clock, if any."""
+    raw_date = str(fixture["date"])
+    kickoff_time = fixture.get("kickoff_time")
+    if not kickoff_time and len(raw_date) >= 16 and raw_date[10] in {" ", "T"}:
+        candidate = raw_date[11:16]
+        if len(candidate) == 5 and candidate[2] == ":":
+            kickoff_time = candidate
+    return raw_date[:10], kickoff_time
 
 
 def venue_history(matches):
@@ -205,6 +217,7 @@ def process_understat_league(league_code, league_name, output_id, source_health=
     output_fixtures = []
 
     for fixture in fixtures:
+        fixture_date, kickoff_time = fixture_date_and_kickoff_time(fixture)
         home_team = fixture['home_team']
         away_team = fixture['away_team']
         print(f"Processing {league_code}: {home_team} vs {away_team}...")
@@ -233,11 +246,12 @@ def process_understat_league(league_code, league_name, output_id, source_health=
                     m['date'] = m['date'].split(' ')[0]
 
             home_matches, home_counts = summarize_history_filter(
-                home_matches, output_id, fixture['date']
+                home_matches, output_id, fixture_date
             )
             away_matches, away_counts = summarize_history_filter(
-                away_matches, output_id, fixture['date']
+                away_matches, output_id, fixture_date
             )
+
             prior_filtered = (
                 home_counts['prior_season_filtered']
                 + away_counts['prior_season_filtered']
@@ -265,7 +279,7 @@ def process_understat_league(league_code, league_name, output_id, source_health=
             global_db_predictions.append({
                 "home_team": home_team,
                 "away_team": away_team,
-                "date": fixture['date'],
+                "date": fixture_date,
                 "league": league_code,
                 "home_expected_xg": home_expected_xg,
                 "away_expected_xg": away_expected_xg,
@@ -276,10 +290,10 @@ def process_understat_league(league_code, league_name, output_id, source_health=
             })
 
             # Assemble fixture data
-            output_fixtures.append({
+            output_fixture = {
                 "home_team": home_team,
                 "away_team": away_team,
-                "date": fixture['date'],
+                "date": fixture_date,
                 "combined_expected_xg": combined_expected_xg,
                 "home_expected_xg": home_expected_xg,
                 "away_expected_xg": away_expected_xg,
@@ -287,8 +301,11 @@ def process_understat_league(league_code, league_name, output_id, source_health=
                 "away_expected_goals": away_expected_goals,
                 "combined_expected_goals": combined_expected_goals,
                 f"home_last_{active_history_size()}_matches": home_matches,
-                f"away_last_{active_history_size()}_matches": away_matches
-            })
+                f"away_last_{active_history_size()}_matches": away_matches,
+            }
+            if kickoff_time:
+                output_fixture["kickoff_time"] = kickoff_time
+            output_fixtures.append(output_fixture)
         except IncompleteHistoryError as e:
             if source_health is not None:
                 record_source_health(
@@ -348,11 +365,12 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
     league_matches = [m for m in db_records if m.get('league') == league_id]
 
     for fixture in fixtures:
+        fixture_date, kickoff_time = fixture_date_and_kickoff_time(fixture)
         home_team = fixture['home_team']
         away_team = fixture['away_team']
         try:
             fixture_records, season_counts = summarize_history_filter(
-                league_matches, league_id, fixture['date']
+                league_matches, league_id, fixture_date
             )
             if source_health is not None and season_counts['prior_season_filtered']:
                 record_source_health(
@@ -408,7 +426,7 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
             global_db_predictions.append({
                 "home_team": home_team,
                 "away_team": away_team,
-                "date": fixture['date'],
+                "date": fixture_date,
                 "league": league_id,
                 "home_expected_xg": home_expected_xg,
                 "away_expected_xg": away_expected_xg,
@@ -418,8 +436,10 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
                 "combined_expected_goals": combined_expected_goals
             })
 
-            output_fixtures.append({
-                "home_team": home_team, "away_team": away_team, "date": fixture['date'],
+            output_fixture = {
+                "home_team": home_team,
+                "away_team": away_team,
+                "date": fixture_date,
                 "combined_expected_xg": combined_expected_xg,
                 "home_expected_xg": home_expected_xg,
                 "away_expected_xg": away_expected_xg,
@@ -427,8 +447,11 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
                 "away_expected_goals": away_expected_goals,
                 "combined_expected_goals": combined_expected_goals,
                 f"home_last_{active_history_size()}_matches": formatted_home,
-                f"away_last_{active_history_size()}_matches": formatted_away
-            })
+                f"away_last_{active_history_size()}_matches": formatted_away,
+            }
+            if kickoff_time:
+                output_fixture["kickoff_time"] = kickoff_time
+            output_fixtures.append(output_fixture)
         except IncompleteHistoryError as e:
             if source_health is not None:
                 record_source_health(
@@ -763,6 +786,62 @@ def get_past_matches(db_records, league_id):
     return list(unique_matches.values())
 
 
+def league_name_map():
+    names = {league["output_id"]: league["name"] for league in UNDERSTAT_LEAGUES}
+    names.update({league["id"]: league["name"] for league in ODDALERTS_LEAGUES})
+    return names
+
+
+def fetch_all_supabase_rows(table, fields, page_size=1000):
+    """Fetch a complete read-only table projection through the existing Supabase seam."""
+    rows = []
+    offset = 0
+    while True:
+        endpoint = (
+            f"/{table}?select={fields}&order=date.asc&limit={page_size}&offset={offset}"
+        )
+        page, error = supabase_request(endpoint)
+        if error is not None:
+            return None, error
+        if not isinstance(page, list):
+            return None, f"Unexpected {table} response shape."
+        rows.extend(page)
+        if len(page) < page_size:
+            return rows, None
+        offset += page_size
+
+
+def fetch_historical_standings_records():
+    """Return retained result and prediction rows required by the standings artifact."""
+    matches, matches_error = fetch_all_supabase_rows(
+        "matches",
+        "team,opponent,date,venue,league,goals_for,goals_against,xg_for,xg_against",
+    )
+    if matches_error is not None:
+        return None, None, f"Could not read matches for standings: {matches_error}"
+
+    predictions, predictions_error = fetch_all_supabase_rows(
+        "predictions",
+        "home_team,away_team,date,league,home_expected_xg,away_expected_xg,home_expected_goals,away_expected_goals",
+    )
+    if predictions_error is not None:
+        return None, None, f"Could not read predictions for standings: {predictions_error}"
+    return matches, predictions, None
+
+
+def write_league_standings_artifact(matches, predictions, version, generated_at):
+    artifact = build_standings_artifact(
+        matches,
+        predictions,
+        league_name_map(),
+        version=version,
+        generated_at=generated_at,
+    )
+    with open("public/league_standings.json", "w", encoding="utf-8") as artifact_file:
+        json.dump(artifact, artifact_file, indent=2)
+    return artifact
+
+
 global_db_predictions = []
 
 def main():
@@ -882,18 +961,35 @@ def main():
             pass
 
     # 5. Prepare and write final data.json output structure (preserving original behavior)
+    version = get_version()
+    generated_at = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     output = {
         "meta": {
-            "version": get_version(),
-            "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+            "version": version,
+            "generated_at": generated_at,
         },
-        "leagues": leagues_data
+        "leagues": leagues_data,
     }
 
-    with open('public/data.json', 'w') as f:
-        json.dump(output, f, indent=2)
+    with open('public/data.json', 'w', encoding='utf-8') as fixture_file:
+        json.dump(output, fixture_file, indent=2)
 
     print(f"Successfully wrote {generated_count} total fixtures to public/data.json")
+
+    standings_matches, standings_predictions, standings_error = fetch_historical_standings_records()
+    if standings_error is not None:
+        print(f"Warning: {standings_error}; retaining any existing league standings artifact.")
+    else:
+        standings_artifact = write_league_standings_artifact(
+            standings_matches,
+            standings_predictions,
+            version,
+            generated_at,
+        )
+        print(
+            "Successfully wrote "
+            f"{len(standings_artifact['leagues'])} leagues to public/league_standings.json"
+        )
 
 if __name__ == "__main__":
     main()

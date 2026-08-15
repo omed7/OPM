@@ -24,7 +24,6 @@ class ClassList {
     }
 }
 
-
 class Element {
     constructor(tagName) {
         this.tagName = tagName;
@@ -37,6 +36,7 @@ class Element {
         this.style = {};
         this.attributes = {};
         this.id = '';
+        this.dataset = {};
     }
 
     get innerHTML() {
@@ -67,9 +67,7 @@ class Element {
     }
 
     click() {
-        if (this.listeners.click) {
-            this.listeners.click({ target: this });
-        }
+        if (this.listeners.click) this.listeners.click({ target: this });
     }
 }
 
@@ -92,24 +90,32 @@ function createStorage(initialValues = {}) {
 }
 
 function response(ok, payload) {
-    return {
-        ok,
-        json: async () => payload,
-    };
+    return { ok, json: async () => payload };
 }
 
-async function boot({ data, dataOk = true, badges = { badges: {} }, badgesOk = true, version = 'test-version', initialStorage = {} }) {
+async function boot({
+    data,
+    dataOk = true,
+    standings = { leagues: [] },
+    standingsOk = true,
+    badges = { badges: {} },
+    badgesOk = true,
+    version = 'test-version',
+    initialStorage = {},
+}) {
     const elements = {
         'fixtures-container': new Element('main'),
         'version-tag': new Element('p'),
         'date-strip': new Element('div'),
         'theme-toggle': new Element('button'),
         'badge-attribution': new Element('p'),
+        'home-tab': new Element('button'),
+        'league-tab': new Element('button'),
+        'favorite-tab': new Element('button'),
     };
     const storage = createStorage(initialStorage);
     const errors = [];
     let readyHandler;
-
     const document = {
         body: new Element('body'),
         documentElement: {
@@ -131,43 +137,27 @@ async function boot({ data, dataOk = true, badges = { badges: {} }, badgesOk = t
             return [];
         },
         addEventListener(eventName, listener) {
-            if (eventName === 'DOMContentLoaded') {
-                readyHandler = listener;
-            }
+            if (eventName === 'DOMContentLoaded') readyHandler = listener;
         },
     };
-
     const context = {
         Date: FakeDate,
-        console: {
-            error(error) {
-                errors.push(String(error));
-            },
-        },
+        console: { error(error) { errors.push(String(error)); } },
         document,
-        fetch: async (url) => {
-            if (url === 'data.json') {
-                return response(dataOk, data);
-            }
-            if (url === 'team_badges.json') {
-                return response(badgesOk, badges);
-            }
-            if (url === 'version.json') {
-                return response(true, { version });
-            }
+        fetch: async url => {
+            if (url === 'data.json') return response(dataOk, data);
+            if (url === 'league_standings.json') return response(standingsOk, standings);
+            if (url === 'team_badges.json') return response(badgesOk, badges);
+            if (url === 'version.json') return response(true, { version });
             throw new Error(`Unexpected fetch: ${url}`);
         },
         localStorage: storage,
         prompt: () => null,
         setImmediate,
     };
-
     vm.runInNewContext(scriptSource, context, { filename: scriptPath });
     readyHandler();
-    for (let i = 0; i < 6; i++) {
-        await new Promise(resolve => setImmediate(resolve));
-    }
-
+    for (let i = 0; i < 8; i += 1) await new Promise(resolve => setImmediate(resolve));
     return { document, elements, storage, errors };
 }
 
@@ -176,60 +166,94 @@ function predictionFixture() {
         home_team: 'Home FC',
         away_team: 'Away FC',
         date: '2026-08-16',
+        kickoff_time: '21:30',
+        home_expected_xg: 1.7,
+        away_expected_xg: 1.2,
+        combined_expected_xg: 2.9,
         home_expected_goals: 1.5,
         away_expected_goals: 1.0,
         combined_expected_goals: 2.5,
-        home_last_4_matches: [{ opponent: 'H1', goals_for: 2, goals_against: 1 }],
-        away_last_4_matches: [{ opponent: 'A1', goals_for: 1, goals_against: 2 }],
+        home_last_4_matches: [{ opponent: 'H1', xg_for: 2, xg_against: 1, goals_for: 2, goals_against: 1 }],
+        away_last_4_matches: [{ opponent: 'A1', xg_for: 1, xg_against: 2, goals_for: 1, goals_against: 2 }],
     };
 }
 
-function finishedFixture() {
+function standingsFixture() {
+    const unavailable = { xg: null, goals: null, xg_goals: null };
     return {
-        home_team: 'Past Home',
-        away_team: 'Past Away',
-        date: '2026-08-16',
-        status: 'FINISHED',
-        home_goals: 2,
-        away_goals: 1,
-        home_xg: 1.8,
-        away_xg: 0.9,
-        home_expected_xg: 1.4,
-        away_expected_xg: 1.1,
-        home_expected_goals: 1.5,
-        away_expected_goals: 1.0,
-    };
-}
-
-async function testPopulatedMetricFinishedNavigationAndTheme() {
-    const app = await boot({
-        data: {
-            leagues: [
+        schema_version: 1,
+        leagues: [{
+            id: 'premier_league',
+            name: 'Premier League',
+            seasons: [
                 {
-                    id: 'test-league',
-                    name: 'Test League',
-                    metric: 'goals',
-                    fixtures: [predictionFixture(), finishedFixture()],
+                    id: '2026-07-01',
+                    label: '2026/27',
+                    teams: [{
+                        name: 'Home FC',
+                        matches_played: 1,
+                        views: {
+                            overall: {
+                                xg: { total: 0.4, average: 0.4, eligible_matches: 1 },
+                                goals: { total: 1.5, average: 1.5, eligible_matches: 1 },
+                                xg_goals: { total: 0.95, average: 0.95 },
+                            },
+                            for: {
+                                xg: { total: -0.1, average: -0.1, eligible_matches: 1 },
+                                goals: { total: 0.5, average: 0.5, eligible_matches: 1 },
+                                xg_goals: { total: 0.2, average: 0.2 },
+                            },
+                            against: {
+                                xg: { total: 0.5, average: 0.5, eligible_matches: 1 },
+                                goals: { total: 1.0, average: 1.0, eligible_matches: 1 },
+                                xg_goals: { total: 0.75, average: 0.75 },
+                            },
+                        },
+                    }],
+                },
+                {
+                    id: '2025-07-01',
+                    label: '2025/26',
+                    teams: [{ name: 'Historic FC', matches_played: 20, views: { overall: unavailable, for: unavailable, against: unavailable } }],
                 },
             ],
-        },
+        }],
+    };
+}
+
+function homeCard(elements) {
+    const section = elements['fixtures-container'].children[0];
+    return section.children[1].children[0];
+}
+
+async function testHomeDefaultsToCompactFixtureDetailsAndFavorites() {
+    const app = await boot({
+        data: { leagues: [{ id: 'premier_league', name: 'Premier League', metric: 'xg', fixtures: [predictionFixture()] }] },
     });
-    const { document, elements, storage, errors } = app;
+    const { elements, storage, document, errors } = app;
+    const card = homeCard(elements);
 
-    assert.strictEqual(elements['version-tag'].textContent, 'vtest-version');
+    assert.strictEqual(elements['home-tab'].getAttribute('aria-selected'), 'true');
     assert.strictEqual(elements['date-strip'].children.length, 7);
-    assert.strictEqual(elements['date-strip'].children[3].classList.contains('active'), true);
-    assert.strictEqual(elements['fixtures-container'].children.length, 1);
-    const leagueBody = elements['fixtures-container'].children[0].children[1];
-    assert.strictEqual(leagueBody.children.length, 2);
-    assert.match(leagueBody.children[0].innerHTML, /Goals Combined/);
-    assert.match(leagueBody.children[0].innerHTML, /1\.50 - 1\.00/);
-    assert.match(leagueBody.children[1].innerHTML, /FT Score/);
-    assert.match(leagueBody.children[1].innerHTML, /Pred Goals: 1\.50 - 1\.00 \| Pred xG: 1\.40 - 1\.10/);
+    assert.match(card.innerHTML, /UTC\+03:00 · 21:30/);
+    assert.doesNotMatch(card.innerHTML, /Predicted xG/);
+    assert.doesNotMatch(card.innerHTML, /1\.70/);
 
-    elements['date-strip'].children[4].click();
-    assert.match(elements['fixtures-container'].innerHTML, /No fixtures on this date/);
-    assert.strictEqual(elements['date-strip'].children[4].classList.contains('active'), true);
+    card.click();
+    assert.match(card.innerHTML, /Predicted xG/);
+    assert.match(card.innerHTML, /1\.70 - 1\.20/);
+
+    card.listeners.click({
+        target: { closest: selector => (selector === '.favorite-toggle' ? {} : null) },
+        preventDefault() {},
+        stopPropagation() {},
+    });
+    assert.match(storage.getItem('opm:favorites:v1'), /Home FC/);
+
+    elements['favorite-tab'].click();
+    assert.strictEqual(elements['favorite-tab'].getAttribute('aria-selected'), 'true');
+    assert.strictEqual(elements['fixtures-container'].children.length, 1);
+    assert.match(elements['fixtures-container'].children[0].innerHTML, /Home FC/);
 
     assert.strictEqual(document.documentElement.getAttribute('data-theme'), 'light');
     elements['theme-toggle'].click();
@@ -238,148 +262,74 @@ async function testPopulatedMetricFinishedNavigationAndTheme() {
     assert.deepStrictEqual(errors, []);
 }
 
-async function testStaticBadgeManifestAttributionAndFallback() {
+async function testLeagueSeasonNavigationAndPaModes() {
     const app = await boot({
-        data: {
-            leagues: [{
-                id: 'premier_league',
-                name: 'Premier League',
-                metric: 'xg',
-                fixtures: [predictionFixture()],
-            }],
-        },
+        data: { leagues: [{ id: 'premier_league', name: 'Premier League', metric: 'xg', fixtures: [predictionFixture()] }] },
+        standings: standingsFixture(),
+    });
+    const { elements, errors } = app;
+
+    elements['league-tab'].click();
+    const directory = elements['fixtures-container'].children[0];
+    assert.strictEqual(directory.children.length, 1);
+    directory.children[0].click();
+
+    const container = elements['fixtures-container'];
+    const seasonSelector = container.children[1];
+    const controls = container.children[3];
+    const currentTable = container.children[4].children[0];
+    assert.strictEqual(seasonSelector.children[0].textContent, '2026/27');
+    assert.match(currentTable.innerHTML, /\+0\.40 \/ \+0\.40/);
+    assert.match(currentTable.innerHTML, /\+0\.95 \/ \+0\.95/);
+
+    controls.children[1].click();
+    const forTable = elements['fixtures-container'].children[4].children[0];
+    assert.match(forTable.innerHTML, /-0\.10 \/ -0\.10/);
+    assert.match(forTable.innerHTML, /\+0\.20 \/ \+0\.20/);
+
+    const refreshedSelector = elements['fixtures-container'].children[1];
+    refreshedSelector.children[0].click();
+    refreshedSelector.children[1].children[1].click();
+    const historicContainer = elements['fixtures-container'];
+    const historicTable = historicContainer.children[5].children[0];
+    assert.strictEqual(historicContainer.children[1].children[0].textContent, '2025/26');
+    assert.match(historicTable.innerHTML, /Historic FC/);
+    assert.match(historicTable.innerHTML, /—/);
+    assert.match(historicContainer.children[4].textContent, /Prediction accuracy is unavailable/);
+    assert.deepStrictEqual(errors, []);
+}
+
+async function testBadgeManifestAttributionAndFallback() {
+    const app = await boot({
+        data: { leagues: [{ id: 'premier_league', name: 'Premier League', metric: 'xg', fixtures: [predictionFixture()] }] },
         badges: {
-            source: {
-                name: 'TheSportsDB',
-                url: 'https://www.thesportsdb.com/',
-                attribution: 'Team badges: TheSportsDB',
-            },
-            badges: {
-                premier_league: {
-                    'Home FC': {
-                        badge_url: 'https://r2.thesportsdb.com/images/home-fc.png',
-                        source_url: 'https://www.thesportsdb.com/team/home-fc',
-                    },
-                },
-            },
+            source: { attribution: 'Team badges: TheSportsDB' },
+            badges: { premier_league: { 'Home FC': { badge_url: 'https://r2.thesportsdb.com/images/home-fc.png' } } },
         },
     });
-    const { elements, errors } = app;
-    const cardHtml = elements['fixtures-container'].children[0].children[1].children[0].innerHTML;
-
+    const cardHtml = homeCard(app.elements).innerHTML;
     assert.match(cardHtml, /https:\/\/r2\.thesportsdb\.com\/images\/home-fc\.png/);
-    assert.match(cardHtml, /alt="Home FC badge"/);
     assert.match(cardHtml, /data-team="Away FC"[^>]*>AF<\/div>/);
-    assert.strictEqual(elements['badge-attribution'].textContent, 'Team badges: TheSportsDB');
-    assert.deepStrictEqual(errors, []);
+    assert.strictEqual(app.elements['badge-attribution'].textContent, 'Team badges: TheSportsDB');
+    assert.deepStrictEqual(app.errors, []);
 }
 
-async function testUnavailableBadgeManifestFallsBackToInitials() {
-    const app = await boot({
-        data: {
-            leagues: [{
-                id: 'premier_league',
-                name: 'Premier League',
-                metric: 'xg',
-                fixtures: [predictionFixture()],
-            }],
-        },
-        badgesOk: false,
-    });
-    const { elements, errors } = app;
-    const cardHtml = elements['fixtures-container'].children[0].children[1].children[0].innerHTML;
+async function testEmptyArtifactAndDataLoadError() {
+    const empty = await boot({ data: { leagues: [] } });
+    assert.match(empty.elements['fixtures-container'].innerHTML, /No leagues found/);
+    assert.deepStrictEqual(empty.errors, []);
 
-    assert.match(cardHtml, /data-team="Home FC"[^>]*>HF<\/div>/);
-    assert.match(cardHtml, /data-team="Away FC"[^>]*>AF<\/div>/);
-    assert.strictEqual(elements['badge-attribution'].textContent, '');
-    assert.deepStrictEqual(errors, []);
-}
-
-async function testCollapsedLeagueSectionsFlagsAndPersistence() {
-    const activeLeagues = [
-        ['premier_league', 'Premier League'], ['la_liga', 'La Liga'], ['serie_a', 'Serie A'],
-        ['bundesliga', 'Bundesliga'], ['ligue_1', 'Ligue 1'], ['superliga-argentina', 'Superliga'],
-        ['admiral-bundesliga', 'Admiral Bundesliga'], ['pro-league-belgium', 'Pro League'],
-        ['serie-a-brazil', 'Serie A Brazil'], ['superliga-denmark', 'Superliga Denmark'],
-        ['league-one', 'League One'], ['2-bundesliga', '2. Bundesliga'],
-        ['copa-libertadores', 'Copa Libertadores'], ['j-league', 'J-League'], ['liga-mx', 'Liga MX'],
-        ['eredivisie', 'Eredivisie'], ['eerste-divisie', 'Eerste Divisie'], ['eliteserien', 'Eliteserien'],
-        ['liga-portugal', 'Liga Portugal'], ['pro-league-saudi', 'Pro League Saudi'],
-        ['premiership', 'Premiership'], ['allsvenskan', 'Allsvenskan'], ['super-lig', 'Super Lig'],
-        ['mls', 'Major League Soccer'], ['veikkausliiga', 'Veikkausliiga'],
-    ];
-    const app = await boot({
-        data: {
-            leagues: activeLeagues.map(([id, name]) => ({
-                id,
-                name,
-                metric: 'xg',
-                fixtures: [predictionFixture()],
-            })),
-        },
-    });
-    const { elements, storage, errors } = app;
-    const sections = elements['fixtures-container'].children;
-    assert.strictEqual(sections.length, activeLeagues.length);
-
-    sections.forEach((section, index) => {
-        const header = section.children[0];
-        const body = section.children[1];
-        assert.strictEqual(section.className, 'league-section');
-        assert.strictEqual(header.tagName, 'button');
-        assert.strictEqual(header.getAttribute('aria-expanded'), 'false');
-        assert.strictEqual(body.classList.contains('hidden'), true);
-        const flagPath = header.innerHTML.match(/assets\/flags\/([a-z-]+\.svg)/)[1];
-        assert.strictEqual(fs.existsSync(path.join(__dirname, '..', 'public', 'assets', 'flags', flagPath)), true);
-        assert.doesNotMatch(header.innerHTML, /[\u{1F1E6}-\u{1F1FF}]/u);
-        assert.match(header.innerHTML, /flag/);
-        assert.match(header.innerHTML, new RegExp(activeLeagues[index][1]));
-    });
-
-    const firstHeader = sections[0].children[0];
-    const firstBody = sections[0].children[1];
-    firstHeader.click();
-    assert.strictEqual(firstHeader.getAttribute('aria-expanded'), 'true');
-    assert.strictEqual(firstBody.classList.contains('hidden'), false);
-    assert.strictEqual(storage.getItem('league_expansion:2026-08-16:premier_league'), 'open');
-
-    const restoredApp = await boot({
-        data: {
-            leagues: activeLeagues.map(([id, name]) => ({
-                id,
-                name,
-                metric: 'xg',
-                fixtures: [predictionFixture()],
-            })),
-        },
-        initialStorage: { 'league_expansion:2026-08-16:premier_league': 'open' },
-    });
-    const restoredSection = restoredApp.elements['fixtures-container'].children[0];
-    assert.strictEqual(restoredSection.children[0].getAttribute('aria-expanded'), 'true');
-    assert.strictEqual(restoredSection.children[1].classList.contains('hidden'), false);
-    assert.deepStrictEqual(errors, []);
-}
-
-async function testEmptyArtifact() {
-    const { elements, errors } = await boot({ data: { leagues: [] } });
-    assert.match(elements['fixtures-container'].innerHTML, /No leagues found/);
-    assert.deepStrictEqual(errors, []);
-}
-
-async function testDataLoadError() {
-    const { elements, errors } = await boot({ data: {}, dataOk: false });
-    assert.match(elements['fixtures-container'].innerHTML, /Error loading fixtures/);
-    assert.strictEqual(errors.length, 1);
-    assert.match(errors[0], /Failed to fetch data/);
+    const failed = await boot({ data: {}, dataOk: false });
+    assert.match(failed.elements['fixtures-container'].innerHTML, /Error loading fixtures/);
+    assert.strictEqual(failed.errors.length, 1);
+    assert.match(failed.errors[0], /Failed to fetch data/);
 }
 
 (async () => {
-    await testPopulatedMetricFinishedNavigationAndTheme();
-    await testStaticBadgeManifestAttributionAndFallback();
-    await testUnavailableBadgeManifestFallsBackToInitials();
-    await testCollapsedLeagueSectionsFlagsAndPersistence();
-    await testEmptyArtifact();
-    await testDataLoadError();
+    await testHomeDefaultsToCompactFixtureDetailsAndFavorites();
+    await testLeagueSeasonNavigationAndPaModes();
+    await testBadgeManifestAttributionAndFallback();
+    await testEmptyArtifactAndDataLoadError();
     console.log('Frontend behavior tests passed.');
 })().catch(error => {
     console.error(error);

@@ -64,7 +64,8 @@ The scheduled pipeline in `src/output_writer.py` uses `src/compute/venue_weighte
 ## Stack
 
 - **Automated pipeline**: Python fetch/compute → `public/data.json` (the default Main/Last-4 path includes four underlying matches per team) → static HTML/CSS/JS frontend → Vercel. Daily cron plus manual `workflow_dispatch`. Also consolidates all Understat played matches and OddAlerts leagues and upserts them directly into Supabase.
-- **Upcoming-fixture metrics**: Every upcoming fixture exposes the expected-xG and expected-goals triplets. `league.metric` remains `xg`, so the current frontend displays xG; expected-goals values are additive public data and may be `null` when source goal inputs are unavailable.
+- **Upcoming-fixture metrics**: Every upcoming fixture exposes the expected-xG and expected-goals triplets. `league.metric` remains `xg`, so the current frontend displays xG; expected-goals values are additive public data and may be `null` when source goal inputs are unavailable. The optional `kickoff_time` field preserves the source clock as `HH:MM`; the Home UI presents that source time as UTC+03:00 by user decision, not as a verified offset-aware timestamp.
+- **League standings artifact**: The writer also emits `public/league_standings.json`, an additive static artifact derived from retained `matches` and original `predictions` rows. It groups results by existing league-season policy and exposes team `matches_played` plus signed `actual − predicted` xG, Goals, and `(xG + Goals) / 2` PA aggregates for Overall, For, and Against views. Historic seasons without preserved original predictions must retain match counts but render PA as unavailable; never backfill PA with a retrospective estimate.
 - Note: The Semi-Automatic manual prediction UI and its `/api` backend have been completely removed, as fixture detection is now fully automated.
 - **Deployment Configuration**: Vercel deployment relies on `.vercelignore` to deploy only the essential directories (`public`, `api`, `src`) and files (`requirements.txt`).
 
@@ -77,8 +78,8 @@ The scheduled pipeline in `src/output_writer.py` uses `src/compute/venue_weighte
 - No API keys are currently required for scrapers — every active data source is scraped.
 
 ## Frontend
-- **Fixture card**: Team badges on either side (CSS-based initials in colored shapes, no external images), combined value between them, a bar under each team on a shared scale, and the 4 underlying matches listed below.
-- **Layout & Navigation**: A horizontal scrolling date strip (7 days: today ± 3) is the primary navigation. Fixtures are grouped by league within the selected date. Fixture lists are capped at a maximum of 10 matches per league. Footer shows an auto-incrementing version.
+- **Fixture card**: Compact Home cards show team badges/names and source kickoff time; their xG/goals results, predictions, bars, and underlying history are revealed only when the card is expanded. Missing numeric values must remain safe fallbacks rather than zeroes.
+- **Layout & Navigation**: A horizontal scrolling date strip (7 days: today ± 3) remains Home navigation. A fixed bottom navigation selects Home, League, or Favorite. Fixtures are grouped by league within the selected date. The League view selects the current season by default, offers retained historical seasons, and provides Overall/For/Against PA modes. Favorites are local-browser preferences only. Footer shows an auto-incrementing version.
 - **Theme**: Supports a persistent Dark Mode mapped via `[data-theme="dark"]` in `public/style.css` and saved in `localStorage`.
 
 ## Conventions

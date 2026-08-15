@@ -20,13 +20,17 @@
         </div>
     </header>
 
-    <div id="date-strip" class="date-strip"></div>
-    <main id="fixtures-container">
-        <!-- Fixtures will be loaded here -->
+    <div id="date-strip" class="date-strip" aria-label="Fixture dates"></div>
+    <main id="fixtures-container" tabindex="-1">
+        <!-- Active tab content will be loaded here -->
         <div class="loading">Loading fixtures...</div>
     </main>
 
-
+    <nav class="bottom-nav" aria-label="Primary navigation">
+        <button id="home-tab" class="bottom-nav-item" type="button" role="tab" aria-selected="true">Home</button>
+        <button id="league-tab" class="bottom-nav-item" type="button" role="tab" aria-selected="false">League</button>
+        <button id="favorite-tab" class="bottom-nav-item" type="button" role="tab" aria-selected="false">Favorite</button>
+    </nav>
 
     <footer>
         <p id="version-tag"></p>

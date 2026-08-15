@@ -73,6 +73,7 @@ class TestOddAlertsFixtureProcessing(unittest.TestCase):
                 "home_team": "Home FC",
                 "away_team": "Away FC",
                 "date": "2026-08-16",
+                "kickoff_time": "21:30",
             }
         ]
         records = [
@@ -181,6 +182,7 @@ class TestOddAlertsFixtureProcessing(unittest.TestCase):
         self.assertEqual(fixture["home_team"], "Home FC")
         self.assertEqual(fixture["away_team"], "Away FC")
         self.assertEqual(fixture["date"], "2026-08-16")
+        self.assertEqual(fixture["kickoff_time"], "21:30")
         self.assertEqual(fixture["home_expected_xg"], 2.19)
         self.assertEqual(fixture["away_expected_xg"], 2.5)
         self.assertEqual(fixture["combined_expected_xg"], 4.69)

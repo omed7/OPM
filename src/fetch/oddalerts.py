@@ -146,9 +146,14 @@ def parse_upcoming_fixtures(html):
         time_m = re.search(r'<div class="competition-fixture__time">\s*(.*?)\s*</div>', article_html, re.DOTALL)
         if time_m:
             time_str = time_m.group(1).strip()
-            # It usually looks like "Sat 08 Aug, 21:30"
-            # Strip off the comma and time to get just "Sat 08 Aug"
+            # It usually looks like "Sat 08 Aug, 21:30". Preserve the source
+            # clock separately while retaining the date-only writer key.
             date_str = time_str.split(',')[0].strip()
+            kickoff_match = re.search(r",\s*(\d{1,2}:\d{2})\b", time_str)
+            kickoff_time = None
+            if kickoff_match:
+                hours, minutes = kickoff_match.group(1).split(":")
+                kickoff_time = f"{int(hours):02d}:{minutes}"
 
             teams = []
             for team_m in re.finditer(r'<div class="competition-fixture__team">.*?<span>(.*?)</span>', article_html, re.DOTALL):
@@ -161,6 +166,7 @@ def parse_upcoming_fixtures(html):
                 dates_matches.append({
                     "pos": m.start(),
                     "date_str": date_str,
+                    "kickoff_time": kickoff_time,
                     "home_team": teams[0],
                     "away_team": teams[1]
                 })
@@ -178,12 +184,15 @@ def parse_upcoming_fixtures(html):
             datetime.strptime(date, '%Y-%m-%d')
         except ValueError:
             continue
-        # Standardize format for output writer
-        fixtures.append({
+        # Standardize format for output writer while retaining the source clock.
+        fixture = {
             "home_team": dm["home_team"],
             "away_team": dm["away_team"],
-            "date": date
-        })
+            "date": date,
+        }
+        if dm.get("kickoff_time"):
+            fixture["kickoff_time"] = dm["kickoff_time"]
+        fixtures.append(fixture)
 
     if not fixtures:
         return []

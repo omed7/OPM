@@ -24,6 +24,7 @@ EXPECTED_METRIC_FIELDS = {
     "combined_expected_goals",
 }
 DATE_PREFIX_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}")
+KICKOFF_TIME_PATTERN = re.compile(r"^(?:[01]\d|2[0-3]):[0-5]\d$")
 SENSITIVE_CONTENT_PATTERN = re.compile(
     r"SUP(?:ER)?BASE_(?:URL|KEY)|service_role|Authorization:\s*Bearer|"
     r"Bearer\s+[A-Za-z0-9._-]{20,}|Traceback \(most recent call last\)|"
@@ -85,6 +86,9 @@ def validate_fixture(fixture, location):
         if not isinstance(fixture[field], str):
             validation_error(f"{location}.{field} must be a string")
     validate_date(fixture["date"], f"{location}.date")
+    if "kickoff_time" in fixture and fixture["kickoff_time"] is not None:
+        if not isinstance(fixture["kickoff_time"], str) or not KICKOFF_TIME_PATTERN.match(fixture["kickoff_time"]):
+            validation_error(f"{location}.kickoff_time must be null or HH:MM")
 
     for field in EXPECTED_METRIC_FIELDS & set(fixture):
         if not is_finite_number_or_null(fixture[field]):

@@ -54,17 +54,15 @@ jobs:
           GITHUB_SHA="$(git rev-parse HEAD)" python3 src/output_writer.py
 
       - name: Validate generated public data
-        run: python3 src/validate_public_data.py public/data.json
+        run: |
+          python3 src/validate_public_data.py public/data.json
+          python3 src/validate_league_standings.py public/league_standings.json
 
-      - name: Check if fixtures changed
+      - name: Check if generated artifacts changed
         id: check_changed
         run: |
-          if git show HEAD:public/data.json > old_data.json 2>/dev/null; then
-            if python3 src/check_changes.py old_data.json public/data.json; then
-              echo "changed=false" >> $GITHUB_OUTPUT
-            else
-              echo "changed=true" >> $GITHUB_OUTPUT
-            fi
+          if git diff --quiet -- public/data.json public/league_standings.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
           else
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
@@ -74,9 +72,10 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add -- public/data.json
-          if [ "$(git diff --cached --name-only)" != "public/data.json" ]; then
-            echo "::error::Unexpected generated files staged for commit."
+          git add -- public/data.json public/league_standings.json
+          unexpected_files=$(git diff --cached --name-only | grep -v -E '^(public/data.json|public/league_standings.json)$' || true)
+          if [ -n "$unexpected_files" ]; then
+            echo "::error::Unexpected generated files staged for commit: $unexpected_files"
             exit 1
           fi
           git commit -m "chore: update fixture data"

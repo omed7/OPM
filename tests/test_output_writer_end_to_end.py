@@ -53,6 +53,11 @@ class TestOutputWriterMainTracer(unittest.TestCase):
                     patch.object(output_writer, "parse_upcoming_fixtures", return_value=upcoming_fixture),
                     patch.object(output_writer.urllib.request, "urlopen") as mock_urlopen,
                     patch.object(output_writer, "get_past_matches", return_value=[]),
+                    patch.object(
+                        output_writer,
+                        "fetch_historical_standings_records",
+                        return_value=([], [], None),
+                    ),
                     patch.object(output_writer, "save_matches_to_supabase", side_effect=save_matches),
                     patch.object(output_writer, "save_predictions_to_supabase", side_effect=save_predictions),
                     patch.object(output_writer, "get_version", return_value="test-version"),
@@ -77,6 +82,11 @@ class TestOutputWriterMainTracer(unittest.TestCase):
                 self.assertEqual(fixture["combined_expected_xg"], 4.69)
                 self.assertEqual(len(fixture["home_last_4_matches"]), 4)
                 self.assertEqual(len(fixture["away_last_4_matches"]), 4)
+                with open("public/league_standings.json", encoding="utf-8") as artifact:
+                    standings = json.load(artifact)
+                self.assertEqual(standings["schema_version"], 1)
+                self.assertEqual(standings["meta"]["version"], "test-version")
+                self.assertEqual(standings["leagues"], [])
             finally:
                 os.chdir(original_cwd)
 
