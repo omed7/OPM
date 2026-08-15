@@ -455,7 +455,13 @@ function renderLeagueDetail() {
 
     const legend = document.createElement('p');
     legend.className = 'pa-legend';
-    legend.textContent = 'PA is actual minus predicted. Values closer to 0 are more predictable. Each entry shows season total / per-match average.';
+    const provenanceText = {
+        reconstructed_historical: 'Reconstructed historical prediction: OPM replayed the active formula using only earlier calendar-date results. ',
+        stored_pre_match: 'Stored pre-match prediction: values were retained before the fixture. ',
+        mixed: 'Mixed prediction sources: stored forecasts take priority; other eligible fixtures use reconstructed historical predictions. ',
+        unavailable: '',
+    }[selectedSeason.prediction_provenance] || '';
+    legend.textContent = `${provenanceText}PA is actual minus predicted. Values closer to 0 are more predictable. Each entry shows season total / per-match average.`;
     container.appendChild(legend);
 
     const viewControls = document.createElement('div');
