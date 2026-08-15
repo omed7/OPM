@@ -80,6 +80,54 @@ class TestUpcomingGoalsContract(unittest.TestCase):
         self.assertIsNone(fixture["away_expected_goals"])
         self.assertIsNone(fixture["combined_expected_goals"])
 
+    @patch("src.output_writer.parse_upcoming_fixtures")
+    @patch("src.output_writer.urllib.request.urlopen")
+    def test_oddalerts_skips_fixture_without_complete_venue_history(
+        self, mock_urlopen, mock_parser
+    ):
+        mock_urlopen.return_value.__enter__.return_value.read.return_value = b"<html>fixtures</html>"
+        mock_parser.return_value = [
+            {"home_team": "Home FC", "away_team": "Away FC", "date": "2026-08-16"}
+        ]
+        records = [
+            {"team": "Home FC", "opponent": "H1", "date": "2026-08-10", "venue": "home", "xg_for": 2.0, "xg_against": 1.0, "goals_for": 2, "goals_against": 1, "league": "mls"},
+            {"team": "Home FC", "opponent": "H2", "date": "2026-08-09", "venue": "away", "xg_for": 1.0, "xg_against": 2.0, "goals_for": 1, "goals_against": 2, "league": "mls"},
+            {"team": "Away FC", "opponent": "A1", "date": "2026-08-08", "venue": "home", "xg_for": 1.0, "xg_against": 1.5, "goals_for": 1, "goals_against": 2, "league": "mls"},
+            {"team": "Away FC", "opponent": "A2", "date": "2026-08-07", "venue": "away", "xg_for": 3.0, "xg_against": 1.0, "goals_for": 3, "goals_against": 1, "league": "mls"},
+        ]
+
+        league = output_writer.process_oddalerts_league(
+            "mls", "Major League Soccer", "/leagues/us/mls/fixtures", records
+        )
+
+        self.assertEqual(league["fixtures"], [])
+
+    @patch("src.output_writer.get_current_season", return_value="2025")
+    @patch("src.output_writer.get_team_matches")
+    @patch("src.output_writer.get_upcoming_fixtures")
+    def test_understat_skips_fixture_without_complete_venue_history(
+        self, mock_upcoming, mock_team_matches, _mock_current_season
+    ):
+        mock_upcoming.return_value = (
+            [{"home_team": "Home FC", "away_team": "Away FC", "date": "2026-08-16"}],
+            "success_with_fixtures",
+            None,
+        )
+        mock_team_matches.side_effect = [
+            [
+                {"opponent": "H1", "date": "2026-08-10", "venue": "home", "xg_for": 2.0, "xg_against": 1.0},
+                {"opponent": "H2", "date": "2026-08-09", "venue": "home", "xg_for": 2.0, "xg_against": 1.0},
+            ],
+            [
+                {"opponent": "A1", "date": "2026-08-10", "venue": "away", "xg_for": 1.0, "xg_against": 1.5},
+                {"opponent": "A2", "date": "2026-08-09", "venue": "away", "xg_for": 1.0, "xg_against": 1.5},
+            ],
+        ]
+
+        league = output_writer.process_understat_league("EPL", "Premier League", "premier_league")
+
+        self.assertEqual(league["fixtures"], [])
+
 
 if __name__ == "__main__":
     unittest.main()

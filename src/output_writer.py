@@ -10,9 +10,65 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from src.fetch.understat_common import get_upcoming_fixtures, get_team_matches, get_played_matches, get_current_season
 from src.fetch.oddalerts import parse_upcoming_fixtures, parse_recent_results
-from src.compute.xg_formula import calculate_expected_xg, SAMPLE_SIZE as XG_SAMPLE_SIZE
-from src.compute.goals_formula import calculate_expected_goals
+from src.compute.methodology_config import (
+    ACTIVE_METHODOLOGY,
+    LAST_8_OLDER_SHARE,
+    LAST_8_RECENT_SHARE,
+    validate_methodology_configuration,
+)
+from src.compute.venue_weighted_methodology import (
+    IncompleteHistoryError,
+    MissingMetricDataError,
+    calculate_fixture_expectation,
+)
 from src.supabase_client import supabase_request
+
+METHODOLOGY_HISTORY_SIZES = {
+    "main_last_4": 4,
+    "last_8": 8,
+}
+
+
+def active_history_size():
+    return METHODOLOGY_HISTORY_SIZES[ACTIVE_METHODOLOGY]
+
+
+def venue_history(matches):
+    return {
+        "home": [match for match in matches if match.get("venue") == "home"],
+        "away": [match for match in matches if match.get("venue") == "away"],
+    }
+
+
+def calculate_active_metrics(home_matches, away_matches):
+    configuration = validate_methodology_configuration(
+        ACTIVE_METHODOLOGY,
+        LAST_8_RECENT_SHARE,
+        LAST_8_OLDER_SHARE,
+    )
+    home_history = venue_history(home_matches)
+    away_history = venue_history(away_matches)
+    xg_stats = calculate_fixture_expectation(
+        home_history,
+        away_history,
+        methodology=configuration["active_methodology"],
+        metric="xg",
+        recent_share=configuration["recent_share"],
+        older_share=configuration["older_share"],
+    )
+    try:
+        goals_stats = calculate_fixture_expectation(
+            home_history,
+            away_history,
+            methodology=configuration["active_methodology"],
+            metric="goals",
+            recent_share=configuration["recent_share"],
+            older_share=configuration["older_share"],
+        )
+    except MissingMetricDataError:
+        goals_stats = None
+    return xg_stats, goals_stats
+
 
 UNDERSTAT_LEAGUES = [
     {"code": "EPL", "name": "Premier League", "output_id": "premier_league"},
@@ -145,8 +201,18 @@ def process_understat_league(league_code, league_name, output_id, source_health=
 
         try:
             # Fetch last N matches for each team
-            home_matches = get_team_matches(league_code, home_team, total_matches=XG_SAMPLE_SIZE, season=season)
-            away_matches = get_team_matches(league_code, away_team, total_matches=XG_SAMPLE_SIZE, season=season)
+            home_matches = get_team_matches(
+                league_code,
+                home_team,
+                total_matches=active_history_size(),
+                season=season,
+            )
+            away_matches = get_team_matches(
+                league_code,
+                away_team,
+                total_matches=active_history_size(),
+                season=season,
+            )
 
             # Format dates to YYYY-MM-DD as per schema
             for m in home_matches:
@@ -156,24 +222,15 @@ def process_understat_league(league_code, league_name, output_id, source_health=
                 if ' ' in m['date']:
                     m['date'] = m['date'].split(' ')[0]
 
-            # Calculate expected metrics
-            xg_stats = calculate_expected_xg(home_matches, away_matches)
+            xg_stats, goals_stats = calculate_active_metrics(home_matches, away_matches)
 
-            # Since Understat matches don't have 'goals_for' explicitly in the dictionary returned by get_team_matches...
-            # Wait, let's check if they do. Let's look at get_team_matches. No, it only has xg_for/xg_against.
-            # So for understat we might only have xG unless we fetch goals. Let's just wrap it.
-            try:
-                goals_stats = calculate_expected_goals(home_matches, away_matches)
-            except Exception:
-                goals_stats = None
+            home_expected_xg = round(xg_stats["home_expected"], 2)
+            away_expected_xg = round(xg_stats["away_expected"], 2)
+            combined_expected_xg = round(xg_stats["combined_expected"], 2)
 
-            home_expected_xg = round(xg_stats['team_a_expected_xg'], 2)
-            away_expected_xg = round(xg_stats['team_b_expected_xg'], 2)
-            combined_expected_xg = round(xg_stats['team_a_expected_xg'] + xg_stats['team_b_expected_xg'], 2)
-
-            home_expected_goals = round(goals_stats['team_a_expected_goals'], 2) if goals_stats else None
-            away_expected_goals = round(goals_stats['team_b_expected_goals'], 2) if goals_stats else None
-            combined_expected_goals = round(goals_stats['team_a_expected_goals'] + goals_stats['team_b_expected_goals'], 2) if goals_stats else None
+            home_expected_goals = round(goals_stats["home_expected"], 2) if goals_stats else None
+            away_expected_goals = round(goals_stats["away_expected"], 2) if goals_stats else None
+            combined_expected_goals = round(goals_stats["combined_expected"], 2) if goals_stats else None
 
             # Collect prediction to db_predictions globally
             global_db_predictions.append({
@@ -200,8 +257,8 @@ def process_understat_league(league_code, league_name, output_id, source_health=
                 "home_expected_goals": home_expected_goals,
                 "away_expected_goals": away_expected_goals,
                 "combined_expected_goals": combined_expected_goals,
-                f"home_last_{XG_SAMPLE_SIZE}_matches": home_matches,
-                f"away_last_{XG_SAMPLE_SIZE}_matches": away_matches
+                f"home_last_{active_history_size()}_matches": home_matches,
+                f"away_last_{active_history_size()}_matches": away_matches
             })
         except Exception as e:
             if source_health is not None:
@@ -260,8 +317,8 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
             home_team_matches.sort(key=lambda x: x['date'], reverse=True)
             away_team_matches.sort(key=lambda x: x['date'], reverse=True)
 
-            home_matches_needed = XG_SAMPLE_SIZE // 2
-            away_matches_needed = XG_SAMPLE_SIZE // 2
+            home_matches_needed = active_history_size() // 2
+            away_matches_needed = active_history_size() // 2
 
             def get_balanced(team_matches, h_need, a_need):
                 s = []
@@ -288,19 +345,15 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
             for m in away_matches:
                 formatted_away.append({'opponent': m['opponent'], 'date': m['date'], 'venue': m['venue'], 'xg_for': m['xg_for'], 'xg_against': m['xg_against']})
 
-            xg_stats = calculate_expected_xg(formatted_home, formatted_away)
-            try:
-                goals_stats = calculate_expected_goals(home_matches, away_matches)
-            except Exception:
-                goals_stats = None
+            xg_stats, goals_stats = calculate_active_metrics(home_matches, away_matches)
 
-            home_expected_xg = round(xg_stats['team_a_expected_xg'], 2)
-            away_expected_xg = round(xg_stats['team_b_expected_xg'], 2)
-            combined_expected_xg = round(xg_stats['team_a_expected_xg'] + xg_stats['team_b_expected_xg'], 2)
+            home_expected_xg = round(xg_stats["home_expected"], 2)
+            away_expected_xg = round(xg_stats["away_expected"], 2)
+            combined_expected_xg = round(xg_stats["combined_expected"], 2)
 
-            home_expected_goals = round(goals_stats['team_a_expected_goals'], 2) if goals_stats else None
-            away_expected_goals = round(goals_stats['team_b_expected_goals'], 2) if goals_stats else None
-            combined_expected_goals = round(goals_stats['team_a_expected_goals'] + goals_stats['team_b_expected_goals'], 2) if goals_stats else None
+            home_expected_goals = round(goals_stats["home_expected"], 2) if goals_stats else None
+            away_expected_goals = round(goals_stats["away_expected"], 2) if goals_stats else None
+            combined_expected_goals = round(goals_stats["combined_expected"], 2) if goals_stats else None
 
             global_db_predictions.append({
                 "home_team": home_team,
@@ -323,8 +376,8 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
                 "home_expected_goals": home_expected_goals,
                 "away_expected_goals": away_expected_goals,
                 "combined_expected_goals": combined_expected_goals,
-                f"home_last_{XG_SAMPLE_SIZE}_matches": formatted_home,
-                f"away_last_{XG_SAMPLE_SIZE}_matches": formatted_away
+                f"home_last_{active_history_size()}_matches": formatted_home,
+                f"away_last_{active_history_size()}_matches": formatted_away
             })
         except Exception as e:
             if source_health is not None:

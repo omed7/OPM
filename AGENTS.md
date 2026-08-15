@@ -7,18 +7,17 @@ Automates Omed's personal football prediction formulas. Shows two numbers per fi
 
 ## Production formulas (do not alter without explicit product approval)
 ### Active scheduled prediction path
-The scheduled pipeline in `src/output_writer.py` is currently the authoritative production path. It calls `calculate_expected_xg()` and `calculate_expected_goals()` from the simple wrapper modules; it does **not** call `src/compute/methodology.py`.
+The scheduled pipeline in `src/output_writer.py` uses `src/compute/venue_weighted_methodology.py` through version-controlled settings in `src/compute/methodology_config.py`.
 
-- **Target sample**: Four recent same-league matches per team, selected as two home and two away records where available.
-- **Current sparse-sample behavior**: The writer proceeds with a partial nonempty selection. It does not mark the resulting prediction as incomplete or expose a quality indicator.
-- **Active calculation**: Each selected match has equal arithmetic weight. Team X's AVG FOR/AGAINST is the arithmetic mean of the selected `*_for`/`*_against` values. Team A's expected metric is `(Team A AVG FOR + Team B AVG AGAINST) / 2`, and Team B's value is symmetric.
-- **Active output**: The scheduled artifact and prediction records contain expected xG and expected-goals values. They contain no methodology identifier, override weights, or `comparisons` field.
+- **Default active methodology**: `main_last_4`. Each team must supply two newest same-league home matches and two newest same-league away matches. Every selected match has equal weight.
+- **Strict history rule**: If either team lacks the full required home/away sample, the writer omits the fixture prediction rather than publishing a partial-sample result.
+- **Main calculation**: Team X's AVG FOR/AGAINST is the equal average of its two home and two away records. Team A's expected metric is `(Team A AVG FOR + Team B AVG AGAINST) / 2`; Team B's value is symmetric.
+- **Available Last-8 methodology**: `last_8` selects four home and four away records per team. Within each venue group, the two newest records receive `LAST_8_RECENT_SHARE` (default 70%) and the older two receive `LAST_8_OLDER_SHARE` (default 30%); home and away group estimates then contribute equally.
+- **Configuration boundary**: `ACTIVE_METHODOLOGY`, `LAST_8_RECENT_SHARE`, and `LAST_8_OLDER_SHARE` are version-controlled product settings. Shares must be between 0 and 1 and total 1. Changing the active methodology or shares requires a reviewed PR and before/after numerical evidence.
+- **Active output**: The scheduled artifact and prediction records contain expected xG and expected-goals values. They contain no methodology identifier, override weights, or `comparisons` field. Expected goals remains `null` when source goal data is unavailable.
 
-### Standalone weighted methodology engine (not scheduled)
-`src/compute/methodology.py` implements balanced Methodology 1 and Methodology 2 selection, Methodology-2 70/30 recency tiers, override normalization, and comparison projections. Its isolated tests cover those capabilities, but the scheduled writer does not route through this engine or expose its comparison data.
-
-### Pending product decision
-Do not describe the weighted engine as production behavior and do not route the scheduled writer through it without the explicit METH-01 decision. That decision must address the authoritative methodology and sparse-history policy with before/after numerical evidence before any prediction behavior changes.
+### Legacy weighted methodology engine
+`src/compute/methodology.py` retains the earlier combined-history Methodology 1/2 engine, tier override normalization, and comparison projections. The scheduled writer does not use it. Do not route production through it or expose its comparison data without a separate product decision.
 
 ## Data sources
 
@@ -63,7 +62,7 @@ Do not describe the weighted engine as production behavior and do not route the 
 
 ## Stack
 
-- **Automated pipeline**: Python fetch/compute → `public/data.json` (includes the 4 underlying matches per team) → static HTML/CSS/JS frontend → Vercel. Daily cron plus manual `workflow_dispatch`. Also consolidates all Understat played matches and OddAlerts leagues and upserts them directly into Supabase.
+- **Automated pipeline**: Python fetch/compute → `public/data.json` (the default Main/Last-4 path includes four underlying matches per team) → static HTML/CSS/JS frontend → Vercel. Daily cron plus manual `workflow_dispatch`. Also consolidates all Understat played matches and OddAlerts leagues and upserts them directly into Supabase.
 - **Upcoming-fixture metrics**: Every upcoming fixture exposes the expected-xG and expected-goals triplets. `league.metric` remains `xg`, so the current frontend displays xG; expected-goals values are additive public data and may be `null` when source goal inputs are unavailable.
 - Note: The Semi-Automatic manual prediction UI and its `/api` backend have been completely removed, as fixture detection is now fully automated.
 - **Deployment Configuration**: Vercel deployment relies on `.vercelignore` to deploy only the essential directories (`public`, `api`, `src`) and files (`requirements.txt`).
