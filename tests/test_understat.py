@@ -210,5 +210,11 @@ class TestUnderstatCommon(unittest.TestCase):
         self.assertEqual(fixtures[1]['home_team'], "Team C")
         self.assertEqual(fixtures[1]['away_team'], "Team D")
 
+    def test_current_season_is_league_aware_without_prior_season_fallback(self):
+        self.assertEqual(get_current_season("EPL", "2026-08-15"), "2026")
+        self.assertEqual(get_current_season("EPL", "2027-01-15"), "2026")
+        self.assertEqual(get_current_season("La_Liga", "2026-08-15"), "2026")
+
+
 if __name__ == "__main__":
     unittest.main()

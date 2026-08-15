@@ -3,39 +3,34 @@ import os
 from datetime import datetime, timedelta
 from understatapi import UnderstatClient
 
-_cached_active_season = None
+from src.compute.season_policy import provider_season_label
 
-def get_current_season():
-    global _cached_active_season
-    if _cached_active_season is not None:
-        return _cached_active_season
 
-    # Simplistic season logic: Understat uses the starting year of the season.
-    now = datetime.now()
-    if now.month >= 7:
-        season = str(now.year)
-    else:
-        season = str(now.year - 1)
+UNDERSTAT_LEAGUE_IDS = {
+    "EPL": "premier_league",
+    "La_Liga": "la_liga",
+    "Serie_A": "serie_a",
+    "Bundesliga": "bundesliga",
+    "Ligue_1": "ligue_1",
+}
 
-    # Verify if the season has any played matches on Understat yet
-    try:
-        client = UnderstatClient()
-        time.sleep(1)
-        matches = client.league(league='EPL').get_match_data(season)
-        played_matches = [m for m in matches if m.get('isResult')]
-        if not played_matches:
-            fallback = str(int(season) - 1)
-            print(f"Season {season} has no played matches on Understat yet. Falling back to most recently completed season {fallback}.")
-            season = fallback
-    except Exception as e:
-        print(f"Error checking season {season} matches: {e}. Falling back to default simplistic calculation.")
 
-    _cached_active_season = season
-    return season
+def get_current_season(league_code="EPL", current_date=None):
+    """Return the configured current-season start year for one Understat league.
+
+    A season with no played matches remains the current season. The caller must not
+    substitute a completed prior season because that would leak last-season history
+    into newly started competitions.
+    """
+    league_id = UNDERSTAT_LEAGUE_IDS.get(league_code)
+    if not league_id:
+        raise ValueError(f"Unsupported Understat league code: {league_code}")
+    current_date = current_date or datetime.now().date().isoformat()
+    return provider_season_label(league_id, current_date)
 
 def get_team_matches(league_code, team_name, total_matches=4, season=None):
     if season is None:
-        season = os.environ.get('SEASON', get_current_season())
+        season = os.environ.get('SEASON', get_current_season(league_code))
 
     client = UnderstatClient()
 
@@ -105,7 +100,7 @@ def get_team_matches(league_code, team_name, total_matches=4, season=None):
 
 def get_played_matches(league_code, season=None):
     if season is None:
-        season = os.environ.get('SEASON', get_current_season())
+        season = os.environ.get('SEASON', get_current_season(league_code))
 
     client = UnderstatClient()
     # Be a polite scraper
@@ -121,7 +116,7 @@ def get_played_matches(league_code, season=None):
 
 def get_upcoming_fixtures(league_code, season=None, include_health=False):
     if season is None:
-        season = os.environ.get('SEASON', get_current_season())
+        season = os.environ.get('SEASON', get_current_season(league_code))
 
     def result(fixtures, status, detail=None):
         if include_health:

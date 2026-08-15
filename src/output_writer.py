@@ -21,6 +21,7 @@ from src.compute.venue_weighted_methodology import (
     MissingMetricDataError,
     calculate_fixture_expectation,
 )
+from src.compute.season_policy import summarize_history_filter
 from src.supabase_client import supabase_request
 
 METHODOLOGY_HISTORY_SIZES = {
@@ -156,10 +157,19 @@ def print_source_health_summary(results):
     print(f"Source health summary: {summary or 'no configured fixture sources'}")
 
     for result in results:
+        detail = f": {result['detail']}" if result.get("detail") else ""
         if result["status"].endswith("_failed"):
-            detail = f": {result['detail']}" if result.get("detail") else ""
             print(
                 f"Warning: {result['provider']} {result['league']} "
+                f"{result['status']}{detail}"
+            )
+        elif result["status"] in {
+            "prior_season_history_filtered",
+            "current_season_history_insufficient",
+            "current_season_source_empty",
+        }:
+            print(
+                f"Season history: {result['provider']} {result['league']} "
                 f"{result['status']}{detail}"
             )
 
@@ -176,7 +186,7 @@ def enforce_source_health(results, configured_providers):
         raise RuntimeError("All configured fixture source groups failed; refusing to publish generated data.")
 
 def process_understat_league(league_code, league_name, output_id, source_health=None):
-    season = os.environ.get('SEASON') or get_current_season()
+    season = os.environ.get('SEASON') or get_current_season(league_code)
     print(f"Fetching upcoming {league_name} fixtures for season {season}...")
 
     try:
@@ -222,6 +232,25 @@ def process_understat_league(league_code, league_name, output_id, source_health=
                 if ' ' in m['date']:
                     m['date'] = m['date'].split(' ')[0]
 
+            home_matches, home_counts = summarize_history_filter(
+                home_matches, output_id, fixture['date']
+            )
+            away_matches, away_counts = summarize_history_filter(
+                away_matches, output_id, fixture['date']
+            )
+            prior_filtered = (
+                home_counts['prior_season_filtered']
+                + away_counts['prior_season_filtered']
+            )
+            if source_health is not None and prior_filtered:
+                record_source_health(
+                    source_health,
+                    'understat_history',
+                    output_id,
+                    'prior_season_history_filtered',
+                    f'{prior_filtered} records',
+                )
+
             xg_stats, goals_stats = calculate_active_metrics(home_matches, away_matches)
 
             home_expected_xg = round(xg_stats["home_expected"], 2)
@@ -260,6 +289,16 @@ def process_understat_league(league_code, league_name, output_id, source_health=
                 f"home_last_{active_history_size()}_matches": home_matches,
                 f"away_last_{active_history_size()}_matches": away_matches
             })
+        except IncompleteHistoryError as e:
+            if source_health is not None:
+                record_source_health(
+                    source_health,
+                    'understat_history',
+                    output_id,
+                    'current_season_history_insufficient',
+                    f'{home_team} vs {away_team}: {e}',
+                )
+            print(f"Skipping {league_name} fixture {home_team} vs {away_team}: {e}")
         except Exception as e:
             if source_health is not None:
                 record_source_health(
@@ -312,8 +351,19 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
         home_team = fixture['home_team']
         away_team = fixture['away_team']
         try:
-            home_team_matches = [m for m in league_matches if m['team'] == home_team]
-            away_team_matches = [m for m in league_matches if m['team'] == away_team]
+            fixture_records, season_counts = summarize_history_filter(
+                league_matches, league_id, fixture['date']
+            )
+            if source_health is not None and season_counts['prior_season_filtered']:
+                record_source_health(
+                    source_health,
+                    'oddalerts_history',
+                    league_id,
+                    'prior_season_history_filtered',
+                    f"{season_counts['prior_season_filtered']} records",
+                )
+            home_team_matches = [m for m in fixture_records if m['team'] == home_team]
+            away_team_matches = [m for m in fixture_records if m['team'] == away_team]
             home_team_matches.sort(key=lambda x: x['date'], reverse=True)
             away_team_matches.sort(key=lambda x: x['date'], reverse=True)
 
@@ -379,6 +429,16 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
                 f"home_last_{active_history_size()}_matches": formatted_home,
                 f"away_last_{active_history_size()}_matches": formatted_away
             })
+        except IncompleteHistoryError as e:
+            if source_health is not None:
+                record_source_health(
+                    source_health,
+                    'oddalerts_history',
+                    league_id,
+                    'current_season_history_insufficient',
+                    f'{home_team} vs {away_team}: {e}',
+                )
+            print(f"Skipping {league_name} fixture {home_team} vs {away_team}: {e}")
         except Exception as e:
             if source_health is not None:
                 record_source_health(
@@ -756,7 +816,7 @@ def main():
 
         # Fetch and process for the match database
         try:
-            season = os.environ.get('SEASON') or get_current_season()
+            season = os.environ.get('SEASON') or get_current_season(league["code"])
             print(f"Fetching all played matches for Understat league {league['name']} (season {season})...")
             played_matches = get_played_matches(league["code"], season=season)
         except Exception as e:
