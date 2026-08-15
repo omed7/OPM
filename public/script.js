@@ -1,6 +1,8 @@
 const FIXTURE_LIMIT = 10;
 
 
+let teamBadgeManifest = { badges: {} };
+
 const LEAGUE_COUNTRIES = {
     'premier_league': { code: 'gb-eng', name: 'England' },
     'la_liga': { code: 'es', name: 'Spain' },
@@ -40,12 +42,28 @@ function renderLeagueFlag(leagueId) {
 async function init() {
     const container = document.getElementById('fixtures-container');
     const versionTag = document.getElementById('version-tag');
+    const badgeAttribution = document.getElementById('badge-attribution');
     const dateStrip = document.getElementById('date-strip');
 
     try {
         const response = await fetch('data.json');
         if (!response.ok) throw new Error('Failed to fetch data');
         const data = await response.json();
+
+        try {
+            const badgeResponse = await fetch('team_badges.json');
+            if (badgeResponse.ok) {
+                const badgeData = await badgeResponse.json();
+                if (badgeData && badgeData.badges) {
+                    teamBadgeManifest = badgeData;
+                }
+                if (badgeAttribution && badgeData && badgeData.source && badgeData.source.attribution) {
+                    badgeAttribution.textContent = badgeData.source.attribution;
+                }
+            }
+        } catch (e) {
+            teamBadgeManifest = { badges: {} };
+        }
 
         try {
             const versionResponse = await fetch('version.json');
@@ -238,7 +256,7 @@ function createFixtureCard(fixture, scaleMax, metric) {
         card.innerHTML = `
             <div class="fixture-header">
                 <div class="team">
-                    ${renderBadgeHtml(fixture.home_team)}
+                    ${renderBadgeHtml(fixture.leagueId, fixture.home_team)}
                     <div class="team-name">${fixture.home_team}</div>
                 </div>
                 <div class="xg-center result-center">
@@ -247,7 +265,7 @@ function createFixtureCard(fixture, scaleMax, metric) {
                     <div class="split-xg">Act xG: ${homeXg} - ${awayXg}</div>
                 </div>
                 <div class="team">
-                    ${renderBadgeHtml(fixture.away_team)}
+                    ${renderBadgeHtml(fixture.leagueId, fixture.away_team)}
                     <div class="team-name">${fixture.away_team}</div>
                 </div>
             </div>
@@ -288,7 +306,7 @@ function createFixtureCard(fixture, scaleMax, metric) {
     card.innerHTML = `
         <div class="fixture-header">
             <div class="team">
-                ${renderBadgeHtml(fixture.home_team)}
+                ${renderBadgeHtml(fixture.leagueId, fixture.home_team)}
                 <div class="team-name">${fixture.home_team}</div>
             </div>
             <div class="xg-center">
@@ -297,7 +315,7 @@ function createFixtureCard(fixture, scaleMax, metric) {
                 <div class="split-xg">${homeExpectedVal.toFixed(2)} - ${awayExpectedVal.toFixed(2)}</div>
             </div>
             <div class="team">
-                ${renderBadgeHtml(fixture.away_team)}
+                ${renderBadgeHtml(fixture.leagueId, fixture.away_team)}
                 <div class="team-name">${fixture.away_team}</div>
             </div>
         </div>
@@ -350,15 +368,22 @@ function getTeamLogo(teamName) {
     }
 }
 
-function renderBadgeHtml(teamName) {
+function getManifestTeamBadge(leagueId, teamName) {
+    const leagueBadges = teamBadgeManifest.badges && teamBadgeManifest.badges[leagueId];
+    const badge = leagueBadges && leagueBadges[teamName];
+    return badge && badge.badge_url ? badge : null;
+}
+
+function renderBadgeHtml(leagueId, teamName) {
     const initials = getInitials(teamName);
     const color = getColor(teamName);
-    const logoUrl = getTeamLogo(teamName);
+    const localLogoUrl = getTeamLogo(teamName);
+    const manifestBadge = getManifestTeamBadge(leagueId, teamName);
+    const logoUrl = localLogoUrl || (manifestBadge && manifestBadge.badge_url);
     if (logoUrl) {
-        return `<div class="team-badge" data-team="${teamName}" style="background-color: transparent;" title="Click to change team logo"><img src="${logoUrl}" alt="${initials}"></div>`;
-    } else {
-        return `<div class="team-badge" data-team="${teamName}" style="background-color: ${color}" title="Click to change team logo">${initials}</div>`;
+        return `<div class="team-badge" data-team="${teamName}" style="background-color: transparent;" title="Click to change team logo"><img src="${logoUrl}" alt="${teamName} badge" onerror="this.remove(); this.parentElement.style.backgroundColor='${color}'; this.parentElement.textContent='${initials}';"></div>`;
     }
+    return `<div class="team-badge" data-team="${teamName}" style="background-color: ${color}" title="Click to change team logo">${initials}</div>`;
 }
 
 function setupLogoClickHandlers() {
