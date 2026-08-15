@@ -3,6 +3,7 @@ import sys
 from unittest.mock import patch
 import os
 from datetime import datetime
+from pathlib import Path
 
 # Add src and root to python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -56,22 +57,17 @@ class TestPredictDates(unittest.TestCase):
 
 class TestOddAlertsUpcomingFixtures(unittest.TestCase):
 
-    def test_parses_trailing_whitespace_fixture_class_and_filters_next_gameweek(self):
-        html = """
-        <article class="competition-fixture ">
-            <div class="competition-fixture__time">Sat 16 Aug, 20:30</div>
-            <div class="competition-fixture__team"><span>Home &amp; Co</span></div>
-            <div class="competition-fixture__team"><span>Away FC</span></div>
-        </article>
-        <article class="competition-fixture ">
-            <div class="competition-fixture__time">Sun 24 Aug, 18:00</div>
-            <div class="competition-fixture__team"><span>Later Home</span></div>
-            <div class="competition-fixture__team"><span>Later Away</span></div>
-        </article>
-        """
+    def test_parses_sanitized_live_markup_with_year_rollover_and_gameweek_filter(self):
+        fixture_path = (
+            Path(__file__).parent
+            / "fixtures"
+            / "oddalerts"
+            / "upcoming_fixtures_trailing_whitespace.html"
+        )
+        html = fixture_path.read_text(encoding="utf-8")
 
         with patch("src.fetch.oddalerts.datetime") as mock_datetime:
-            mock_datetime.now.return_value = datetime(2026, 8, 1)
+            mock_datetime.now.return_value = datetime(2026, 12, 28)
             mock_datetime.strptime.side_effect = datetime.strptime
             fixtures = parse_upcoming_fixtures(html)
 
@@ -79,10 +75,15 @@ class TestOddAlertsUpcomingFixtures(unittest.TestCase):
             fixtures,
             [
                 {
-                    "home_team": "Home & Co",
+                    "home_team": "CF Montréal",
+                    "away_team": "Home & Co",
+                    "date": "2026-12-29",
+                },
+                {
+                    "home_team": "Future United",
                     "away_team": "Away FC",
-                    "date": "2026-08-16",
-                }
+                    "date": "2027-01-01",
+                },
             ],
         )
 
