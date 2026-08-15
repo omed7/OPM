@@ -1,13 +1,41 @@
 const FIXTURE_LIMIT = 10;
 
-const LEAGUE_FLAGS = {
-    'premier_league': '🏴\u200d󠁢\u200d󠁥\u200d󠁢\u200d󠁧\u200d󠁿',
-    'la_liga': '🇪🇸',
-    'serie_a': '🇮🇹',
-    'bundesliga': '🇩🇪',
-    'ligue_1': '🇫🇷'
+
+const LEAGUE_COUNTRIES = {
+    'premier_league': { code: 'gb-eng', name: 'England' },
+    'la_liga': { code: 'es', name: 'Spain' },
+    'serie_a': { code: 'it', name: 'Italy' },
+    'bundesliga': { code: 'de', name: 'Germany' },
+    'ligue_1': { code: 'fr', name: 'France' },
+    'superliga-argentina': { code: 'ar', name: 'Argentina' },
+    'admiral-bundesliga': { code: 'at', name: 'Austria' },
+    'pro-league-belgium': { code: 'be', name: 'Belgium' },
+    'serie-a-brazil': { code: 'br', name: 'Brazil' },
+    'superliga-denmark': { code: 'dk', name: 'Denmark' },
+    'league-one': { code: 'gb-sct', name: 'Scotland' },
+    '2-bundesliga': { code: 'de', name: 'Germany' },
+    'copa-libertadores': { code: 'un', name: 'South America' },
+    'j-league': { code: 'jp', name: 'Japan' },
+    'liga-mx': { code: 'mx', name: 'Mexico' },
+    'eredivisie': { code: 'nl', name: 'Netherlands' },
+    'eerste-divisie': { code: 'nl', name: 'Netherlands' },
+    'eliteserien': { code: 'no', name: 'Norway' },
+    'liga-portugal': { code: 'pt', name: 'Portugal' },
+    'pro-league-saudi': { code: 'sa', name: 'Saudi Arabia' },
+    'premiership': { code: 'gb-sct', name: 'Scotland' },
+    'allsvenskan': { code: 'se', name: 'Sweden' },
+    'super-lig': { code: 'tr', name: 'Türkiye' },
+    'mls': { code: 'us', name: 'United States' },
+    'veikkausliiga': { code: 'fi', name: 'Finland' }
 };
 
+function renderLeagueFlag(leagueId) {
+    const country = LEAGUE_COUNTRIES[leagueId];
+    if (!country) {
+        return '<span class="league-flag-fallback" aria-label="Country unavailable">—</span>';
+    }
+    return `<img class="league-flag" src="assets/flags/${country.code}.svg" alt="${country.name} flag">`;
+}
 
 async function init() {
     const container = document.getElementById('fixtures-container');
@@ -107,43 +135,70 @@ async function init() {
                 return;
             }
 
-            // Group by league
+            // Group by stable league ID so leagues with the same display name remain distinct.
             const grouped = {};
-            fixturesOnDate.forEach(f => {
-                if (!grouped[f.leagueName]) grouped[f.leagueName] = [];
-                grouped[f.leagueName].push(f);
+            fixturesOnDate.forEach(fixture => {
+                if (!grouped[fixture.leagueId]) {
+                    grouped[fixture.leagueId] = {
+                        name: fixture.leagueName,
+                        fixtures: [],
+                    };
+                }
+                grouped[fixture.leagueId].fixtures.push(fixture);
             });
 
-            // Sort fixtures in each group chronologically
-            for (const leagueName in grouped) {
-                grouped[leagueName].sort((a, b) => a.timeObj - b.timeObj);
-            }
+            // Render each league as an independently expandable section.
+            for (const [leagueId, league] of Object.entries(grouped)) {
+                const leagueFixtures = league.fixtures.sort((a, b) => a.timeObj - b.timeObj);
+                const section = document.createElement('section');
+                section.className = 'league-section';
 
-            // Render
-            for (const leagueName in grouped) {
-                const leagueHeader = document.createElement('div');
-                leagueHeader.className = 'league-header';
-                const leagueId = grouped[leagueName][0].leagueId;
-                const flag = LEAGUE_FLAGS[leagueId] || '';
-                leagueHeader.textContent = flag ? `${flag} ${leagueName}` : leagueName;
-                container.appendChild(leagueHeader);
+                const storageKey = `league_expansion:${dateStr}:${leagueId}`;
+                const isOpen = localStorage.getItem(storageKey) === 'open';
+                const header = document.createElement('button');
+                header.className = 'league-toggle';
+                header.setAttribute('type', 'button');
+                header.setAttribute('aria-expanded', String(isOpen));
+                header.innerHTML = `
+                    <span class="league-toggle-icon" aria-hidden="true">⌄</span>
+                    ${renderLeagueFlag(leagueId)}
+                    <span class="league-name">${league.name}</span>
+                    <span class="league-count">${leagueFixtures.length}</span>
+                `;
 
-                const leagueFixtures = grouped[leagueName];
+                const body = document.createElement('div');
+                body.className = 'league-fixtures';
+                if (!isOpen) body.classList.add('hidden');
+
+                header.addEventListener('click', () => {
+                    const nextOpen = header.getAttribute('aria-expanded') !== 'true';
+                    header.setAttribute('aria-expanded', String(nextOpen));
+                    if (nextOpen) {
+                        body.classList.remove('hidden');
+                        localStorage.setItem(storageKey, 'open');
+                    } else {
+                        body.classList.add('hidden');
+                        localStorage.setItem(storageKey, 'closed');
+                    }
+                });
 
                 const metric = leagueFixtures[0].metric;
                 let maxSingleMetric = 0;
-                leagueFixtures.forEach(f => {
-                    const homeVal = f[`home_expected_${metric}`];
-                    const awayVal = f[`away_expected_${metric}`];
+                leagueFixtures.forEach(fixture => {
+                    const homeVal = fixture[`home_expected_${metric}`];
+                    const awayVal = fixture[`away_expected_${metric}`];
                     if (typeof homeVal === 'number') maxSingleMetric = Math.max(maxSingleMetric, homeVal);
                     if (typeof awayVal === 'number') maxSingleMetric = Math.max(maxSingleMetric, awayVal);
                 });
 
                 const scaleMax = Math.max(maxSingleMetric * 1.1, 3.0);
-
                 leagueFixtures.forEach(fixture => {
-                    container.appendChild(createFixtureCard(fixture, scaleMax, metric));
+                    body.appendChild(createFixtureCard(fixture, scaleMax, metric));
                 });
+
+                section.appendChild(header);
+                section.appendChild(body);
+                container.appendChild(section);
             }
         }
 

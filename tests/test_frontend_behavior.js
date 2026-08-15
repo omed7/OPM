@@ -18,7 +18,12 @@ class ClassList {
     contains(value) {
         return this.values.has(value);
     }
+
+    remove(value) {
+        this.values.delete(value);
+    }
 }
+
 
 class Element {
     constructor(tagName) {
@@ -30,6 +35,8 @@ class Element {
         this.textContent = '';
         this.listeners = {};
         this.style = {};
+        this.attributes = {};
+        this.id = '';
     }
 
     get innerHTML() {
@@ -50,6 +57,15 @@ class Element {
         this.listeners[eventName] = listener;
     }
 
+    setAttribute(name, value) {
+        this.attributes[name] = String(value);
+        if (name === 'id') this.id = String(value);
+    }
+
+    getAttribute(name) {
+        return this.attributes[name] || null;
+    }
+
     click() {
         if (this.listeners.click) {
             this.listeners.click({ target: this });
@@ -63,8 +79,8 @@ class FakeDate extends Date {
     }
 }
 
-function createStorage() {
-    const values = new Map();
+function createStorage(initialValues = {}) {
+    const values = new Map(Object.entries(initialValues));
     return {
         getItem(key) {
             return values.has(key) ? values.get(key) : null;
@@ -82,14 +98,14 @@ function response(ok, payload) {
     };
 }
 
-async function boot({ data, dataOk = true, version = 'test-version' }) {
+async function boot({ data, dataOk = true, version = 'test-version', initialStorage = {} }) {
     const elements = {
         'fixtures-container': new Element('main'),
         'version-tag': new Element('p'),
         'date-strip': new Element('div'),
         'theme-toggle': new Element('button'),
     };
-    const storage = createStorage();
+    const storage = createStorage(initialStorage);
     const errors = [];
     let readyHandler;
 
@@ -198,11 +214,13 @@ async function testPopulatedMetricFinishedNavigationAndTheme() {
     assert.strictEqual(elements['version-tag'].textContent, 'vtest-version');
     assert.strictEqual(elements['date-strip'].children.length, 7);
     assert.strictEqual(elements['date-strip'].children[3].classList.contains('active'), true);
-    assert.strictEqual(elements['fixtures-container'].children.length, 3);
-    assert.match(elements['fixtures-container'].children[1].innerHTML, /Goals Combined/);
-    assert.match(elements['fixtures-container'].children[1].innerHTML, /1\.50 - 1\.00/);
-    assert.match(elements['fixtures-container'].children[2].innerHTML, /FT Score/);
-    assert.match(elements['fixtures-container'].children[2].innerHTML, /Pred Goals: 1\.50 - 1\.00 \| Pred xG: 1\.40 - 1\.10/);
+    assert.strictEqual(elements['fixtures-container'].children.length, 1);
+    const leagueBody = elements['fixtures-container'].children[0].children[1];
+    assert.strictEqual(leagueBody.children.length, 2);
+    assert.match(leagueBody.children[0].innerHTML, /Goals Combined/);
+    assert.match(leagueBody.children[0].innerHTML, /1\.50 - 1\.00/);
+    assert.match(leagueBody.children[1].innerHTML, /FT Score/);
+    assert.match(leagueBody.children[1].innerHTML, /Pred Goals: 1\.50 - 1\.00 \| Pred xG: 1\.40 - 1\.10/);
 
     elements['date-strip'].children[4].click();
     assert.match(elements['fixtures-container'].innerHTML, /No fixtures on this date/);
@@ -212,6 +230,71 @@ async function testPopulatedMetricFinishedNavigationAndTheme() {
     elements['theme-toggle'].click();
     assert.strictEqual(document.documentElement.getAttribute('data-theme'), 'dark');
     assert.strictEqual(storage.getItem('theme'), 'dark');
+    assert.deepStrictEqual(errors, []);
+}
+
+async function testCollapsedLeagueSectionsFlagsAndPersistence() {
+    const activeLeagues = [
+        ['premier_league', 'Premier League'], ['la_liga', 'La Liga'], ['serie_a', 'Serie A'],
+        ['bundesliga', 'Bundesliga'], ['ligue_1', 'Ligue 1'], ['superliga-argentina', 'Superliga'],
+        ['admiral-bundesliga', 'Admiral Bundesliga'], ['pro-league-belgium', 'Pro League'],
+        ['serie-a-brazil', 'Serie A Brazil'], ['superliga-denmark', 'Superliga Denmark'],
+        ['league-one', 'League One'], ['2-bundesliga', '2. Bundesliga'],
+        ['copa-libertadores', 'Copa Libertadores'], ['j-league', 'J-League'], ['liga-mx', 'Liga MX'],
+        ['eredivisie', 'Eredivisie'], ['eerste-divisie', 'Eerste Divisie'], ['eliteserien', 'Eliteserien'],
+        ['liga-portugal', 'Liga Portugal'], ['pro-league-saudi', 'Pro League Saudi'],
+        ['premiership', 'Premiership'], ['allsvenskan', 'Allsvenskan'], ['super-lig', 'Super Lig'],
+        ['mls', 'Major League Soccer'], ['veikkausliiga', 'Veikkausliiga'],
+    ];
+    const app = await boot({
+        data: {
+            leagues: activeLeagues.map(([id, name]) => ({
+                id,
+                name,
+                metric: 'xg',
+                fixtures: [predictionFixture()],
+            })),
+        },
+    });
+    const { elements, storage, errors } = app;
+    const sections = elements['fixtures-container'].children;
+    assert.strictEqual(sections.length, activeLeagues.length);
+
+    sections.forEach((section, index) => {
+        const header = section.children[0];
+        const body = section.children[1];
+        assert.strictEqual(section.className, 'league-section');
+        assert.strictEqual(header.tagName, 'button');
+        assert.strictEqual(header.getAttribute('aria-expanded'), 'false');
+        assert.strictEqual(body.classList.contains('hidden'), true);
+        const flagPath = header.innerHTML.match(/assets\/flags\/([a-z-]+\.svg)/)[1];
+        assert.strictEqual(fs.existsSync(path.join(__dirname, '..', 'public', 'assets', 'flags', flagPath)), true);
+        assert.doesNotMatch(header.innerHTML, /[\u{1F1E6}-\u{1F1FF}]/u);
+        assert.match(header.innerHTML, /flag/);
+        assert.match(header.innerHTML, new RegExp(activeLeagues[index][1]));
+    });
+
+    const firstHeader = sections[0].children[0];
+    const firstBody = sections[0].children[1];
+    firstHeader.click();
+    assert.strictEqual(firstHeader.getAttribute('aria-expanded'), 'true');
+    assert.strictEqual(firstBody.classList.contains('hidden'), false);
+    assert.strictEqual(storage.getItem('league_expansion:2026-08-16:premier_league'), 'open');
+
+    const restoredApp = await boot({
+        data: {
+            leagues: activeLeagues.map(([id, name]) => ({
+                id,
+                name,
+                metric: 'xg',
+                fixtures: [predictionFixture()],
+            })),
+        },
+        initialStorage: { 'league_expansion:2026-08-16:premier_league': 'open' },
+    });
+    const restoredSection = restoredApp.elements['fixtures-container'].children[0];
+    assert.strictEqual(restoredSection.children[0].getAttribute('aria-expanded'), 'true');
+    assert.strictEqual(restoredSection.children[1].classList.contains('hidden'), false);
     assert.deepStrictEqual(errors, []);
 }
 
@@ -230,6 +313,7 @@ async function testDataLoadError() {
 
 (async () => {
     await testPopulatedMetricFinishedNavigationAndTheme();
+    await testCollapsedLeagueSectionsFlagsAndPersistence();
     await testEmptyArtifact();
     await testDataLoadError();
     console.log('Frontend behavior tests passed.');
