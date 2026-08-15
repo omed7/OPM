@@ -23,6 +23,7 @@ The scheduled pipeline in `src/output_writer.py` uses `src/compute/venue_weighte
 
 - **Fully automated (5 leagues)**: Understat.com, scraped using the `understatapi` package. Supported leagues: Premier League (`EPL`), La Liga (`La_Liga`), Serie A (`Serie_A`), Bundesliga (`Bundesliga`), and Ligue 1 (`Ligue_1`). RFPL (Russia) is deliberately excluded. Be a polite scraper (use rate limiting).
 - **OddAlerts Automated Data**: OddAlerts.com. Free pages only — robots.txt blocks `/UpdateLiveFeed`, `/UpdateLiveStats`, `/app/`; everything else public is fair game. "Recent Results with xG" on `/xg/<league>` pages is server-rendered and scrapeable. "Upcoming Fixtures" on `/leagues/<country>/<league>/fixtures` pages are server-rendered and scrapeable. 20 valid leagues (including MLS, Eliteserien, Premiership, Superliga, Veikkausliiga) are fully automated. Note: Iceland and Canada do not have scrapeable server-rendered fixtures.
+- **Season-aware prediction history**: `src/compute/season_policy.py` defines each active league's current-season boundary. Before Main/Last-4 or Last-8 history selection, retain only same-league records on or after that boundary and before the upcoming fixture. Never fall back to a prior completed season when the current season has no played matches. Incomplete current-season samples are intentionally omitted and reported in source health.
 
 ## Unified Match Database (Supabase)
 - Match data is stored in a Supabase PostgreSQL database table called `matches`. The legacy flat file `public/match_database.json` has been removed.
@@ -69,7 +70,7 @@ The scheduled pipeline in `src/output_writer.py` uses `src/compute/venue_weighte
 
 ## Environment Variables
 
-- `SEASON` (Optional): Override automatic season detection for testing.
+- `SEASON` (Optional): Override the league-specific Understat current-season label for controlled testing only; it must not be used to make production fall back to a prior season.
 - `MOCK_UPCOMING` (Optional): Enable fallback mock fixture generation in `src/fetch/understat_common.py` when no live future fixtures exist.
 - `SUPERBASE_URL` or `SUPABASE_URL`: URL for the Supabase REST API (Required for both serverless and cron).
 - `SUPERBASE_KEY` or `SUPABASE_KEY`: Server-side Supabase Secret/service-role key only; never use an anon or publishable key. Required for trusted cron and server-side maintenance only.
