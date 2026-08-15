@@ -100,7 +100,7 @@ def print_source_health_summary(results):
     print(f"Source health summary: {summary or 'no configured fixture sources'}")
 
     for result in results:
-        if result["status"] in {"fetch_failed", "parse_failed", "fixture_failed"}:
+        if result["status"].endswith("_failed"):
             detail = f": {result['detail']}" if result.get("detail") else ""
             print(
                 f"Warning: {result['provider']} {result['league']} "
@@ -338,7 +338,7 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
 
     return {"id": league_id, "name": league_name, "metric": "xg", "fixtures": output_fixtures}
 
-def fetch_and_parse_oddalerts_league(league_id, slug, name):
+def fetch_and_parse_oddalerts_league(league_id, slug, name, source_health=None):
     print(f"Fetching {name} ({league_id}) matches from OddAlerts...")
     url = f"https://www.oddalerts.com/xg/{slug}"
     req = urllib.request.Request(
@@ -353,6 +353,10 @@ def fetch_and_parse_oddalerts_league(league_id, slug, name):
             print(f"Fetch for {league_id} succeeded.")
     except Exception as e:
         print(f"Fetch for {league_id} failed: {e}")
+        if source_health is not None:
+            record_source_health(
+                source_health, "oddalerts_history", league_id, "history_fetch_failed", str(e)
+            )
 
     parsed_matches = []
     if html_content:
@@ -361,6 +365,10 @@ def fetch_and_parse_oddalerts_league(league_id, slug, name):
             print(f"Parsed {len(parsed_matches)} matches for {league_id} successfully.")
         except Exception as e:
             print(f"Error parsing matches for {league_id}: {e}")
+            if source_health is not None:
+                record_source_health(
+                    source_health, "oddalerts_history", league_id, "history_parse_failed", str(e)
+                )
     return parsed_matches
 
 def map_oddalerts_to_db(matches, league_id):
@@ -656,10 +664,18 @@ def main():
     # 1. Fetch OddAlerts leagues
     for league in ODDALERTS_LEAGUES:
         try:
-            matches = fetch_and_parse_oddalerts_league(league["id"], league["slug"], league["name"])
+            matches = fetch_and_parse_oddalerts_league(
+                league["id"], league["slug"], league["name"], source_health
+            )
             db_records.extend(map_oddalerts_to_db(matches, league["id"]))
         except Exception as e:
-            print(f"Failed to fetch or parse OddAlerts league {league['name']}: {e}")
+            record_source_health(
+                source_health,
+                "oddalerts_history",
+                league["id"],
+                "history_mapping_failed",
+                str(e),
+            )
 
 
     leagues_data = []
@@ -690,10 +706,26 @@ def main():
             season = os.environ.get('SEASON') or get_current_season()
             print(f"Fetching all played matches for Understat league {league['name']} (season {season})...")
             played_matches = get_played_matches(league["code"], season=season)
-            db_records.extend(map_understat_to_db(played_matches, league["output_id"]))
-            print(f"Mapped {len(played_matches)} played matches for Understat league {league['name']}.")
         except Exception as e:
-            print(f"Failed to process Understat league {league['name']} for match database: {e}")
+            record_source_health(
+                source_health,
+                "understat_history",
+                league["output_id"],
+                "history_fetch_failed",
+                str(e),
+            )
+        else:
+            try:
+                db_records.extend(map_understat_to_db(played_matches, league["output_id"]))
+                print(f"Mapped {len(played_matches)} played matches for Understat league {league['name']}.")
+            except Exception as e:
+                record_source_health(
+                    source_health,
+                    "understat_history",
+                    league["output_id"],
+                    "history_mapping_failed",
+                    str(e),
+                )
 
 
     print_source_health_summary(source_health)
