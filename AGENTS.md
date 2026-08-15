@@ -5,25 +5,20 @@ Instructions for AI coding agents (Jules) working in this repo. Whenever your PR
 ## Project
 Automates Omed's personal football prediction formulas. Shows two numbers per fixture, nothing else — no winners, scores, or probabilities unless a task explicitly asks for them.
 
-## The formulas (do not alter without being told to)
-### Methodology System
-The prediction engine supports multiple methodologies and metrics (xG and Goals) running on balanced historical matches pulled directly from the unified match database. Both teams in a fixture must share the same methodology and the same metric.
+## Production formulas (do not alter without explicit product approval)
+### Active scheduled prediction path
+The scheduled pipeline in `src/output_writer.py` is currently the authoritative production path. It calls `calculate_expected_xg()` and `calculate_expected_goals()` from the simple wrapper modules; it does **not** call `src/compute/methodology.py`.
 
-- **Methodology 1**: Equal weight, last 4 matches (2 home + 2 away). Default weight: 25.0% per match.
-- **Methodology 2**: Last 8 matches (4 home + 4 away), chronologically ordered. Default weight: 70% collectively across the most recent 4 matches (17.5% each) / 30% collectively across the older 4 matches (7.5% each).
+- **Target sample**: Four recent same-league matches per team, selected as two home and two away records where available.
+- **Current sparse-sample behavior**: The writer proceeds with a partial nonempty selection. It does not mark the resulting prediction as incomplete or expose a quality indicator.
+- **Active calculation**: Each selected match has equal arithmetic weight. Team X's AVG FOR/AGAINST is the arithmetic mean of the selected `*_for`/`*_against` values. Team A's expected metric is `(Team A AVG FOR + Team B AVG AGAINST) / 2`, and Team B's value is symmetric.
+- **Active output**: The scheduled artifact and prediction records contain expected xG and expected-goals values. They contain no methodology identifier, override weights, or `comparisons` field.
 
-### Weight Normalization and Redistribution
-Weights are normalized per tier to sum to 100% of that tier's target total (Methodology 1 has one tier with total 1.0; Methodology 2 has two tiers: recent with total 0.70 and older with total 0.30).
-- If a match is deleted (weight set to 0.0) or manually overridden, the difference is redistributed **proportionally** across all other unoverridden matches within the same tier to maintain the tier's target total.
+### Standalone weighted methodology engine (not scheduled)
+`src/compute/methodology.py` implements balanced Methodology 1 and Methodology 2 selection, Methodology-2 70/30 recency tiers, override normalization, and comparison projections. Its isolated tests cover those capabilities, but the scheduled writer does not route through this engine or expose its comparison data.
 
-### Formula Calculations (xG & Goals)
-For a fixture between Team A (home) and Team B (away) with computed weighted averages for each team:
-- Team X's AVG FOR = weighted sum of X's scored goals/xG across matches
-- Team X's AVG AGAINST = weighted sum of X's conceded goals/xG across matches
-- Team A's expected metric = (Team A's AVG FOR + Team B's AVG AGAINST) / 2
-- Team B's expected metric = (Team B's AVG FOR + Team A's AVG AGAINST) / 2
-
-When computing a prediction, the engine also silently computes comparison projections for all default methodologies/metrics and stores them inside the `comparisons` field.
+### Pending product decision
+Do not describe the weighted engine as production behavior and do not route the scheduled writer through it without the explicit METH-01 decision. That decision must address the authoritative methodology and sparse-history policy with before/after numerical evidence before any prediction behavior changes.
 
 ## Data sources
 
