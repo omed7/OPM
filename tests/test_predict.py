@@ -87,6 +87,68 @@ class TestOddAlertsUpcomingFixtures(unittest.TestCase):
             ],
         )
 
+    def test_skips_unparseable_fixture_date_but_keeps_valid_fixture(self):
+        html = """
+        <article class="competition-fixture ">
+            <div class="competition-fixture__time">Kick-off TBC</div>
+            <div class="competition-fixture__team"><span>TBD Home</span></div>
+            <div class="competition-fixture__team"><span>TBD Away</span></div>
+        </article>
+        <article class="competition-fixture ">
+            <div class="competition-fixture__time">Tue 30 Dec, 20:00</div>
+            <div class="competition-fixture__team"><span>Scheduled Home</span></div>
+            <div class="competition-fixture__team"><span>Scheduled Away</span></div>
+        </article>
+        """
+
+        with patch("src.fetch.oddalerts.datetime") as mock_datetime:
+            mock_datetime.now.return_value = datetime(2026, 12, 28)
+            mock_datetime.strptime.side_effect = datetime.strptime
+            fixtures = parse_upcoming_fixtures(html)
+
+        self.assertEqual(
+            fixtures,
+            [
+                {
+                    "home_team": "Scheduled Home",
+                    "away_team": "Scheduled Away",
+                    "date": "2026-12-30",
+                }
+            ],
+        )
+
+    def test_returns_empty_for_empty_fixture_markup(self):
+        self.assertEqual(parse_upcoming_fixtures("<main>No fixtures</main>"), [])
+
+
+class TestOddAlertsRecentResults(unittest.TestCase):
+
+    def test_skips_completed_result_with_missing_xg(self):
+        fixture_path = (
+            Path(__file__).parent
+            / "fixtures"
+            / "oddalerts"
+            / "recent_results_missing_xg.html"
+        )
+
+        with patch("src.fetch.oddalerts.datetime") as mock_datetime:
+            mock_datetime.now.return_value = datetime(2026, 8, 17)
+            results = parse_recent_results(fixture_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(
+            results,
+            [
+                {
+                    "home_team": "Valid Home",
+                    "away_team": "Valid Away",
+                    "home_xg": 1.25,
+                    "away_xg": 0.75,
+                    "score": "2 - 1",
+                    "date": "2026-08-16",
+                }
+            ],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

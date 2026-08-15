@@ -95,10 +95,10 @@ def parse_recent_results(html):
             xg_m = re.search(r'<span class="xg[^\"]*\"[^>]*>(.*?)</span>', tp, re.DOTALL)
             name_m = re.search(r'<div class="name">(.*?)</div>', tp, re.DOTALL)
 
-            xg_val = xg_m.group(1).strip() if xg_m else "0.0"
+            xg_val = xg_m.group(1).strip() if xg_m else None
             name_val = name_m.group(1).strip() if name_m else ""
 
-            if name_val:
+            if name_val and xg_val is not None:
                 teams_data.append({"name": name_val, "xg": xg_val})
 
         status_match = re.search(r'<div class="status">.*?<span class="status-text">(.*?)</span>', part, re.DOTALL)
@@ -173,12 +173,16 @@ def parse_upcoming_fixtures(html):
 
     fixtures = []
     for dm in dates_matches:
-        dm["date"] = resolved_dates.get(dm["pos"], dm["date_str"])
+        date = resolved_dates.get(dm["pos"], dm["date_str"])
+        try:
+            datetime.strptime(date, '%Y-%m-%d')
+        except ValueError:
+            continue
         # Standardize format for output writer
         fixtures.append({
             "home_team": dm["home_team"],
             "away_team": dm["away_team"],
-            "date": dm["date"]
+            "date": date
         })
 
     if not fixtures:

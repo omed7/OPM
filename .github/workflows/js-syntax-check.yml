@@ -20,6 +20,8 @@ jobs:
           # Use shopt globstar for recursive matching if needed in bash,
           # or find is a safe bet
           find public -name "*.js" -type f -print0 | xargs -0 -I {} node --check {}
+      - name: Run frontend behavior tests
+        run: node tests/test_frontend_behavior.js
 
   check-python-and-artifact:
     runs-on: ubuntu-latest
