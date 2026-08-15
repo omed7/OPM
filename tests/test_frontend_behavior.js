@@ -189,6 +189,7 @@ function standingsFixture() {
                 {
                     id: '2026-07-01',
                     label: '2026/27',
+                    prediction_provenance: 'reconstructed_historical',
                     teams: [{
                         name: 'Home FC',
                         matches_played: 1,
@@ -214,6 +215,7 @@ function standingsFixture() {
                 {
                     id: '2025-07-01',
                     label: '2025/26',
+                    prediction_provenance: 'unavailable',
                     teams: [{ name: 'Historic FC', matches_played: 20, views: { overall: unavailable, for: unavailable, against: unavailable } }],
                 },
             ],
@@ -281,6 +283,7 @@ async function testLeagueSeasonNavigationAndPaModes() {
     assert.strictEqual(seasonSelector.children[0].textContent, '2026/27');
     assert.match(currentTable.innerHTML, /\+0\.40 \/ \+0\.40/);
     assert.match(currentTable.innerHTML, /\+0\.95 \/ \+0\.95/);
+    assert.match(container.children[2].textContent, /Reconstructed historical prediction/);
 
     controls.children[1].click();
     const forTable = elements['fixtures-container'].children[4].children[0];

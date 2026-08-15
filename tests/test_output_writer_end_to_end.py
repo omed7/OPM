@@ -84,7 +84,7 @@ class TestOutputWriterMainTracer(unittest.TestCase):
                 self.assertEqual(len(fixture["away_last_4_matches"]), 4)
                 with open("public/league_standings.json", encoding="utf-8") as artifact:
                     standings = json.load(artifact)
-                self.assertEqual(standings["schema_version"], 1)
+                self.assertEqual(standings["schema_version"], 2)
                 self.assertEqual(standings["meta"]["version"], "test-version")
                 self.assertEqual(standings["leagues"], [])
             finally:

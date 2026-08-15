@@ -9,6 +9,7 @@ import sys
 SENSITIVE_PATTERN = re.compile(r"(supabase|service_role|api[_-]?key|authorization|bearer)", re.I)
 VIEWS = {"overall", "for", "against"}
 METRICS = {"xg", "goals", "xg_goals"}
+PREDICTION_PROVENANCE = {"stored_pre_match", "reconstructed_historical", "mixed", "unavailable"}
 
 
 def _require(condition, message):
@@ -41,7 +42,7 @@ def _validate_metric(metric, value, field):
 def validate(payload):
     _require(isinstance(payload, dict), "Artifact root must be an object.")
     _require(set(payload) == {"schema_version", "meta", "leagues"}, "Artifact root has unexpected keys.")
-    _require(payload["schema_version"] == 1, "Unsupported schema version.")
+    _require(payload["schema_version"] == 2, "Unsupported schema version.")
     _require(isinstance(payload["meta"], dict), "meta must be an object.")
     _require(set(payload["meta"]) == {"version", "generated_at"}, "meta has unexpected keys.")
     _require(all(isinstance(payload["meta"][key], str) for key in payload["meta"]), "meta values must be strings.")
@@ -59,11 +60,18 @@ def validate(payload):
 
         season_ids = set()
         for season in league["seasons"]:
-            _require(set(season) == {"id", "label", "teams"}, "Season has unexpected keys.")
+            _require(
+                set(season) == {"id", "label", "prediction_provenance", "teams"},
+                "Season has unexpected keys.",
+            )
             _require(isinstance(season["id"], str) and season["id"], "Season id must be a non-empty string.")
             _require(season["id"] not in season_ids, "Season ids must be unique per league.")
             season_ids.add(season["id"])
             _require(isinstance(season["label"], str) and season["label"], "Season label must be a non-empty string.")
+            _require(
+                season["prediction_provenance"] in PREDICTION_PROVENANCE,
+                "Season prediction provenance is invalid.",
+            )
             _require(isinstance(season["teams"], list), "Season teams must be an array.")
 
             team_names = set()

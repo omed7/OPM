@@ -42,6 +42,7 @@ class TestLeagueStandingsArtifact(unittest.TestCase):
 
         validate(artifact)
         season = artifact["leagues"][0]["seasons"][0]
+        self.assertEqual(season["prediction_provenance"], "stored_pre_match")
         home = next(team for team in season["teams"] if team["name"] == "Home FC")
         away = next(team for team in season["teams"] if team["name"] == "Away FC")
 
@@ -154,6 +155,65 @@ class TestLeagueStandingsArtifact(unittest.TestCase):
         )
 
         self.assertEqual(artifact["leagues"], [])
+
+    def test_reconstructs_historical_pa_from_only_earlier_calendar_dates(self):
+        def fixture(date, home, away, home_xg, away_xg, home_goals, away_goals):
+            return {
+                "team": home,
+                "opponent": away,
+                "date": date,
+                "venue": "home",
+                "league": "premier_league",
+                "xg_for": home_xg,
+                "xg_against": away_xg,
+                "goals_for": home_goals,
+                "goals_against": away_goals,
+            }
+
+        matches = [
+            fixture("2021-08-01", "Alpha", "Alpha Home One", 1, 1, 1, 1),
+            fixture("2021-08-01", "Beta", "Beta Home One", 4, 1, 4, 1),
+            fixture("2021-08-02", "Alpha Away One", "Alpha", 1, 2, 1, 2),
+            fixture("2021-08-02", "Beta Away One", "Beta", 1, 2, 1, 2),
+            fixture("2021-08-03", "Alpha", "Alpha Home Two", 3, 1, 3, 1),
+            fixture("2021-08-03", "Beta", "Beta Home Two", 4, 1, 4, 1),
+            fixture("2021-08-04", "Alpha Away Two", "Alpha", 1, 4, 1, 4),
+            fixture("2021-08-04", "Beta Away Two", "Beta", 1, 2, 1, 2),
+            fixture("2021-08-05", "Same Day Host", "Beta", 99, 99, 9, 9),
+            fixture("2021-08-05", "Alpha", "Beta", 2, 1, 2, 1),
+        ]
+
+        artifact = build_standings_artifact(
+            matches,
+            [],
+            {"premier_league": "Premier League"},
+            version="test-version",
+            generated_at="2026-08-16T00:00:00Z",
+        )
+
+        season = artifact["leagues"][0]["seasons"][0]
+        alpha = next(team for team in season["teams"] if team["name"] == "Alpha")
+        self.assertEqual(season["prediction_provenance"], "reconstructed_historical")
+        self.assertEqual(alpha["views"]["for"]["xg"], {
+            "total": 0.25,
+            "average": 0.25,
+            "eligible_matches": 1,
+        })
+        self.assertEqual(alpha["views"]["against"]["xg"], {
+            "total": -1.0,
+            "average": -1.0,
+            "eligible_matches": 1,
+        })
+        self.assertEqual(alpha["views"]["overall"]["xg"], {
+            "total": -0.75,
+            "average": -0.75,
+            "eligible_matches": 1,
+        })
+        self.assertEqual(alpha["views"]["for"]["goals"], {
+            "total": 0.25,
+            "average": 0.25,
+            "eligible_matches": 1,
+        })
 
 
 if __name__ == "__main__":
