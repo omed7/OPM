@@ -57,15 +57,15 @@ class TestSeasonAwareOddAlertsWriter(unittest.TestCase):
         for team, opponent in (("Home FC", "H"), ("Away FC", "A")):
             records.extend(
                 [
-                    {"team": team, "opponent": f"{opponent} home 1", "date": "2026-07-10", "venue": "home", "xg_for": 2.0, "xg_against": 1.0, "goals_for": 2, "goals_against": 1, "league": "allsvenskan"},
-                    {"team": team, "opponent": f"{opponent} home 2", "date": "2026-06-10", "venue": "home", "xg_for": 1.0, "xg_against": 2.0, "goals_for": 1, "goals_against": 2, "league": "allsvenskan"},
-                    {"team": team, "opponent": f"{opponent} away 1", "date": "2026-07-09", "venue": "away", "xg_for": 1.5, "xg_against": 1.5, "goals_for": 1, "goals_against": 1, "league": "allsvenskan"},
-                    {"team": team, "opponent": f"{opponent} away 2", "date": "2026-06-09", "venue": "away", "xg_for": 1.5, "xg_against": 1.5, "goals_for": 1, "goals_against": 1, "league": "allsvenskan"},
+                    {"team": team, "opponent": f"{opponent} home 1", "date": "2026-07-10", "venue": "home", "xg_for": 2.0, "xg_against": 1.0, "goals_for": 2, "goals_against": 1, "league": "eliteserien"},
+                    {"team": team, "opponent": f"{opponent} home 2", "date": "2026-06-10", "venue": "home", "xg_for": 1.0, "xg_against": 2.0, "goals_for": 1, "goals_against": 2, "league": "eliteserien"},
+                    {"team": team, "opponent": f"{opponent} away 1", "date": "2026-07-09", "venue": "away", "xg_for": 1.5, "xg_against": 1.5, "goals_for": 1, "goals_against": 1, "league": "eliteserien"},
+                    {"team": team, "opponent": f"{opponent} away 2", "date": "2026-06-09", "venue": "away", "xg_for": 1.5, "xg_against": 1.5, "goals_for": 1, "goals_against": 1, "league": "eliteserien"},
                 ]
             )
 
         league = output_writer.process_oddalerts_league(
-            "allsvenskan", "Allsvenskan", "/leagues/sweden/allsvenskan/fixtures", records
+            "eliteserien", "Eliteserien", "/leagues/norway/eliteserien/fixtures", records
         )
 
         self.assertEqual(len(league["fixtures"]), 1)

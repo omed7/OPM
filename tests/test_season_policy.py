@@ -51,11 +51,11 @@ class TestSeasonPolicy(unittest.TestCase):
         ]
 
         eligible = filter_history_for_fixture(
-            history, "allsvenskan", "2026-08-15"
+            history, "eliteserien", "2026-08-15"
         )
 
         self.assertEqual([record["id"] for record in eligible], ["current-season"])
-        self.assertEqual(season_start_date("allsvenskan", "2026-08-15"), "2026-01-01")
+        self.assertEqual(season_start_date("eliteserien", "2026-08-15"), "2026-01-01")
 
     def test_split_year_league_uses_verified_july_boundary(self):
         history = [
@@ -73,7 +73,7 @@ class TestSeasonPolicy(unittest.TestCase):
     def test_understat_provider_label_uses_derived_start_year(self):
         self.assertEqual(provider_season_label("premier_league", "2026-08-15"), "2026")
         self.assertEqual(provider_season_label("premier_league", "2027-01-15"), "2026")
-        self.assertEqual(provider_season_label("allsvenskan", "2026-08-15"), "2026")
+        self.assertEqual(provider_season_label("eliteserien", "2026-08-15"), "2026")
 
     def test_supported_league_registries_are_fully_covered(self):
         configured = set(LEAGUE_SEASON_POLICIES)

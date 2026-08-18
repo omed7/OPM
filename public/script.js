@@ -24,10 +24,7 @@ const LEAGUE_COUNTRIES = {
     'pro-league-belgium': { code: 'be', name: 'Belgium' },
     'serie-a-brazil': { code: 'br', name: 'Brazil' },
     'superliga-denmark': { code: 'dk', name: 'Denmark' },
-    'league-one': { code: 'gb-sct', name: 'Scotland' },
     '2-bundesliga': { code: 'de', name: 'Germany' },
-    'copa-libertadores': { code: 'un', name: 'South America' },
-    'j-league': { code: 'jp', name: 'Japan' },
     'liga-mx': { code: 'mx', name: 'Mexico' },
     'eredivisie': { code: 'nl', name: 'Netherlands' },
     'eerste-divisie': { code: 'nl', name: 'Netherlands' },
@@ -35,10 +32,8 @@ const LEAGUE_COUNTRIES = {
     'liga-portugal': { code: 'pt', name: 'Portugal' },
     'pro-league-saudi': { code: 'sa', name: 'Saudi Arabia' },
     'premiership': { code: 'gb-sct', name: 'Scotland' },
-    'allsvenskan': { code: 'se', name: 'Sweden' },
     'super-lig': { code: 'tr', name: 'Türkiye' },
     'mls': { code: 'us', name: 'United States' },
-    'veikkausliiga': { code: 'fi', name: 'Finland' },
 };
 
 function renderLeagueFlag(leagueId) {

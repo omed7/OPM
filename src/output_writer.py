@@ -97,10 +97,7 @@ ODDALERTS_LEAGUES = [
     {"id": "pro-league-belgium", "name": "Pro League", "slug": "pro-league-belgium", "fixtures_path": "/leagues/belgium/pro-league/fixtures"},
     {"id": "serie-a-brazil", "name": "Serie A Brazil", "slug": "serie-a-brazil", "fixtures_path": "/leagues/brazil/serie-a/fixtures"},
     {"id": "superliga-denmark", "name": "Superliga Denmark", "slug": "superliga-denmark", "fixtures_path": "/leagues/denmark/superliga/fixtures"},
-    {"id": "league-one", "name": "League One", "slug": "league-one", "fixtures_path": "/leagues/scotland/league-one/fixtures"},
     {"id": "2-bundesliga", "name": "2. Bundesliga", "slug": "2-bundesliga", "fixtures_path": "/leagues/germany/2.-bundesliga/fixtures"},
-    {"id": "copa-libertadores", "name": "Copa Libertadores", "slug": "copa-libertadores", "fixtures_path": "/leagues/south-america/copa-libertadores/fixtures"},
-    {"id": "j-league", "name": "J-League", "slug": "j-league", "fixtures_path": "/leagues/japan/j1-league/fixtures"},
     {"id": "liga-mx", "name": "Liga MX", "slug": "liga-mx", "fixtures_path": "/leagues/mexico/liga-mx/fixtures"},
     {"id": "eredivisie", "name": "Eredivisie", "slug": "eredivisie", "fixtures_path": "/leagues/netherlands/eredivisie/fixtures"},
     {"id": "eerste-divisie", "name": "Eerste Divisie", "slug": "eerste-divisie", "fixtures_path": "/leagues/netherlands/eerste-divisie/fixtures"},
@@ -108,10 +105,8 @@ ODDALERTS_LEAGUES = [
     {"id": "liga-portugal", "name": "Liga Portugal", "slug": "liga-portugal", "fixtures_path": "/leagues/portugal/liga-portugal/fixtures"},
     {"id": "pro-league-saudi", "name": "Pro League Saudi", "slug": "pro-league-saudi", "fixtures_path": "/leagues/saudi-arabia/pro-league/fixtures"},
     {"id": "premiership", "name": "Premiership", "slug": "premiership", "fixtures_path": "/leagues/scotland/premiership/fixtures"},
-    {"id": "allsvenskan", "name": "Allsvenskan", "slug": "allsvenskan", "fixtures_path": "/leagues/sweden/allsvenskan/fixtures"},
     {"id": "super-lig", "name": "Super Lig", "slug": "super-lig", "fixtures_path": "/leagues/turkiye/super-lig/fixtures"},
     {"id": "mls", "name": "Major League Soccer", "slug": "mls", "fixtures_path": "/leagues/united-states/major-league-soccer/fixtures"},
-    {"id": "veikkausliiga", "name": "Veikkausliiga", "slug": "veikkausliiga", "fixtures_path": "/leagues/finland/veikkausliiga/fixtures"}
 ]
 
 def get_version():
