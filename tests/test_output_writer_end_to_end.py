@@ -25,13 +25,13 @@ class TestOutputWriterMainTracer(unittest.TestCase):
         }
         raw_matches = [
             {"home_team": "Home FC", "away_team": "Opposition 1", "home_xg": 2.0, "away_xg": 1.0, "score": "2 - 1", "date": "2026-08-10"},
-            {"home_team": "Opposition 2", "away_team": "Home FC", "home_xg": 2.0, "away_xg": 1.0, "score": "2 - 1", "date": "2026-08-09"},
-            {"home_team": "Home FC", "away_team": "Opposition 3", "home_xg": 4.0, "away_xg": 3.0, "score": "4 - 3", "date": "2026-08-08"},
-            {"home_team": "Opposition 4", "away_team": "Home FC", "home_xg": 4.0, "away_xg": 3.0, "score": "4 - 3", "date": "2026-08-07"},
+            {"home_team": "Opposition 2", "away_team": "Home FC", "home_xg": 2.0, "away_xg": 1.0, "score": "2 - 1", "date": "2026-08-11"},
+            {"home_team": "Home FC", "away_team": "Opposition 3", "home_xg": 4.0, "away_xg": 3.0, "score": "4 - 3", "date": "2026-08-12"},
+            {"home_team": "Opposition 4", "away_team": "Home FC", "home_xg": 4.0, "away_xg": 3.0, "score": "4 - 3", "date": "2026-08-13"},
             {"home_team": "Away FC", "away_team": "Opposition 5", "home_xg": 1.0, "away_xg": 1.5, "score": "1 - 2", "date": "2026-08-11"},
             {"home_team": "Opposition 6", "away_team": "Away FC", "home_xg": 1.0, "away_xg": 3.0, "score": "1 - 3", "date": "2026-08-10"},
-            {"home_team": "Away FC", "away_team": "Opposition 7", "home_xg": 2.0, "away_xg": 2.0, "score": "2 - 2", "date": "2026-08-09"},
-            {"home_team": "Opposition 8", "away_team": "Away FC", "home_xg": 3.0, "away_xg": 4.0, "score": "3 - 4", "date": "2026-08-08"},
+            {"home_team": "Away FC", "away_team": "Opposition 7", "home_xg": 2.0, "away_xg": 2.0, "score": "2 - 2", "date": "2026-08-11"},
+            {"home_team": "Opposition 8", "away_team": "Away FC", "home_xg": 3.0, "away_xg": 4.0, "score": "3 - 4", "date": "2026-08-12"},
         ]
         upcoming_fixture = [{"home_team": "Home FC", "away_team": "Away FC", "date": "2026-08-16"}]
         persistence_order = []
