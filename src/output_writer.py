@@ -22,6 +22,7 @@ from src.compute.venue_weighted_methodology import (
     calculate_fixture_expectation,
 )
 from src.compute.season_policy import summarize_history_filter
+from src.compute.source_boundary import accepts_provider_record
 from src.compute.league_standings import build_standings_artifact
 from src.supabase_client import supabase_request
 
@@ -533,6 +534,13 @@ def map_oddalerts_to_db(matches, league_id):
         date = m.get("date")
         home_team = m.get("home_team")
         away_team = m.get("away_team")
+
+        try:
+            accepted_by_boundary = accepts_provider_record("oddalerts", league_id, date)
+        except (TypeError, ValueError):
+            accepted_by_boundary = False
+        if not accepted_by_boundary:
+            continue
 
         # Home team record
         records.append({
