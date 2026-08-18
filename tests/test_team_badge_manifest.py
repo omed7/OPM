@@ -7,7 +7,6 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / 'public' / 'data.json'
 MANIFEST_PATH = ROOT / 'public' / 'team_badges.json'
 EXPECTED_UNMAPPED = {
-    'allsvenskan': {'Malmö FF'},
     'superliga-argentina': {'Central Cordoba SdE'},
 }
 

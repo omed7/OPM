@@ -22,7 +22,6 @@ LEAGUE_SEASON_POLICIES = {
     "admiral-bundesliga": {"season_start_month": 7, "provider": "oddalerts"},
     "pro-league-belgium": {"season_start_month": 7, "provider": "oddalerts"},
     "superliga-denmark": {"season_start_month": 7, "provider": "oddalerts"},
-    "league-one": {"season_start_month": 7, "provider": "oddalerts"},
     "2-bundesliga": {"season_start_month": 7, "provider": "oddalerts"},
     "liga-mx": {"season_start_month": 7, "provider": "oddalerts"},
     "eredivisie": {"season_start_month": 7, "provider": "oddalerts"},
@@ -33,12 +32,8 @@ LEAGUE_SEASON_POLICIES = {
     "super-lig": {"season_start_month": 7, "provider": "oddalerts"},
     # OddAlerts: calendar-year competitions.
     "serie-a-brazil": {"season_start_month": 1, "provider": "oddalerts"},
-    "copa-libertadores": {"season_start_month": 1, "provider": "oddalerts"},
-    "j-league": {"season_start_month": 1, "provider": "oddalerts"},
     "eliteserien": {"season_start_month": 1, "provider": "oddalerts"},
-    "allsvenskan": {"season_start_month": 1, "provider": "oddalerts"},
     "mls": {"season_start_month": 1, "provider": "oddalerts"},
-    "veikkausliiga": {"season_start_month": 1, "provider": "oddalerts"},
 }
 
 
