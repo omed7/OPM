@@ -93,7 +93,6 @@ UNDERSTAT_LEAGUES = [
 ]
 
 ODDALERTS_LEAGUES = [
-    {"id": "superliga-argentina", "name": "Superliga", "slug": "superliga-argentina", "fixtures_path": "/leagues/argentina/liga-profesional-de-futbol/fixtures"},
     {"id": "admiral-bundesliga", "name": "Admiral Bundesliga", "slug": "admiral-bundesliga", "fixtures_path": "/leagues/austria/admiral-bundesliga/fixtures"},
     {"id": "pro-league-belgium", "name": "Pro League", "slug": "pro-league-belgium", "fixtures_path": "/leagues/belgium/pro-league/fixtures"},
     {"id": "serie-a-brazil", "name": "Serie A Brazil", "slug": "serie-a-brazil", "fixtures_path": "/leagues/brazil/serie-a/fixtures"},

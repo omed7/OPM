@@ -19,7 +19,6 @@ const LEAGUE_COUNTRIES = {
     'serie_a': { code: 'it', name: 'Italy' },
     'bundesliga': { code: 'de', name: 'Germany' },
     'ligue_1': { code: 'fr', name: 'France' },
-    'superliga-argentina': { code: 'ar', name: 'Argentina' },
     'admiral-bundesliga': { code: 'at', name: 'Austria' },
     'pro-league-belgium': { code: 'be', name: 'Belgium' },
     'serie-a-brazil': { code: 'br', name: 'Brazil' },

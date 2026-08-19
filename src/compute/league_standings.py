@@ -1,6 +1,7 @@
 """Build static, season-specific team prediction-accuracy standings."""
 
 from collections import defaultdict
+from math import isfinite
 
 from src.compute.methodology_config import (
     ACTIVE_METHODOLOGY,
@@ -45,7 +46,7 @@ def _empty_team():
     return {
         "matches_played": 0,
         "metrics": {
-            view: {metric: _empty_metric() for metric in METRICS}
+            view: {**{metric: _empty_metric() for metric in METRICS}, "xg_goals": _empty_metric()}
             for view in VIEWS
         },
     }
@@ -75,13 +76,12 @@ def _metric_output(metric_data):
 def _view_output(metrics):
     xg = _metric_output(metrics["xg"])
     goals = _metric_output(metrics["goals"])
-    if xg is None or goals is None:
-        xg_goals = None
-    else:
-        xg_goals = {
-            "total": _normalise_number((xg["total"] + goals["total"]) / 2),
-            "average": _normalise_number((xg["average"] + goals["average"]) / 2),
-        }
+    combined = _metric_output(metrics["xg_goals"])
+    xg_goals = (
+        None
+        if combined is None
+        else {"total": combined["total"], "average": combined["average"]}
+    )
     return {"xg": xg, "goals": goals, "xg_goals": xg_goals}
 
 
@@ -105,8 +105,24 @@ def _team_record(fixture, side):
     }
 
 
+def _has_usable_metric(record, metric):
+    fields = ("xg_for", "xg_against") if metric == "xg" else ("goals_for", "goals_against")
+    try:
+        return all(isfinite(float(record.get(field))) for field in fields)
+    except (TypeError, ValueError):
+        return False
+
+
+def _metric_history(history, metric):
+    """Keep only prior records with both values for the requested metric."""
+    return {
+        venue: [record for record in records if _has_usable_metric(record, metric)]
+        for venue, records in history.items()
+    }
+
+
 def _reconstruct_prediction(history_by_team, fixture):
-    """Replay the active formula without allowing any same-day or later result."""
+    """Replay each available metric without allowing any same-day or later result."""
     configuration = validate_methodology_configuration(
         ACTIVE_METHODOLOGY,
         LAST_8_RECENT_SHARE,
@@ -122,46 +138,33 @@ def _reconstruct_prediction(history_by_team, fixture):
         venue: filter_history_for_fixture(records, league, fixture_date)
         for venue, records in history_by_team[fixture["opponent"]].items()
     }
-    try:
-        xg = calculate_fixture_expectation(
-            home_history,
-            away_history,
-            methodology=configuration["active_methodology"],
-            metric="xg",
-            recent_share=configuration["recent_share"],
-            older_share=configuration["older_share"],
-        )
-    except (IncompleteHistoryError, MissingMetricDataError):
-        return None
 
-    prediction = {
-        "home_expected_xg": xg["home_expected"],
-        "away_expected_xg": xg["away_expected"],
-    }
-    try:
-        goals = calculate_fixture_expectation(
-            home_history,
-            away_history,
-            methodology=configuration["active_methodology"],
-            metric="goals",
-            recent_share=configuration["recent_share"],
-            older_share=configuration["older_share"],
-        )
-        prediction.update(
-            {
-                "home_expected_goals": goals["home_expected"],
-                "away_expected_goals": goals["away_expected"],
-            }
-        )
-    except (IncompleteHistoryError, MissingMetricDataError):
-        pass
-    return prediction
+    prediction = {}
+    for metric, home_key, away_key in (
+        ("xg", "home_expected_xg", "away_expected_xg"),
+        ("goals", "home_expected_goals", "away_expected_goals"),
+    ):
+        try:
+            expectation = calculate_fixture_expectation(
+                _metric_history(home_history, metric),
+                _metric_history(away_history, metric),
+                methodology=configuration["active_methodology"],
+                metric=metric,
+                recent_share=configuration["recent_share"],
+                older_share=configuration["older_share"],
+            )
+        except (IncompleteHistoryError, MissingMetricDataError):
+            continue
+        prediction[home_key] = expectation["home_expected"]
+        prediction[away_key] = expectation["away_expected"]
+    return prediction or None
 
 
 def _apply_prediction(season, fixture, prediction):
     home = season["teams"][fixture["team"]]
     away = season["teams"][fixture["opponent"]]
     used_metric = False
+    differences = {}
     for metric, actual_home_key, actual_away_key, prediction_home_key, prediction_away_key in (
         ("xg", "xg_for", "xg_against", "home_expected_xg", "away_expected_xg"),
         ("goals", "goals_for", "goals_against", "home_expected_goals", "away_expected_goals"),
@@ -177,14 +180,30 @@ def _apply_prediction(season, fixture, prediction):
         home_against = float(actual_away) - float(predicted_away)
         away_for = home_against
         away_against = home_for
-
-        _add_metric(home, "for", metric, home_for)
-        _add_metric(home, "against", metric, home_against)
-        _add_metric(home, "overall", metric, home_for + home_against)
-        _add_metric(away, "for", metric, away_for)
-        _add_metric(away, "against", metric, away_against)
-        _add_metric(away, "overall", metric, away_for + away_against)
+        differences[metric] = {
+            "home": {"for": home_for, "against": home_against, "overall": home_for + home_against},
+            "away": {"for": away_for, "against": away_against, "overall": away_for + away_against},
+        }
+        for view, difference in differences[metric]["home"].items():
+            _add_metric(home, view, metric, difference)
+        for view, difference in differences[metric]["away"].items():
+            _add_metric(away, view, metric, difference)
         used_metric = True
+
+    if set(differences) == set(METRICS):
+        for view in VIEWS:
+            _add_metric(
+                home,
+                view,
+                "xg_goals",
+                (differences["xg"]["home"][view] + differences["goals"]["home"][view]) / 2,
+            )
+            _add_metric(
+                away,
+                view,
+                "xg_goals",
+                (differences["xg"]["away"][view] + differences["goals"]["away"][view]) / 2,
+            )
     return used_metric
 
 

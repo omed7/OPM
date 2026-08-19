@@ -18,7 +18,6 @@ LEAGUE_SEASON_POLICIES = {
     "bundesliga": {"season_start_month": 7, "provider": "understat"},
     "ligue_1": {"season_start_month": 7, "provider": "understat"},
     # OddAlerts: summer/autumn-to-spring competitions and split-year stages.
-    "superliga-argentina": {"season_start_month": 7, "provider": "oddalerts"},
     "admiral-bundesliga": {"season_start_month": 7, "provider": "oddalerts"},
     "pro-league-belgium": {"season_start_month": 7, "provider": "oddalerts"},
     "superliga-denmark": {"season_start_month": 7, "provider": "oddalerts"},

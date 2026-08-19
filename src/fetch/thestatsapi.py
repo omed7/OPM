@@ -15,7 +15,6 @@ BASE_URL = "https://api.thestatsapi.com/api"
 
 # Each entry is explicit so resolution failures are reported rather than guessed.
 THESTATSAPI_COMPETITIONS = {
-    "superliga-argentina": (("Liga Profesional de Fútbol", "Argentina"),),
     "admiral-bundesliga": (("Austrian Bundesliga", "Austria"),),
     "pro-league-belgium": (("Pro League", "Belgium"),),
     "serie-a-brazil": (("Brasileirão Série A", "Brazil"),),

@@ -57,19 +57,6 @@ class TestSeasonPolicy(unittest.TestCase):
         self.assertEqual([record["id"] for record in eligible], ["current-season"])
         self.assertEqual(season_start_date("eliteserien", "2026-08-15"), "2026-01-01")
 
-    def test_split_year_league_uses_verified_july_boundary(self):
-        history = [
-            {"date": "2026-05-15", "id": "earlier-stage"},
-            {"date": "2026-07-26", "id": "current-stage"},
-        ]
-
-        eligible = filter_history_for_fixture(
-            history, "superliga-argentina", "2026-08-17"
-        )
-
-        self.assertEqual([record["id"] for record in eligible], ["current-stage"])
-        self.assertEqual(season_start_date("superliga-argentina", "2026-08-17"), "2026-07-01")
-
     def test_understat_provider_label_uses_derived_start_year(self):
         self.assertEqual(provider_season_label("premier_league", "2026-08-15"), "2026")
         self.assertEqual(provider_season_label("premier_league", "2027-01-15"), "2026")
