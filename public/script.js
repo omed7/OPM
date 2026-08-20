@@ -2,16 +2,28 @@ const FIXTURE_LIMIT = 10;
 const FAVORITES_STORAGE_KEY = 'opm:favorites:v1';
 
 let teamBadgeManifest = { badges: {} };
+let logoDialogState = { teamName: null, trigger: null };
 let appState = {
     fixtureData: null,
     standingsData: { leagues: [] },
     allFixtures: [],
     activeDate: null,
+    activeSearchQuery: '',
     activeTab: 'home',
     activeLeagueId: null,
     activeSeasonId: null,
     activeView: 'overall',
+    activeSort: 'combined',
+    activeSortDirection: 'asc',
 };
+
+const STANDINGS_SORT_OPTIONS = [
+    ['combined', 'Combined PA'],
+    ['xg', 'xG PA'],
+    ['goals', 'Goals PA'],
+    ['matches', 'Matches played'],
+    ['name', 'Team name'],
+];
 
 const LEAGUE_COUNTRIES = {
     'premier_league': { code: 'gb-eng', name: 'England' },
@@ -53,6 +65,12 @@ function currentLocalDateString() {
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 }
 
+function formatHomeDate(value) {
+    const date = new Date(`${value}T12:00:00`);
+    if (Number.isNaN(date.getTime())) return value || 'Selected date';
+    return date.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' });
+}
+
 function fixtureTimeObject(fixture) {
     const date = localDateString(fixture.date);
     const time = fixture.kickoff_time || '00:00';
@@ -84,11 +102,8 @@ function writeFavoriteKeys(keys) {
 function toggleFavorite(fixture) {
     const key = fixtureKey(fixture);
     const favorites = readFavoriteKeys();
-    if (favorites.has(key)) {
-        favorites.delete(key);
-    } else {
-        favorites.add(key);
-    }
+    if (favorites.has(key)) favorites.delete(key);
+    else favorites.add(key);
     writeFavoriteKeys(favorites);
     renderActiveTab();
 }
@@ -119,16 +134,14 @@ function formatPa(metric) {
 function getInitials(name) {
     if (!name) return '??';
     const parts = name.split(' ');
-    if (parts.length >= 2) {
-        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-    }
+    if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     return name.substring(0, 2).toUpperCase();
 }
 
 function getColor(name) {
     let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    for (let index = 0; index < name.length; index += 1) {
+        hash = name.charCodeAt(index) + ((hash << 5) - hash);
     }
     return `hsl(${Math.abs(hash % 360)}, 60%, 40%)`;
 }
@@ -143,22 +156,52 @@ function getTeamLogo(teamName) {
     }
 }
 
+function normalizeTeamName(value) {
+    return String(value || '')
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLocaleLowerCase()
+        .replace(/[^a-z0-9]/g, '');
+}
+
 function getManifestTeamBadge(leagueId, teamName) {
     const leagueBadges = teamBadgeManifest.badges && teamBadgeManifest.badges[leagueId];
-    const badge = leagueBadges && leagueBadges[teamName];
-    return badge && badge.badge_url ? badge : null;
+    if (!leagueBadges || !teamName) return null;
+    const direct = leagueBadges[teamName];
+    if (direct && direct.badge_url) return direct;
+
+    const normalizedName = normalizeTeamName(teamName);
+    const matches = Object.keys(leagueBadges)
+        .filter(candidate => normalizeTeamName(candidate) === normalizedName);
+    if (matches.length !== 1) return null;
+    const normalizedBadge = leagueBadges[matches[0]];
+    return normalizedBadge && normalizedBadge.badge_url ? normalizedBadge : null;
+}
+
+function getTeamBadgeUrl(leagueId, teamName) {
+    const localLogoUrl = getTeamLogo(teamName);
+    const manifestBadge = getManifestTeamBadge(leagueId, teamName);
+    return localLogoUrl || (manifestBadge && manifestBadge.badge_url) || null;
 }
 
 function renderBadgeHtml(leagueId, teamName) {
     const initials = getInitials(teamName);
     const color = getColor(teamName);
-    const localLogoUrl = getTeamLogo(teamName);
-    const manifestBadge = getManifestTeamBadge(leagueId, teamName);
-    const logoUrl = localLogoUrl || (manifestBadge && manifestBadge.badge_url);
+    const logoUrl = getTeamBadgeUrl(leagueId, teamName);
     if (logoUrl) {
-        return `<div class="team-badge" data-team="${teamName}" style="background-color: transparent;" title="Click to change team logo"><img src="${logoUrl}" alt="${teamName} badge" onerror="this.remove(); this.parentElement.style.backgroundColor='${color}'; this.parentElement.textContent='${initials}';"></div>`;
+        return `<button class="team-badge" type="button" data-team="${teamName}" style="background-color: transparent;" title="Customize ${teamName} crest" aria-label="Customize ${teamName} crest"><img src="${logoUrl}" alt="${teamName} crest" onerror="this.remove(); this.parentElement.style.backgroundColor='${color}'; this.parentElement.textContent='${initials}';"></button>`;
     }
-    return `<div class="team-badge" data-team="${teamName}" style="background-color: ${color}" title="Click to change team logo">${initials}</div>`;
+    return `<button class="team-badge" type="button" data-team="${teamName}" style="background-color: ${color}" title="Customize ${teamName} crest" aria-label="Customize ${teamName} crest">${initials}</button>`;
+}
+
+function renderStandingsTeamHtml(leagueId, teamName) {
+    const initials = getInitials(teamName);
+    const color = getColor(teamName);
+    const logoUrl = getTeamBadgeUrl(leagueId, teamName);
+    const crest = logoUrl
+        ? `<span class="standings-team-crest" aria-hidden="true"><img src="${logoUrl}" alt="" onerror="this.remove(); this.parentElement.style.backgroundColor='${color}'; this.parentElement.textContent='${initials}';"></span>`
+        : `<span class="standings-team-crest standings-team-initials" style="background-color: ${color}" aria-hidden="true">${initials}</span>`;
+    return `<span class="standings-team">${crest}<span>${teamName}</span></span>`;
 }
 
 function fixtureDetailsHtml(fixture, scaleMax, metric) {
@@ -178,10 +221,10 @@ function fixtureDetailsHtml(fixture, scaleMax, metric) {
         }
         return `
             <div class="fixture-detail-result">
-                <div><span>FT Score</span><strong>${goals}</strong></div>
+                <div><span>FT score</span><strong>${goals}</strong></div>
                 ${actualMetric}
             </div>
-            <div class="prediction-history">${predictionParts.length ? predictionParts.join(' | ') : 'No stored pre-match prediction.'}</div>
+            <div class="prediction-history">${predictionParts.length ? predictionParts.join(' · ') : 'No stored pre-match prediction.'}</div>
         `;
     }
 
@@ -193,7 +236,7 @@ function fixtureDetailsHtml(fixture, scaleMax, metric) {
     const awayPercent = typeof awayExpected === 'number' ? Math.max(0, Math.min(100, (awayExpected / safeScale) * 100)) : 0;
     const homeHistoryKey = Object.keys(fixture).find(key => key.startsWith('home_last_') && key.endsWith('_matches'));
     const awayHistoryKey = Object.keys(fixture).find(key => key.startsWith('away_last_') && key.endsWith('_matches'));
-    const historyHtml = (records, side) => (records || []).map(match => {
+    const historyHtml = records => (records || []).map(match => {
         const valueFor = match[`${metric}_for`];
         const valueAgainst = match[`${metric}_against`];
         return `<div class="history-item">${formatNumber(valueFor)} - ${formatNumber(valueAgainst)} vs ${match.opponent}</div>`;
@@ -211,8 +254,8 @@ function fixtureDetailsHtml(fixture, scaleMax, metric) {
             <div class="xg-bar-container away-bar-container"><div class="xg-bar" style="width: ${awayPercent}%"></div></div>
         </div>
         <div class="match-history">
-            <div class="history-list home">${historyHtml(fixture[homeHistoryKey], 'home')}</div>
-            <div class="history-list away">${historyHtml(fixture[awayHistoryKey], 'away')}</div>
+            <div class="history-list home">${historyHtml(fixture[homeHistoryKey])}</div>
+            <div class="history-list away">${historyHtml(fixture[awayHistoryKey])}</div>
         </div>
     `;
 }
@@ -224,8 +267,6 @@ function createFixtureCard(fixture, scaleMax, metric) {
     function renderCard() {
         const favorite = isFavorite(fixture);
         card.className = `fixture-card ${expanded ? 'expanded' : 'compact'}`;
-        card.setAttribute('aria-expanded', String(expanded));
-        card.setAttribute('tabindex', '0');
         card.innerHTML = `
             <div class="fixture-summary">
                 <div class="team">
@@ -233,8 +274,8 @@ function createFixtureCard(fixture, scaleMax, metric) {
                     <div class="team-name">${fixture.home_team}</div>
                 </div>
                 <div class="fixture-time" aria-label="Kickoff ${formatSourceKickoff(fixture)}">
-                    <span>Kickoff</span>
-                    <strong>${formatSourceKickoff(fixture)}</strong>
+                    <span>${fixture.status === 'FINISHED' ? 'Final' : 'Kickoff'}</span>
+                    <strong>${fixture.status === 'FINISHED' ? `${fixture.home_goals ?? '—'} - ${fixture.away_goals ?? '—'}` : formatSourceKickoff(fixture)}</strong>
                 </div>
                 <div class="team">
                     ${renderBadgeHtml(fixture.leagueId, fixture.away_team)}
@@ -243,30 +284,31 @@ function createFixtureCard(fixture, scaleMax, metric) {
             </div>
             <div class="fixture-card-actions">
                 <button class="favorite-toggle" type="button" aria-pressed="${favorite}" aria-label="${favorite ? 'Remove' : 'Save'} ${fixture.home_team} versus ${fixture.away_team} ${favorite ? 'from' : 'to'} favorites">${favorite ? 'Saved' : 'Save'}</button>
-                <span class="fixture-detail-hint">${expanded ? 'Hide details' : 'Show details'}</span>
+                <button class="fixture-details-toggle" type="button" aria-expanded="${expanded}" aria-label="${expanded ? 'Hide' : 'Show'} details for ${fixture.home_team} versus ${fixture.away_team}">${expanded ? 'Hide details' : 'View details'} <span class="details-toggle-icon" aria-hidden="true">⌄</span></button>
             </div>
             <div class="fixture-details ${expanded ? '' : 'hidden'}">${expanded ? fixtureDetailsHtml(fixture, scaleMax, metric) : ''}</div>
         `;
     }
 
+    function toggleDetails() {
+        expanded = !expanded;
+        renderCard();
+    }
+
     renderCard();
     card.addEventListener('click', event => {
         const target = event.target;
-        if (target && typeof target.closest === 'function' && target.closest('.team-badge')) return;
-        if (target && typeof target.closest === 'function' && target.closest('.favorite-toggle')) {
+        if (!target || typeof target.closest !== 'function') return;
+        if (target.closest('.favorite-toggle')) {
             if (typeof event.preventDefault === 'function') event.preventDefault();
             if (typeof event.stopPropagation === 'function') event.stopPropagation();
             toggleFavorite(fixture);
             return;
         }
-        expanded = !expanded;
-        renderCard();
-    });
-    card.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ') {
+        if (target.closest('.fixture-details-toggle')) {
             if (typeof event.preventDefault === 'function') event.preventDefault();
-            expanded = !expanded;
-            renderCard();
+            if (typeof event.stopPropagation === 'function') event.stopPropagation();
+            toggleDetails();
         }
     });
     return card;
@@ -281,17 +323,68 @@ function renderDateStrip() {
         date.setDate(today.getDate() + offset);
         const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
         const button = document.createElement('button');
-        button.className = `date-button ${dateString === appState.activeDate ? 'active' : ''}`;
+        const isToday = offset === 0;
+        button.className = `date-button ${isToday ? 'today' : ''} ${dateString === appState.activeDate ? 'active' : ''}`;
         button.setAttribute('type', 'button');
         button.setAttribute('aria-pressed', String(dateString === appState.activeDate));
         const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        button.innerHTML = `<div class="day-name">${dayNames[date.getDay()]}</div><div class="day-num">${date.getDate()}</div>`;
+        const accessibleDate = date.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+        button.setAttribute('aria-label', isToday ? `Today, ${accessibleDate}` : accessibleDate);
+        button.innerHTML = isToday
+            ? '<div class="day-name">Today</div>'
+            : `<div class="day-name">${dayNames[date.getDay()]}</div><div class="day-num">${date.getDate()}</div>`;
         button.addEventListener('click', () => {
             appState.activeDate = dateString;
+            appState.activeSearchQuery = '';
             renderActiveTab();
         });
         dateStrip.appendChild(button);
     }
+}
+
+function fixtureMatchesSearch(fixture, query) {
+    const normalized = String(query || '').trim().toLocaleLowerCase();
+    if (!normalized) return true;
+    return [fixture.home_team, fixture.away_team, fixture.leagueName]
+        .some(value => String(value || '').toLocaleLowerCase().includes(normalized));
+}
+
+function createHomeToolbar(totalCount, visibleCount) {
+    const toolbar = document.createElement('section');
+    toolbar.className = 'home-toolbar';
+    const countText = appState.activeSearchQuery
+        ? `${visibleCount} of ${totalCount} matches`
+        : `${totalCount} ${totalCount === 1 ? 'match' : 'matches'}`;
+
+    const copy = document.createElement('div');
+    copy.className = 'home-toolbar-copy';
+    copy.innerHTML = `<p class="eyebrow">Match centre</p><h2>${formatHomeDate(appState.activeDate)} <span class="fixture-count">${countText}</span></h2><p>Browse scheduled and completed fixtures by competition.</p>`;
+
+    const searchField = document.createElement('div');
+    searchField.className = 'home-search-field';
+    const label = document.createElement('label');
+    label.setAttribute('for', 'home-search');
+    label.textContent = 'Find a fixture';
+    const input = document.createElement('input');
+    input.id = 'home-search';
+    input.className = 'search-input';
+    input.setAttribute('type', 'search');
+    input.setAttribute('autocomplete', 'off');
+    input.setAttribute('placeholder', 'Team or league');
+    input.value = appState.activeSearchQuery;
+    const help = document.createElement('p');
+    help.className = 'home-search-help';
+    help.textContent = 'Searches the selected date only.';
+    input.addEventListener('input', event => {
+        appState.activeSearchQuery = event.target.value || '';
+        renderActiveTab();
+    });
+    searchField.appendChild(label);
+    searchField.appendChild(input);
+    searchField.appendChild(help);
+    toolbar.appendChild(copy);
+    toolbar.appendChild(searchField);
+    return toolbar;
 }
 
 function renderHome() {
@@ -302,13 +395,21 @@ function renderHome() {
     container.innerHTML = '';
 
     const fixturesOnDate = appState.allFixtures.filter(fixture => fixture.localDateStr === appState.activeDate);
-    if (fixturesOnDate.length === 0) {
-        container.innerHTML = '<div class="no-fixtures">No fixtures on this date.</div>';
+    const visibleFixtures = fixturesOnDate.filter(fixture => fixtureMatchesSearch(fixture, appState.activeSearchQuery));
+    container.appendChild(createHomeToolbar(fixturesOnDate.length, visibleFixtures.length));
+
+    if (fixturesOnDate.length === 0 || visibleFixtures.length === 0) {
+        const state = document.createElement('div');
+        state.className = 'no-fixtures';
+        state.innerHTML = fixturesOnDate.length === 0
+            ? '<div><strong>No fixtures on this date.</strong>Select another date to view available matches.</div>'
+            : '<div><strong>No fixtures match this search.</strong>Try a different team or league name.</div>';
+        container.appendChild(state);
         return;
     }
 
     const grouped = {};
-    fixturesOnDate.forEach(fixture => {
+    visibleFixtures.forEach(fixture => {
         if (!grouped[fixture.leagueId]) grouped[fixture.leagueId] = { name: fixture.leagueName, fixtures: [] };
         grouped[fixture.leagueId].fixtures.push(fixture);
     });
@@ -318,7 +419,7 @@ function renderHome() {
         const section = document.createElement('section');
         section.className = 'league-section';
         const storageKey = `league_expansion:${appState.activeDate}:${leagueId}`;
-        const open = localStorage.getItem(storageKey) === 'open';
+        const open = localStorage.getItem(storageKey) !== 'closed';
         const header = document.createElement('button');
         header.className = 'league-toggle';
         header.setAttribute('type', 'button');
@@ -359,9 +460,80 @@ function selectedLeagueSummary() {
     return (appState.standingsData.leagues || []).find(league => league.id === appState.activeLeagueId) || null;
 }
 
+function standingSortValue(team, viewId, sortId) {
+    if (sortId === 'name') return team.name || '';
+    if (sortId === 'matches') return Number.isFinite(team.matches_played) ? team.matches_played : null;
+    const metricId = { combined: 'xg_goals', xg: 'xg', goals: 'goals' }[sortId];
+    const metric = team.views && team.views[viewId] && team.views[viewId][metricId];
+    return metric && Number.isFinite(metric.average) ? Math.abs(metric.average) : null;
+}
+
+function sortStandingTeams(teams) {
+    return [...teams].sort((left, right) => {
+        const leftValue = standingSortValue(left, appState.activeView, appState.activeSort);
+        const rightValue = standingSortValue(right, appState.activeView, appState.activeSort);
+        if (appState.activeSort === 'name') {
+            const comparison = leftValue.localeCompare(rightValue);
+            return appState.activeSortDirection === 'asc' ? comparison : -comparison;
+        }
+        const leftMissing = leftValue === null;
+        const rightMissing = rightValue === null;
+        if (leftMissing || rightMissing) {
+            if (leftMissing && rightMissing) return left.name.localeCompare(right.name);
+            return leftMissing ? 1 : -1;
+        }
+        const comparison = leftValue - rightValue;
+        if (comparison !== 0) return appState.activeSortDirection === 'asc' ? comparison : -comparison;
+        return left.name.localeCompare(right.name);
+    });
+}
+
+function sortDirectionLabel() {
+    if (appState.activeSort === 'name') return appState.activeSortDirection === 'asc' ? 'A–Z' : 'Z–A';
+    if (appState.activeSort === 'matches') return appState.activeSortDirection === 'asc' ? 'Fewest first' : 'Most first';
+    return appState.activeSortDirection === 'asc' ? 'Closest to zero' : 'Largest magnitude';
+}
+
+function renderStandingsSortControls() {
+    const controls = document.createElement('div');
+    controls.className = 'standings-sort-controls';
+    const label = document.createElement('label');
+    label.setAttribute('for', 'standings-sort');
+    label.textContent = 'Sort by';
+    const select = document.createElement('select');
+    select.id = 'standings-sort';
+    select.className = 'standings-sort-select';
+    select.setAttribute('aria-label', 'Sort League table by');
+    STANDINGS_SORT_OPTIONS.forEach(([value, labelText]) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = labelText;
+        if (value === appState.activeSort) option.setAttribute('selected', 'selected');
+        select.appendChild(option);
+    });
+    select.value = appState.activeSort;
+    select.addEventListener('change', event => {
+        appState.activeSort = event.target.value;
+        renderActiveTab();
+    });
+    const direction = document.createElement('button');
+    direction.className = 'sort-direction-button';
+    direction.setAttribute('type', 'button');
+    direction.setAttribute('aria-label', `Sort direction: ${sortDirectionLabel()}`);
+    direction.textContent = sortDirectionLabel();
+    direction.addEventListener('click', () => {
+        appState.activeSortDirection = appState.activeSortDirection === 'asc' ? 'desc' : 'asc';
+        renderActiveTab();
+    });
+    controls.appendChild(label);
+    controls.appendChild(select);
+    controls.appendChild(direction);
+    return controls;
+}
+
 function renderLeagueList() {
     const container = document.getElementById('fixtures-container');
-    container.innerHTML = '<h2 class="tab-heading">Leagues</h2><p class="tab-description">Choose a league to view team prediction accuracy by season.</p>';
+    container.innerHTML = '<p class="eyebrow">Accuracy explorer</p><h2 class="tab-heading">League prediction accuracy</h2><p class="tab-description">Choose a league to inspect signed actual-minus-predicted performance by retained season.</p>';
     const list = document.createElement('div');
     list.className = 'league-directory';
     const options = allLeagueOptions();
@@ -378,6 +550,8 @@ function renderLeagueList() {
             const summary = selectedLeagueSummary();
             appState.activeSeasonId = summary && summary.seasons.length ? summary.seasons[0].id : null;
             appState.activeView = 'overall';
+            appState.activeSort = 'combined';
+            appState.activeSortDirection = 'asc';
             renderActiveTab();
         });
         list.appendChild(button);
@@ -477,6 +651,7 @@ function renderLeagueDetail() {
         viewControls.appendChild(button);
     });
     container.appendChild(viewControls);
+    container.appendChild(renderStandingsSortControls());
 
     const hasPredictionAccuracy = selectedSeason.teams.some(team => team.views.overall.xg || team.views.overall.goals);
     if (!hasPredictionAccuracy) {
@@ -486,22 +661,18 @@ function renderLeagueDetail() {
         container.appendChild(note);
     }
 
-    const teams = [...selectedSeason.teams].sort((left, right) => {
-        const leftMetric = left.views[appState.activeView].xg_goals;
-        const rightMetric = right.views[appState.activeView].xg_goals;
-        const leftValue = leftMetric ? Math.abs(leftMetric.average) : Number.POSITIVE_INFINITY;
-        const rightValue = rightMetric ? Math.abs(rightMetric.average) : Number.POSITIVE_INFINITY;
-        return leftValue - rightValue || left.name.localeCompare(right.name);
-    });
+    const teams = sortStandingTeams(selectedSeason.teams);
     const tableWrapper = document.createElement('div');
     tableWrapper.className = 'standings-table-wrapper';
+    tableWrapper.setAttribute('tabindex', '0');
+    tableWrapper.setAttribute('aria-label', `${title.textContent} prediction accuracy table`);
     const table = document.createElement('table');
     table.className = 'standings-table';
     table.innerHTML = `
-        <thead><tr><th scope="col">Team</th><th scope="col">Matches played</th><th scope="col">xG PA</th><th scope="col">Goals PA</th><th scope="col">xG/G PA</th></tr></thead>
+        <thead><tr><th scope="col">Team</th><th scope="col">Matches</th><th scope="col">xG PA</th><th scope="col">Goals PA</th><th scope="col">Combined PA</th></tr></thead>
         <tbody>${teams.map(team => {
             const view = team.views[appState.activeView];
-            return `<tr><th scope="row">${team.name}</th><td>${team.matches_played}</td><td>${formatPa(view.xg)}</td><td>${formatPa(view.goals)}</td><td>${formatPa(view.xg_goals)}</td></tr>`;
+            return `<tr><th scope="row">${renderStandingsTeamHtml(appState.activeLeagueId, team.name)}</th><td>${team.matches_played}</td><td>${formatPa(view.xg)}</td><td>${formatPa(view.goals)}</td><td>${formatPa(view.xg_goals)}</td></tr>`;
         }).join('')}</tbody>
     `;
     tableWrapper.appendChild(table);
@@ -511,24 +682,24 @@ function renderLeagueDetail() {
 function renderLeague() {
     const dateStrip = document.getElementById('date-strip');
     dateStrip.className = 'date-strip hidden';
-    if (!appState.activeLeagueId) {
-        renderLeagueList();
-    } else {
-        renderLeagueDetail();
-    }
+    if (!appState.activeLeagueId) renderLeagueList();
+    else renderLeagueDetail();
 }
 
 function renderFavorites() {
     const container = document.getElementById('fixtures-container');
     const dateStrip = document.getElementById('date-strip');
     dateStrip.className = 'date-strip hidden';
-    container.innerHTML = '<h2 class="tab-heading">Favorites</h2><p class="tab-description">Saved fixtures are kept only in this browser.</p>';
     const favorites = appState.allFixtures.filter(isFavorite).sort((left, right) => left.timeObj - right.timeObj);
+    container.innerHTML = `<div class="favorites-heading-row"><div><p class="eyebrow">Your match list</p><h2 class="tab-heading">Favorites</h2></div><span class="favorites-count">${favorites.length} saved</span></div><p class="tab-description">Saved fixtures are kept only in this browser.</p>`;
     if (!favorites.length) {
-        container.innerHTML += '<div class="no-fixtures">No favorite fixtures yet. Use Save on a Home fixture to track it here.</div>';
+        container.innerHTML += '<div class="no-fixtures"><div><strong>No saved fixtures yet.</strong>Use Save on a Home fixture to keep it here.</div></div>';
         return;
     }
-    favorites.forEach(fixture => container.appendChild(createFixtureCard(fixture, 3, fixture.metric || 'xg')));
+    const grid = document.createElement('div');
+    grid.className = 'favorites-grid';
+    favorites.forEach(fixture => grid.appendChild(createFixtureCard(fixture, 3, fixture.metric || 'xg')));
+    container.appendChild(grid);
 }
 
 function renderActiveTab() {
@@ -616,35 +787,134 @@ async function init() {
         renderActiveTab();
     } catch (error) {
         console.error(error);
-        container.innerHTML = '<div class="no-fixtures">Error loading fixtures. Please try again later.</div>';
+        container.innerHTML = '<div class="no-fixtures"><div><strong>Fixture data could not load.</strong>Please refresh and try again.</div></div>';
     }
+}
+
+function readLocalTeamLogos() {
+    try {
+        const stored = JSON.parse(localStorage.getItem('team_logos') || '{}');
+        return stored && typeof stored === 'object' ? stored : {};
+    } catch (error) {
+        return {};
+    }
+}
+
+function hideLogoDialog() {
+    const dialog = document.getElementById('logo-dialog');
+    if (!dialog) return;
+    dialog.hidden = true;
+    dialog.setAttribute('aria-hidden', 'true');
+    const error = document.getElementById('logo-dialog-error');
+    if (error) error.hidden = true;
+    const trigger = logoDialogState.trigger;
+    logoDialogState = { teamName: null, trigger: null };
+    if (trigger && typeof trigger.focus === 'function') trigger.focus();
+}
+
+function showLogoDialog(teamName, trigger) {
+    const dialog = document.getElementById('logo-dialog');
+    const teamLabel = document.getElementById('logo-dialog-team');
+    const input = document.getElementById('logo-url');
+    const error = document.getElementById('logo-dialog-error');
+    if (!dialog || !teamLabel || !input) return;
+    logoDialogState = { teamName, trigger };
+    const teamLogos = readLocalTeamLogos();
+    teamLabel.textContent = teamName;
+    input.value = teamLogos[teamName] || '';
+    if (error) error.hidden = true;
+    dialog.hidden = false;
+    dialog.setAttribute('aria-hidden', 'false');
+    if (typeof input.focus === 'function') input.focus();
+}
+
+function saveLocalTeamLogo(teamName, value) {
+    const teamLogos = readLocalTeamLogos();
+    if (value) teamLogos[teamName] = value;
+    else delete teamLogos[teamName];
+    localStorage.setItem('team_logos', JSON.stringify(teamLogos));
+}
+
+function setupLogoDialog() {
+    const dialog = document.getElementById('logo-dialog');
+    const form = document.getElementById('logo-form');
+    const input = document.getElementById('logo-url');
+    const close = document.getElementById('logo-dialog-close');
+    const cancel = document.getElementById('logo-dialog-cancel');
+    const remove = document.getElementById('logo-remove');
+    const error = document.getElementById('logo-dialog-error');
+    if (!dialog || !form || !input) return;
+
+    const closeDialog = () => hideLogoDialog();
+    if (close) close.addEventListener('click', closeDialog);
+    if (cancel) cancel.addEventListener('click', closeDialog);
+    dialog.addEventListener('click', event => {
+        const target = event.target;
+        if (target && typeof target.closest === 'function' && target.closest('[data-logo-dialog-close="true"]')) closeDialog();
+    });
+    if (remove) remove.addEventListener('click', () => {
+        if (!logoDialogState.teamName) return;
+        try {
+            saveLocalTeamLogo(logoDialogState.teamName, '');
+            hideLogoDialog();
+            renderActiveTab();
+        } catch (storageError) {
+            if (error) {
+                error.textContent = 'Your browser could not save that preference.';
+                error.hidden = false;
+            }
+        }
+    });
+    form.addEventListener('submit', event => {
+        if (typeof event.preventDefault === 'function') event.preventDefault();
+        if (!logoDialogState.teamName) return;
+        const value = String(input.value || '').trim();
+        if (value) {
+            try {
+                const url = new URL(value);
+                if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Unsupported protocol');
+            } catch (urlError) {
+                if (error) {
+                    error.textContent = 'Enter a valid http or https image URL.';
+                    error.hidden = false;
+                }
+                return;
+            }
+        }
+        try {
+            saveLocalTeamLogo(logoDialogState.teamName, value);
+            hideLogoDialog();
+            renderActiveTab();
+        } catch (storageError) {
+            if (error) {
+                error.textContent = 'Your browser could not save that preference.';
+                error.hidden = false;
+            }
+        }
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && !dialog.hidden) hideLogoDialog();
+    });
 }
 
 function setupLogoClickHandlers() {
     document.body.addEventListener('click', event => {
         const badge = event.target && typeof event.target.closest === 'function' ? event.target.closest('.team-badge') : null;
         if (!badge) return;
+        if (typeof event.preventDefault === 'function') event.preventDefault();
         const teamName = badge.dataset.team;
-        if (!teamName) return;
-        let teamLogos = {};
-        try {
-            teamLogos = JSON.parse(localStorage.getItem('team_logos') || '{}');
-        } catch (error) {
-            teamLogos = {};
-        }
-        const currentLogoUrl = teamLogos[teamName] || '';
-        const newLogoUrl = prompt(`Enter custom logo URL for ${teamName} (leave blank to remove):`, currentLogoUrl);
-        if (newLogoUrl === null) return;
-        const trimmedLogoUrl = newLogoUrl.trim();
-        if (trimmedLogoUrl) teamLogos[teamName] = trimmedLogoUrl;
-        else delete teamLogos[teamName];
-        try {
-            localStorage.setItem('team_logos', JSON.stringify(teamLogos));
-        } catch (error) {
-            return;
-        }
-        renderActiveTab();
+        if (teamName) showLogoDialog(teamName, badge);
     });
+}
+
+function syncThemeButton() {
+    const toggleBtn = document.getElementById('theme-toggle');
+    if (!toggleBtn) return;
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    toggleBtn.setAttribute('aria-pressed', String(dark));
+    toggleBtn.setAttribute('aria-label', dark ? 'Enable light theme' : 'Enable dark theme');
+    const icon = typeof toggleBtn.querySelector === 'function' ? toggleBtn.querySelector('.theme-toggle-icon') : null;
+    if (icon) icon.textContent = dark ? '☼' : '◐';
 }
 
 function setupTheme() {
@@ -652,17 +922,18 @@ function setupTheme() {
     if (!toggleBtn) return;
     const currentTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', currentTheme);
-    toggleBtn.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+    syncThemeButton();
     toggleBtn.addEventListener('click', () => {
         const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
-        toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+        syncThemeButton();
     });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     init();
     setupTheme();
+    setupLogoDialog();
     setupLogoClickHandlers();
 });

@@ -1,41 +1,76 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Football xG Predictions</title>
+    <meta name="theme-color" content="#0b1220">
+    <title>OPM Football Predictions</title>
     <link rel="stylesheet" href="style.css">
     <script>
-        // Set theme immediately to avoid flash of light mode
+        // Set theme immediately to avoid flash of light mode.
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 </head>
 <body>
-    <header>
-        <h1>Football Predictions</h1>
-        <div class="header-right">
-
-            <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">🌙</button>
+    <header class="app-header">
+        <div class="brand-lockup">
+            <p class="eyebrow">OPM · Football data</p>
+            <h1>Prediction Monitor</h1>
         </div>
+        <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Enable dark theme" aria-pressed="false">
+            <span class="theme-toggle-icon" aria-hidden="true">◐</span>
+            <span class="theme-toggle-label">Theme</span>
+        </button>
     </header>
 
     <div id="date-strip" class="date-strip" aria-label="Fixture dates"></div>
-    <main id="fixtures-container" tabindex="-1">
-        <!-- Active tab content will be loaded here -->
-        <div class="loading">Loading fixtures...</div>
+    <main id="fixtures-container" tabindex="-1" aria-live="polite">
+        <div class="loading">Loading fixture data…</div>
     </main>
 
-    <nav class="bottom-nav" aria-label="Primary navigation">
-        <button id="home-tab" class="bottom-nav-item" type="button" role="tab" aria-selected="true">Home</button>
-        <button id="league-tab" class="bottom-nav-item" type="button" role="tab" aria-selected="false">League</button>
-        <button id="favorite-tab" class="bottom-nav-item" type="button" role="tab" aria-selected="false">Favorite</button>
+    <nav class="bottom-nav" aria-label="Primary navigation" role="tablist">
+        <button id="home-tab" class="bottom-nav-item" type="button" role="tab" aria-selected="true">
+            <span class="nav-icon" aria-hidden="true">⌂</span><span>Home</span>
+        </button>
+        <button id="league-tab" class="bottom-nav-item" type="button" role="tab" aria-selected="false">
+            <span class="nav-icon" aria-hidden="true">▤</span><span>League</span>
+        </button>
+        <button id="favorite-tab" class="bottom-nav-item" type="button" role="tab" aria-selected="false">
+            <span class="nav-icon" aria-hidden="true">★</span><span>Favorites</span>
+        </button>
     </nav>
 
     <footer>
         <p id="version-tag"></p>
         <p id="badge-attribution"></p>
     </footer>
+
+    <div id="logo-dialog" class="logo-dialog" hidden aria-hidden="true">
+        <div class="logo-dialog-backdrop" data-logo-dialog-close="true"></div>
+        <section class="logo-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="logo-dialog-title" aria-describedby="logo-dialog-description">
+            <div class="logo-dialog-heading">
+                <div>
+                    <p class="eyebrow">Local browser preference</p>
+                    <h2 id="logo-dialog-title">Customize team crest</h2>
+                </div>
+                <button id="logo-dialog-close" class="icon-button" type="button" aria-label="Close crest customization">×</button>
+            </div>
+            <p id="logo-dialog-description">Add an image URL for <strong id="logo-dialog-team"></strong>. This preference is saved only in this browser.</p>
+            <form id="logo-form" novalidate>
+                <label for="logo-url">Image URL</label>
+                <input id="logo-url" name="logo-url" type="url" inputmode="url" autocomplete="url" placeholder="https://example.com/crest.png">
+                <p id="logo-dialog-error" class="form-error" role="alert" hidden></p>
+                <div class="logo-dialog-actions">
+                    <button id="logo-remove" class="text-button danger" type="button">Remove custom crest</button>
+                    <span class="dialog-action-spacer"></span>
+                    <button id="logo-dialog-cancel" class="secondary-button" type="button">Cancel</button>
+                    <button class="primary-button" type="submit">Save crest</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
