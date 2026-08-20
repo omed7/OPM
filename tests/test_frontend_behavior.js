@@ -178,6 +178,22 @@ function predictionFixture() {
     };
 }
 
+function goalsOnlyFinishedFixture() {
+    return {
+        home_team: 'Goals Home',
+        away_team: 'Goals Away',
+        date: '2026-08-16',
+        kickoff_time: '18:00',
+        status: 'FINISHED',
+        home_goals: 2,
+        away_goals: 1,
+        home_xg: null,
+        away_xg: null,
+        home_expected_goals: 1.4,
+        away_expected_goals: 0.9,
+    };
+}
+
 function standingsFixture() {
     const unavailable = { xg: null, goals: null, xg_goals: null };
     return {
@@ -264,6 +280,21 @@ async function testHomeDefaultsToCompactFixtureDetailsAndFavorites() {
     assert.deepStrictEqual(errors, []);
 }
 
+async function testGoalsOnlyFinishedFixtureExplainsMissingXg() {
+    const app = await boot({
+        data: { leagues: [{ id: 'admiral-bundesliga', name: 'Admiral Bundesliga', metric: 'goals', fixtures: [goalsOnlyFinishedFixture()] }] },
+    });
+    const card = homeCard(app.elements);
+
+    card.click();
+    assert.match(card.innerHTML, /FT Score/);
+    assert.match(card.innerHTML, /2 - 1/);
+    assert.match(card.innerHTML, /Goals-only result/);
+    assert.match(card.innerHTML, /xG unavailable/);
+    assert.doesNotMatch(card.innerHTML, /Actual xG/);
+    assert.deepStrictEqual(app.errors, []);
+}
+
 async function testLeagueSeasonNavigationAndPaModes() {
     const app = await boot({
         data: { leagues: [{ id: 'premier_league', name: 'Premier League', metric: 'xg', fixtures: [predictionFixture()] }] },
@@ -330,6 +361,7 @@ async function testEmptyArtifactAndDataLoadError() {
 
 (async () => {
     await testHomeDefaultsToCompactFixtureDetailsAndFavorites();
+    await testGoalsOnlyFinishedFixtureExplainsMissingXg();
     await testLeagueSeasonNavigationAndPaModes();
     await testBadgeManifestAttributionAndFallback();
     await testEmptyArtifactAndDataLoadError();
