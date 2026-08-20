@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "4f0a8c7",
-    "generated_at": "2026-08-20T00:21:30Z"
+    "version": "689e77e",
+    "generated_at": "2026-08-20T06:59:24Z"
   },
   "leagues": [
     {
@@ -15,6 +15,22 @@
       "name": "La Liga",
       "metric": "xg",
       "fixtures": [
+        {
+          "home_team": "Atletico Madrid",
+          "away_team": "Malaga",
+          "date": "2026-08-19",
+          "home_goals": 2,
+          "away_goals": 0,
+          "home_xg": 1.34391,
+          "away_xg": 0.229576,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
         {
           "home_team": "Deportivo La Coruna",
           "away_team": "Elche",
