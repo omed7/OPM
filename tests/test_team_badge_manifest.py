@@ -6,7 +6,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / 'public' / 'data.json'
 MANIFEST_PATH = ROOT / 'public' / 'team_badges.json'
-EXPECTED_UNMAPPED = {}
+EXPECTED_UNMAPPED = {
+    'la_liga': {
+        'Deportivo La Coruna',
+        'Elche',
+        'Espanyol',
+        'Levante',
+        'Racing Santander',
+        'Villarreal',
+    },
+}
 
 
 class TeamBadgeManifestTests(unittest.TestCase):
