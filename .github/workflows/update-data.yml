@@ -58,6 +58,9 @@ jobs:
           python3 src/validate_public_data.py public/data.json
           python3 src/validate_league_standings.py public/league_standings.json
 
+      - name: Validate generated badge coverage
+        run: python3 -m unittest tests/test_team_badge_manifest.py
+
       - name: Check if generated artifacts changed
         id: check_changed
         run: |
