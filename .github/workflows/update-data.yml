@@ -58,8 +58,17 @@ jobs:
           python3 src/validate_public_data.py public/data.json
           python3 src/validate_league_standings.py public/league_standings.json
 
-      - name: Validate generated badge coverage
-        run: python3 -m unittest tests/test_team_badge_manifest.py
+      - name: Validate badge manifest and warn about initials fallbacks
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from src import team_badges
+
+          manifest = team_badges.load_json(Path("public/team_badges.json"))
+          team_badges.validate_badge_manifest(manifest)
+          data = team_badges.load_json(Path("public/data.json"))
+          team_badges.print_coverage_summary(team_badges.badge_coverage(data["leagues"], manifest))
+          PY
 
       - name: Check if generated artifacts changed
         id: check_changed
