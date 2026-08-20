@@ -6,7 +6,6 @@ THESTATSAPI_CUTOFF = date(2026, 8, 10)
 
 RETAINED_ODDALERTS_LEAGUES = frozenset(
     {
-        "superliga-argentina",
         "admiral-bundesliga",
         "pro-league-belgium",
         "serie-a-brazil",

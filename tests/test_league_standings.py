@@ -216,5 +216,69 @@ class TestLeagueStandingsArtifact(unittest.TestCase):
         })
 
 
+    def test_reconstructs_goals_pa_for_score_only_fixture_without_xg_or_combined_pa(self):
+        def fixture(date, home, away, home_goals, away_goals, home_xg=1.0, away_xg=1.0):
+            return {
+                "team": home,
+                "opponent": away,
+                "date": date,
+                "venue": "home",
+                "league": "premier_league",
+                "xg_for": home_xg,
+                "xg_against": away_xg,
+                "goals_for": home_goals,
+                "goals_against": away_goals,
+            }
+
+        matches = [
+            fixture("2026-08-01", "Alpha", "Alpha Home One", 2, 1),
+            fixture("2026-08-01", "Beta", "Beta Home One", 1, 2),
+            fixture("2026-08-02", "Alpha Away One", "Alpha", 1, 1),
+            fixture("2026-08-02", "Beta Away One", "Beta", 1, 1),
+            fixture("2026-08-03", "Alpha", "Alpha Home Two", 2, 1),
+            fixture("2026-08-03", "Beta", "Beta Home Two", 3, 2),
+            fixture("2026-08-04", "Alpha Away Two", "Alpha", 3, 2),
+            fixture("2026-08-04", "Beta Away Two", "Beta", 3, 2),
+            fixture("2026-08-05", "Alpha", "Beta", 2, 1, None, None),
+            fixture("2026-08-06", "Alpha", "Beta", 2, 0, 2.1, 1.1),
+        ]
+
+        artifact = build_standings_artifact(
+            matches,
+            [],
+            {"premier_league": "Premier League"},
+            version="test-version",
+            generated_at="2026-08-16T00:00:00Z",
+        )
+
+        validate(artifact)
+        season = artifact["leagues"][0]["seasons"][0]
+        alpha = next(team for team in season["teams"] if team["name"] == "Alpha")
+        self.assertEqual(alpha["views"]["overall"]["xg"], {
+            "total": 1.2,
+            "average": 1.2,
+            "eligible_matches": 1,
+        })
+        self.assertEqual(alpha["views"]["for"]["goals"], {
+            "total": 0.125,
+            "average": 0.0625,
+            "eligible_matches": 2,
+        })
+        self.assertEqual(alpha["views"]["against"]["goals"], {
+            "total": -2.25,
+            "average": -1.125,
+            "eligible_matches": 2,
+        })
+        self.assertEqual(alpha["views"]["overall"]["goals"], {
+            "total": -2.125,
+            "average": -1.0625,
+            "eligible_matches": 2,
+        })
+        self.assertEqual(alpha["views"]["overall"]["xg_goals"], {
+            "total": -0.2125,
+            "average": -0.2125,
+        })
+
+
 if __name__ == "__main__":
     unittest.main()

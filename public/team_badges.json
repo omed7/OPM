@@ -7,43 +7,6 @@
     "reviewed_at": "2026-08-15"
   },
   "badges": {
-    "superliga-argentina": {
-      "Independiente": {
-        "provider_id": "135164",
-        "provider_name": "Independiente",
-        "provider_league": "Argentinian Primera Division",
-        "badge_url": "https://r2.thesportsdb.com/images/media/team/badge/eki4nd1580842605.png",
-        "source_url": "https://www.thesportsdb.com/team/135164"
-      },
-      "Independiente Rivadavia": {
-        "provider_id": "137777",
-        "provider_name": "Independiente Rivadavia",
-        "provider_league": "Argentinian Primera Division",
-        "badge_url": "https://r2.thesportsdb.com/images/media/team/badge/qgzi2b1769406125.png",
-        "source_url": "https://www.thesportsdb.com/team/137777"
-      },
-      "Lanús": {
-        "provider_id": "135165",
-        "provider_name": "Lanús",
-        "provider_league": "Argentinian Primera Division",
-        "badge_url": "https://r2.thesportsdb.com/images/media/team/badge/ddty0w1769146364.png",
-        "source_url": "https://www.thesportsdb.com/team/135165"
-      },
-      "Talleres Córdoba": {
-        "provider_id": "136674",
-        "provider_name": "Talleres de Córdoba",
-        "provider_league": "Argentinian Primera Division",
-        "badge_url": "https://r2.thesportsdb.com/images/media/team/badge/7hum2t1769310938.png",
-        "source_url": "https://www.thesportsdb.com/team/136674"
-      },
-      "Unión Santa Fe": {
-        "provider_id": "135178",
-        "provider_name": "Unión",
-        "provider_league": "Argentinian Primera Division",
-        "badge_url": "https://r2.thesportsdb.com/images/media/team/badge/btnx6q1734587495.png",
-        "source_url": "https://www.thesportsdb.com/team/135178"
-      }
-    },
     "serie-a-brazil": {
       "Botafogo": {
         "provider_id": "134285",
@@ -189,9 +152,5 @@
       }
     }
   },
-  "unmapped": {
-    "superliga-argentina": [
-      "Central Cordoba SdE"
-    ]
-  }
+  "unmapped": {}
 }
