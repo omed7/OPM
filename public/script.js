@@ -164,7 +164,11 @@ function renderBadgeHtml(leagueId, teamName) {
 function fixtureDetailsHtml(fixture, scaleMax, metric) {
     if (fixture.status === 'FINISHED') {
         const goals = `${fixture.home_goals ?? '—'} - ${fixture.away_goals ?? '—'}`;
-        const actualXg = `${formatNumber(fixture.home_xg)} - ${formatNumber(fixture.away_xg)}`;
+        const hasActualXg = [fixture.home_xg, fixture.away_xg]
+            .every(value => typeof value === 'number' && Number.isFinite(value));
+        const actualMetric = hasActualXg
+            ? `<div><span>Actual xG</span><strong>${formatNumber(fixture.home_xg)} - ${formatNumber(fixture.away_xg)}</strong></div>`
+            : '<div><span>Goals-only result</span><strong>xG unavailable</strong></div>';
         const predictionParts = [];
         if (fixture.home_expected_goals !== undefined && fixture.home_expected_goals !== null) {
             predictionParts.push(`Pred Goals: ${formatNumber(fixture.home_expected_goals)} - ${formatNumber(fixture.away_expected_goals)}`);
@@ -175,7 +179,7 @@ function fixtureDetailsHtml(fixture, scaleMax, metric) {
         return `
             <div class="fixture-detail-result">
                 <div><span>FT Score</span><strong>${goals}</strong></div>
-                <div><span>Actual xG</span><strong>${actualXg}</strong></div>
+                ${actualMetric}
             </div>
             <div class="prediction-history">${predictionParts.length ? predictionParts.join(' | ') : 'No stored pre-match prediction.'}</div>
         `;
