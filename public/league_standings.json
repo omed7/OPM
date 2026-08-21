@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "meta": {
-    "version": "689e77e",
-    "generated_at": "2026-08-20T06:59:24Z"
+    "version": "832a91d",
+    "generated_at": "2026-08-21T07:00:40Z"
   },
   "leagues": [
     {
@@ -390,6 +390,27 @@
               }
             },
             {
+              "name": "FC Heidenheim",
+              "matches_played": 1,
+              "views": {
+                "overall": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "for": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "against": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                }
+              }
+            },
+            {
               "name": "FC St. Pauli",
               "matches_played": 1,
               "views": {
@@ -520,7 +541,7 @@
             },
             {
               "name": "Hertha BSC",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
