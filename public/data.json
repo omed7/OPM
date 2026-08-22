@@ -1,14 +1,31 @@
 {
   "meta": {
-    "version": "832a91d",
-    "generated_at": "2026-08-21T07:00:40Z"
+    "version": "3453e32",
+    "generated_at": "2026-08-22T06:59:02Z"
   },
   "leagues": [
     {
       "id": "premier_league",
       "name": "Premier League",
       "metric": "xg",
-      "fixtures": []
+      "fixtures": [
+        {
+          "home_team": "Arsenal",
+          "away_team": "Coventry",
+          "date": "2026-08-21",
+          "home_goals": 3,
+          "away_goals": 0,
+          "home_xg": 1.85424,
+          "away_xg": 0.558336,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        }
+      ]
     },
     {
       "id": "la_liga",
@@ -23,22 +40,6 @@
           "away_goals": 0,
           "home_xg": 1.34391,
           "away_xg": 0.229576,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED"
-        },
-        {
-          "home_team": "Deportivo La Coruna",
-          "away_team": "Elche",
-          "date": "2026-08-17",
-          "home_goals": 1,
-          "away_goals": 1,
-          "home_xg": 0.33987,
-          "away_xg": 1.58691,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -65,7 +66,24 @@
       "id": "ligue_1",
       "name": "Ligue 1",
       "metric": "xg",
-      "fixtures": []
+      "fixtures": [
+        {
+          "home_team": "Marseille",
+          "away_team": "Strasbourg",
+          "date": "2026-08-21",
+          "home_goals": 4,
+          "away_goals": 0,
+          "home_xg": 2.35215,
+          "away_xg": 0.192997,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        }
+      ]
     }
   ]
 }
