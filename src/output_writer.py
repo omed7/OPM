@@ -714,13 +714,14 @@ def save_predictions_to_supabase(predictions):
 
 from datetime import timedelta
 
-def get_past_matches(db_records, league_id):
+def get_past_matches(db_records, league_id, timestamp_index=None):
     now = datetime.now(timezone.utc)
     # We want matches from today-4 to today+1 (to account for timezones)
     start_date = (now - timedelta(days=4)).strftime('%Y-%m-%d')
     end_date = (now + timedelta(days=1)).strftime('%Y-%m-%d')
 
     past_matches = []
+    timestamp_index = timestamp_index or {}
 
     # 1. Fetch predictions for this league and timeframe
     predictions_endpoint = f"/predictions?league=eq.{league_id}&date=gte.{start_date}&date=lte.{end_date}"
@@ -752,7 +753,7 @@ def get_past_matches(db_records, league_id):
 
     for key, r in result_records.items():
         pred = predictions_map.get(key, {})
-        past_matches.append({
+        fixture = {
             "home_team": r["team"],
             "away_team": r["opponent"],
             "date": r["date"],
@@ -766,9 +767,23 @@ def get_past_matches(db_records, league_id):
             "home_expected_goals": pred.get("home_expected_goals"),
             "away_expected_goals": pred.get("away_expected_goals"),
             "combined_expected_goals": pred.get("combined_expected_goals"),
-            "status": "FINISHED"
-        })
+            "status": "FINISHED",
+        }
+        timestamp_key = (league_id, r["team"], r["opponent"], str(r["date"])[:10])
+        kickoff_at = timestamp_index.get(timestamp_key)
+        if kickoff_at:
+            fixture["kickoff_at"] = kickoff_at
+        past_matches.append(fixture)
     return past_matches
+
+
+def current_run_timestamp_index(league_id, matches):
+    """Return transient public fixture timestamps from verified OddAlerts results."""
+    return {
+        (league_id, match["home_team"], match["away_team"], str(match["date"])[:10]): match["kickoff_at"]
+        for match in matches
+        if match.get("kickoff_at")
+    }
 
 
 def league_name_map():
@@ -831,6 +846,7 @@ global_db_predictions = []
 
 def main():
     db_records = []
+    completed_timestamp_index = {}
     source_health = []
     configured_providers = set()
     if ODDALERTS_LEAGUES:
@@ -843,6 +859,9 @@ def main():
         try:
             matches = fetch_and_parse_oddalerts_league(
                 league["id"], league["slug"], league["name"], source_health
+            )
+            completed_timestamp_index.update(
+                current_run_timestamp_index(league["id"], matches)
             )
             db_records.extend(map_oddalerts_to_db(matches, league["id"]))
         except Exception as e:
@@ -912,7 +931,9 @@ def main():
     # This preserves completed results when a league has no forecast-eligible upcoming fixture.
     for league_data in oddalerts_leagues_data:
         league_id = league_data["id"]
-        past_fixtures = get_past_matches(db_records, league_id)
+        past_fixtures = get_past_matches(
+            db_records, league_id, timestamp_index=completed_timestamp_index
+        )
         league_data["fixtures"].extend(past_fixtures)
         if league_data["fixtures"]:
             leagues_data.append(league_data)
@@ -923,7 +944,9 @@ def main():
         if league_data["id"] in oddalerts_league_ids:
             continue
         league_id = league_data["id"]
-        past_fixtures = get_past_matches(db_records, league_id)
+        past_fixtures = get_past_matches(
+            db_records, league_id, timestamp_index=completed_timestamp_index
+        )
         league_data["fixtures"].extend(past_fixtures)
 
     # Ensure public directory exists

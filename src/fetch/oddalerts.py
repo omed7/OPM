@@ -1,6 +1,9 @@
+import json
 import re
+import unicodedata
 import urllib.request
-from datetime import datetime, timedelta
+from collections import defaultdict
+from datetime import datetime, timedelta, timezone
 
 def resolve_oddalerts_dates(dates, current_dt=None, is_forward=False):
     if not current_dt:
@@ -50,6 +53,169 @@ def resolve_oddalerts_dates(dates, current_dt=None, is_forward=False):
         resolved[pos] = formatted
 
     return resolved
+
+UTC_DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+
+
+def normalize_team_name(value):
+    normalized = unicodedata.normalize("NFKD", str(value or ""))
+    normalized = normalized.encode("ascii", "ignore").decode("ascii")
+    return re.sub(r"[^a-z0-9]", "", normalized.casefold())
+
+
+def parse_score(score):
+    if not isinstance(score, str) or " - " not in score:
+        return None
+    try:
+        home_goals, away_goals = score.split(" - ", 1)
+        return int(home_goals.strip()), int(away_goals.strip())
+    except ValueError:
+        return None
+
+
+def extract_xg_page_data(html):
+    marker = "window.xgPageData ="
+    marker_index = html.find(marker)
+    if marker_index < 0:
+        return None
+    start = html.find("{", marker_index + len(marker))
+    if start < 0:
+        return None
+
+    depth = 0
+    in_string = False
+    escaped = False
+    end = None
+    for index in range(start, len(html)):
+        character = html[index]
+        if in_string:
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == '"':
+                in_string = False
+            continue
+        if character == '"':
+            in_string = True
+        elif character == "{":
+            depth += 1
+        elif character == "}":
+            depth -= 1
+            if depth == 0:
+                end = index + 1
+                break
+    if end is None:
+        return None
+
+    raw_payload = html[start:end]
+    json_payload = re.sub(
+        r"(^|[,{]\s*)(upcomingFixtures|teamStats)\s*:",
+        r'\1"\2":',
+        raw_payload,
+    )
+    try:
+        payload = json.loads(json_payload)
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(payload.get("teamStats"), dict):
+        return None
+    return payload
+
+
+def has_utc_epoch_evidence(payload):
+    for fixture in payload.get("upcomingFixtures", []):
+        date_value = fixture.get("date") if isinstance(fixture, dict) else None
+        timestamp = fixture.get("timestamp") if isinstance(fixture, dict) else None
+        if isinstance(timestamp, bool) or not isinstance(timestamp, (int, float)):
+            continue
+        try:
+            date_utc = datetime.strptime(date_value, UTC_DATETIME_FORMAT).replace(tzinfo=timezone.utc)
+            epoch_utc = datetime.fromtimestamp(timestamp, timezone.utc)
+        except (TypeError, ValueError, OverflowError, OSError):
+            continue
+        if date_utc == epoch_utc:
+            return True
+    return False
+
+
+def completed_fixture_timestamps(html):
+    payload = extract_xg_page_data(html)
+    if not payload or not has_utc_epoch_evidence(payload):
+        return []
+
+    observed = defaultdict(list)
+    for team in payload["teamStats"].values():
+        if not isinstance(team, dict):
+            continue
+        owner_name = team.get("name")
+        owner_id = team.get("id")
+        for match in team.get("matches", []):
+            if not isinstance(match, dict) or match.get("location") not in {"home", "away"}:
+                continue
+            try:
+                match_datetime = datetime.strptime(match.get("date"), UTC_DATETIME_FORMAT)
+                fixture_id = match["fixture_id"]
+                league_id = match["league_id"]
+                opponent_name = match["opponent"]
+                opponent_id = match["opponent_id"]
+                goals_for = int(match["goals_for"])
+                goals_against = int(match["goals_against"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            if not isinstance(owner_name, str) or not isinstance(opponent_name, str):
+                continue
+            if match["location"] == "home":
+                home = (owner_id, owner_name, goals_for)
+                away = (opponent_id, opponent_name, goals_against)
+            else:
+                home = (opponent_id, opponent_name, goals_against)
+                away = (owner_id, owner_name, goals_for)
+            observed[(league_id, fixture_id)].append(
+                (match_datetime, home, away)
+            )
+
+    fixtures = []
+    for copies in observed.values():
+        if len(copies) != 2:
+            continue
+        first_datetime, first_home, first_away = copies[0]
+        if any(copy != copies[0] for copy in copies[1:]):
+            continue
+        fixtures.append({
+            "home_team": first_home[1],
+            "away_team": first_away[1],
+            "home_goals": first_home[2],
+            "away_goals": first_away[2],
+            "date": first_datetime.strftime("%Y-%m-%d"),
+            "kickoff_at": first_datetime.replace(tzinfo=timezone.utc).strftime(
+                "%Y-%m-%dT%H:%M:%SZ"
+            ),
+        })
+    return fixtures
+
+
+def enrich_completed_results_with_timestamps(results, html):
+    candidates = completed_fixture_timestamps(html)
+    for result in results:
+        score = parse_score(result.get("score"))
+        if not score:
+            continue
+        matching_candidates = [
+            candidate
+            for candidate in candidates
+            if candidate["date"] == result.get("date")
+            and candidate["home_goals"] == score[0]
+            and candidate["away_goals"] == score[1]
+            and normalize_team_name(candidate["home_team"])
+            == normalize_team_name(result.get("home_team"))
+            and normalize_team_name(candidate["away_team"])
+            == normalize_team_name(result.get("away_team"))
+        ]
+        if len(matching_candidates) == 1:
+            result["kickoff_at"] = matching_candidates[0]["kickoff_at"]
+    return results
+
 
 def parse_recent_results(html):
     # Normalize single quotes to double quotes for class names to support direct server fetch (OddAlerts uses single quotes)
@@ -134,7 +300,7 @@ def parse_recent_results(html):
                 except ValueError:
                     pass
 
-    return matches
+    return enrich_completed_results_with_timestamps(matches, html)
 
 def parse_upcoming_fixtures(html):
     dates_matches = []
