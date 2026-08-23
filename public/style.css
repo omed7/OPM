@@ -450,6 +450,17 @@ h2 {
     background: var(--accent-soft);
 }
 
+.empty-state-date-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.empty-state-date-actions .empty-state-reset {
+    margin-top: 14px;
+}
+
 .loading,
 .no-fixtures {
     display: grid;

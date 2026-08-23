@@ -455,6 +455,55 @@ async function testCompletedTimestampUsesViewerLocalDateWithDateOnlyFallback() {
     assert.deepStrictEqual(app.errors, []);
 }
 
+async function testHomeRendersEverySameLeagueFixtureOnTheSelectedDate() {
+    const fixtures = Array.from({ length: 13 }, (_, index) => predictionFixture({
+        home_team: `MLS Home ${index + 1}`,
+        away_team: `MLS Away ${index + 1}`,
+        date: '2026-08-16',
+        status: 'FINISHED',
+        home_goals: index % 4,
+        away_goals: (index + 1) % 4,
+    }));
+    const app = await boot({
+        data: { leagues: [{ id: 'mls', name: 'Major League Soccer', metric: 'xg', fixtures }] },
+    });
+    const section = homeSection(app.elements);
+
+    assert.match(homeToolbar(app.elements).children[0].innerHTML, /13 matches/);
+    assert.match(section.children[0].innerHTML, /Major League Soccer/);
+    assert.match(section.children[0].innerHTML, />13<\/span>/);
+    assert.strictEqual(section.children[1].children.length, 13);
+    assert.deepStrictEqual(app.errors, []);
+}
+
+async function testEmptyDateOffersPreviousAndNextAvailableDates() {
+    const app = await boot({
+        data: {
+            leagues: [{
+                id: 'mls',
+                name: 'Major League Soccer',
+                metric: 'xg',
+                fixtures: [
+                    predictionFixture({ home_team: 'Previous Date FC', away_team: 'Away FC', date: '2026-08-15' }),
+                    predictionFixture({ home_team: 'Next Date FC', away_team: 'Away FC', date: '2026-08-17' }),
+                ],
+            }],
+        },
+    });
+    const emptyState = app.elements['fixtures-container'].children[1];
+
+    assert.match(emptyState.innerHTML, /No fixtures on this date/);
+    const dateActions = emptyState.children[0];
+    assert.strictEqual(dateActions.children.length, 2);
+    assert.match(dateActions.children[0].textContent, /Previous available/);
+    assert.match(dateActions.children[1].textContent, /Next available/);
+
+    dateActions.children[1].click();
+    assert.match(homeToolbar(app.elements).children[0].innerHTML, /1 match/);
+    assert.match(homeCard(app.elements).innerHTML, /Next Date FC/);
+    assert.deepStrictEqual(app.errors, []);
+}
+
 async function testGoalsOnlyFinishedFixtureExplainsMissingXg() {
     const app = await boot({
         data: { leagues: [{ id: 'admiral-bundesliga', name: 'Admiral Bundesliga', metric: 'goals', fixtures: [goalsOnlyFinishedFixture()] }] },
@@ -609,6 +658,8 @@ async function testEmptyArtifactAndDataLoadError() {
     await testHomeSearchDetailsAndFavorites();
     await testFixtureIntelligenceFiltersAvailabilityAndFreshness();
     await testCompletedTimestampUsesViewerLocalDateWithDateOnlyFallback();
+    await testHomeRendersEverySameLeagueFixtureOnTheSelectedDate();
+    await testEmptyDateOffersPreviousAndNextAvailableDates();
     await testGoalsOnlyFinishedFixtureExplainsMissingXg();
     await testLeagueSeasonNavigationAndPaModes();
     await testLeagueCrestsAndSorting();
