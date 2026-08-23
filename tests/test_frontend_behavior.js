@@ -341,7 +341,7 @@ async function testHomeSearchDetailsAndFavorites() {
 
     search = homeToolbar(elements).children[1].children[1];
     search.listeners.input({ target: { value: 'Unknown Club' } });
-    assert.match(elements['fixtures-container'].children[1].innerHTML, /No fixtures match this search/);
+    assert.match(elements['fixtures-container'].children[1].innerHTML, /No fixtures matching this search/);
 
     search = homeToolbar(elements).children[1].children[1];
     search.listeners.input({ target: { value: '' } });
@@ -357,6 +357,51 @@ async function testHomeSearchDetailsAndFavorites() {
     assert.strictEqual(document.documentElement.getAttribute('data-theme'), 'dark');
     assert.strictEqual(elements['theme-toggle'].getAttribute('aria-pressed'), 'true');
     assert.strictEqual(storage.getItem('theme'), 'dark');
+    assert.deepStrictEqual(errors, []);
+}
+
+async function testFixtureIntelligenceFiltersAvailabilityAndFreshness() {
+    const app = await boot({
+        data: {
+            meta: { generated_at: '2026-08-16T08:30:00Z' },
+            leagues: [
+                { id: 'premier_league', name: 'Premier League', metric: 'xg', fixtures: [predictionFixture({ status: 'SCHEDULED' })] },
+                { id: 'la_liga', name: 'La Liga', metric: 'xg', fixtures: [predictionFixture({
+                    home_team: 'Finished FC',
+                    away_team: 'Result FC',
+                    status: 'FINISHED',
+                    home_goals: 2,
+                    away_goals: 1,
+                    combined_expected_xg: null,
+                    combined_expected_goals: null,
+                })] },
+            ],
+        },
+    });
+    const { elements, errors } = app;
+    assert.strictEqual(homeToolbar(elements).children[0].children[0].textContent, 'Data updated 2026-08-16 08:30:00 UTC');
+    assert.match(homeCard(elements).innerHTML, /Forecast available/);
+
+    let filters = homeToolbar(elements).children[2];
+    let statusControls = filters.children[0].children[1];
+    statusControls.children[1].click();
+    assert.match(homeCard(elements).innerHTML, /Home FC/);
+
+    filters = homeToolbar(elements).children[2];
+    statusControls = filters.children[0].children[1];
+    statusControls.children[2].click();
+    assert.match(homeCard(elements).innerHTML, /Finished FC/);
+    assert.match(homeCard(elements).innerHTML, /Forecast unavailable/);
+
+    filters = homeToolbar(elements).children[2];
+    const forecastControls = filters.children[1].children[1];
+    forecastControls.children[1].click();
+    const emptyState = elements['fixtures-container'].children[1];
+    assert.match(emptyState.innerHTML, /No finished available forecast fixtures/);
+    assert.strictEqual(emptyState.children[0].textContent, 'Clear filters');
+    emptyState.children[0].click();
+    assert.match(homeCard(elements).innerHTML, /Home FC/);
+    assert.match(homeToolbar(elements).children[0].innerHTML, /2 matches/);
     assert.deepStrictEqual(errors, []);
 }
 
@@ -512,6 +557,7 @@ async function testEmptyArtifactAndDataLoadError() {
 
 (async () => {
     await testHomeSearchDetailsAndFavorites();
+    await testFixtureIntelligenceFiltersAvailabilityAndFreshness();
     await testGoalsOnlyFinishedFixtureExplainsMissingXg();
     await testLeagueSeasonNavigationAndPaModes();
     await testLeagueCrestsAndSorting();
