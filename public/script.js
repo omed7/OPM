@@ -1,4 +1,3 @@
-const FIXTURE_LIMIT = 10;
 const FAVORITES_STORAGE_KEY = 'opm:favorites:v1';
 
 let teamBadgeManifest = { badges: {} };
@@ -511,11 +510,40 @@ function createHomeToolbar(totalCount, visibleCount) {
     return toolbar;
 }
 
+function availableDatesAroundActiveDate() {
+    const dates = [...new Set(appState.allFixtures.map(fixture => fixture.localDateStr).filter(Boolean))]
+        .sort();
+    const previous = dates.filter(date => date < appState.activeDate).at(-1) || null;
+    const next = dates.find(date => date > appState.activeDate) || null;
+    return { previous, next };
+}
+
+function createAvailableDateAction(label, date) {
+    const button = document.createElement('button');
+    button.className = 'empty-state-reset';
+    button.setAttribute('type', 'button');
+    button.textContent = `${label}: ${formatHomeDate(date)}`;
+    button.addEventListener('click', () => {
+        appState.activeDate = date;
+        appState.activeSearchQuery = '';
+        renderActiveTab();
+    });
+    return button;
+}
+
 function createHomeEmptyState(hasFixturesOnDate) {
     const state = document.createElement('div');
     state.className = 'no-fixtures';
     if (!hasFixturesOnDate) {
-        state.innerHTML = '<div><strong>No fixtures on this date.</strong>Select another date to view available matches.</div>';
+        state.innerHTML = '<div><strong>No fixtures on this date.</strong>Select an available date to view matches.</div>';
+        const { previous, next } = availableDatesAroundActiveDate();
+        if (previous || next) {
+            const actions = document.createElement('div');
+            actions.className = 'empty-state-date-actions';
+            if (previous) actions.appendChild(createAvailableDateAction('Previous available', previous));
+            if (next) actions.appendChild(createAvailableDateAction('Next available', next));
+            state.appendChild(actions);
+        }
         return state;
     }
     const statusPhrase = appState.homeStatusFilter === 'all' ? '' : `${appState.homeStatusFilter} `;
@@ -557,7 +585,7 @@ function renderHome() {
     });
 
     Object.entries(grouped).forEach(([leagueId, league]) => {
-        const leagueFixtures = league.fixtures.sort((left, right) => left.timeObj - right.timeObj).slice(0, FIXTURE_LIMIT);
+        const leagueFixtures = league.fixtures.sort((left, right) => left.timeObj - right.timeObj);
         const section = document.createElement('section');
         section.className = 'league-section';
         const storageKey = `league_expansion:${appState.activeDate}:${leagueId}`;
