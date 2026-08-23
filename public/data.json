@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "045aa3f",
-    "generated_at": "2026-08-23T15:51:03Z"
+    "version": "29f77fb",
+    "generated_at": "2026-08-23T16:12:08Z"
   },
   "leagues": [
     {
@@ -33,6 +33,22 @@
           "away_goals": 0,
           "home_xg": 4.04155,
           "away_xg": 0.756284,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Brighton",
+          "away_team": "Aston Villa",
+          "date": "2026-08-23",
+          "home_goals": 4,
+          "away_goals": 0,
+          "home_xg": 4.00327,
+          "away_xg": 0.275249,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -81,6 +97,22 @@
           "away_goals": 1,
           "home_xg": 1.58452,
           "away_xg": 1.17743,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Manchester City",
+          "away_team": "Bournemouth",
+          "date": "2026-08-23",
+          "home_goals": 2,
+          "away_goals": 1,
+          "home_xg": 2.47444,
+          "away_xg": 0.707541,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -292,6 +324,22 @@
       "name": "Ligue 1",
       "metric": "xg",
       "fixtures": [
+        {
+          "home_team": "Angers",
+          "away_team": "Lille",
+          "date": "2026-08-23",
+          "home_goals": 0,
+          "away_goals": 2,
+          "home_xg": 1.85763,
+          "away_xg": 1.21456,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
         {
           "home_team": "Le Mans",
           "away_team": "Brest",
@@ -735,6 +783,22 @@
           "status": "FINISHED"
         },
         {
+          "home_team": "NAC Breda",
+          "away_team": "Jong Ajax",
+          "date": "2026-08-22",
+          "home_goals": 3,
+          "away_goals": 2,
+          "home_xg": 2.18,
+          "away_xg": 1.04,
+          "home_expected_xg": 2.06,
+          "away_expected_xg": 1.83,
+          "combined_expected_xg": 3.88,
+          "home_expected_goals": 1.75,
+          "away_expected_goals": 0.88,
+          "combined_expected_goals": 2.62,
+          "status": "FINISHED"
+        },
+        {
           "home_team": "Vitesse",
           "away_team": "Almere City",
           "date": "2026-08-21",
@@ -757,22 +821,6 @@
       "name": "Liga Portugal",
       "metric": "xg",
       "fixtures": [
-        {
-          "home_team": "Sporting CP",
-          "away_team": "Alverca",
-          "date": "2026-08-22",
-          "home_goals": 3,
-          "away_goals": 1,
-          "home_xg": 1.73,
-          "away_xg": 0.45,
-          "home_expected_xg": 1.64,
-          "away_expected_xg": 0.97,
-          "combined_expected_xg": 2.61,
-          "home_expected_goals": 2.38,
-          "away_expected_goals": 0.88,
-          "combined_expected_goals": 3.25,
-          "status": "FINISHED"
-        },
         {
           "home_team": "Estoril",
           "away_team": "Rio Ave",
@@ -804,6 +852,22 @@
           "away_expected_goals": 1.0,
           "combined_expected_goals": 2.5,
           "status": "FINISHED"
+        },
+        {
+          "home_team": "Sporting CP",
+          "away_team": "Alverca",
+          "date": "2026-08-22",
+          "home_goals": 3,
+          "away_goals": 1,
+          "home_xg": 1.73,
+          "away_xg": 0.45,
+          "home_expected_xg": 1.64,
+          "away_expected_xg": 0.97,
+          "combined_expected_xg": 2.61,
+          "home_expected_goals": 2.38,
+          "away_expected_goals": 0.88,
+          "combined_expected_goals": 3.25,
+          "status": "FINISHED"
         }
       ]
     },
@@ -812,6 +876,22 @@
       "name": "Pro League Saudi",
       "metric": "xg",
       "fixtures": [
+        {
+          "home_team": "Al Ahli",
+          "away_team": "Abha",
+          "date": "2026-08-22",
+          "home_goals": 4,
+          "away_goals": 0,
+          "home_xg": 2.16,
+          "away_xg": 1.18,
+          "home_expected_xg": 1.85,
+          "away_expected_xg": 0.72,
+          "combined_expected_xg": 2.57,
+          "home_expected_goals": 2.38,
+          "away_expected_goals": 0.75,
+          "combined_expected_goals": 3.12,
+          "status": "FINISHED"
+        },
         {
           "home_team": "Al Faisaly",
           "away_team": "NEOM SC",
@@ -829,6 +909,22 @@
           "status": "FINISHED"
         },
         {
+          "home_team": "Al Fateh",
+          "away_team": "Al Ettifaq",
+          "date": "2026-08-22",
+          "home_goals": 0,
+          "away_goals": 1,
+          "home_xg": 1.67,
+          "away_xg": 1.71,
+          "home_expected_xg": 1.45,
+          "away_expected_xg": 1.38,
+          "combined_expected_xg": 2.84,
+          "home_expected_goals": 1.0,
+          "away_expected_goals": 1.25,
+          "combined_expected_goals": 2.25,
+          "status": "FINISHED"
+        },
+        {
           "home_team": "Al Hazm",
           "away_team": "Al Draih",
           "date": "2026-08-21",
@@ -842,6 +938,38 @@
           "home_expected_goals": 1.0,
           "away_expected_goals": 0.75,
           "combined_expected_goals": 1.75,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Al Khaleej",
+          "away_team": "Al Shabab",
+          "date": "2026-08-22",
+          "home_goals": 0,
+          "away_goals": 0,
+          "home_xg": 0.45,
+          "away_xg": 1.03,
+          "home_expected_xg": 1.42,
+          "away_expected_xg": 1.37,
+          "combined_expected_xg": 2.8,
+          "home_expected_goals": 1.5,
+          "away_expected_goals": 2.12,
+          "combined_expected_goals": 3.62,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Al Kholood",
+          "away_team": "Al Taawoun",
+          "date": "2026-08-22",
+          "home_goals": 3,
+          "away_goals": 2,
+          "home_xg": 1.69,
+          "away_xg": 1.95,
+          "home_expected_xg": 1.15,
+          "away_expected_xg": 1.29,
+          "combined_expected_xg": 2.44,
+          "home_expected_goals": 0.75,
+          "away_expected_goals": 1.25,
+          "combined_expected_goals": 2.0,
           "status": "FINISHED"
         },
         {
@@ -923,6 +1051,22 @@
       "metric": "xg",
       "fixtures": [
         {
+          "home_team": "\u00c7orum FK",
+          "away_team": "Kas\u0131mpa\u015fa",
+          "date": "2026-08-22",
+          "home_goals": 0,
+          "away_goals": 1,
+          "home_xg": 1.31,
+          "away_xg": 0.36,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
           "home_team": "Erzurumspor FK",
           "away_team": "Galatasaray",
           "date": "2026-08-21",
@@ -937,6 +1081,38 @@
           "away_expected_goals": null,
           "combined_expected_goals": null,
           "status": "FINISHED"
+        },
+        {
+          "home_team": "Fenerbah\u00e7e",
+          "away_team": "Konyaspor",
+          "date": "2026-08-22",
+          "home_goals": 4,
+          "away_goals": 2,
+          "home_xg": 2.35,
+          "away_xg": 1.59,
+          "home_expected_xg": 2.14,
+          "away_expected_xg": 1.15,
+          "combined_expected_xg": 3.29,
+          "home_expected_goals": 2.25,
+          "away_expected_goals": 1.5,
+          "combined_expected_goals": 3.75,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Rizespor",
+          "away_team": "Samsunspor",
+          "date": "2026-08-22",
+          "home_goals": 0,
+          "away_goals": 2,
+          "home_xg": 2.12,
+          "away_xg": 0.35,
+          "home_expected_xg": 1.89,
+          "away_expected_xg": 1.35,
+          "combined_expected_xg": 3.24,
+          "home_expected_goals": 1.38,
+          "away_expected_goals": 2.5,
+          "combined_expected_goals": 3.88,
+          "status": "FINISHED"
         }
       ]
     },
@@ -946,6 +1122,54 @@
       "metric": "xg",
       "fixtures": [
         {
+          "home_team": "Austin",
+          "away_team": "Philadelphia Union",
+          "date": "2026-08-23",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 1.42,
+          "away_xg": 0.78,
+          "home_expected_xg": 0.89,
+          "away_expected_xg": 2.02,
+          "combined_expected_xg": 2.91,
+          "home_expected_goals": 1.0,
+          "away_expected_goals": 1.83,
+          "combined_expected_goals": 2.83,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "CF Montr\u00e9al",
+          "away_team": "LA Galaxy",
+          "date": "2026-08-22",
+          "home_goals": 2,
+          "away_goals": 2,
+          "home_xg": 1.64,
+          "away_xg": 1.11,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Charlotte",
+          "away_team": "DC United",
+          "date": "2026-08-22",
+          "home_goals": 3,
+          "away_goals": 1,
+          "home_xg": 2.01,
+          "away_xg": 1.8,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
           "home_team": "Cincinnati",
           "away_team": "New York City",
           "date": "2026-08-19",
@@ -953,6 +1177,22 @@
           "away_goals": 1,
           "home_xg": 1.27,
           "away_xg": 1.38,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Cincinnati",
+          "away_team": "Seattle Sounders",
+          "date": "2026-08-22",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 1.2,
+          "away_xg": 1.12,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -1010,6 +1250,22 @@
           "status": "FINISHED"
         },
         {
+          "home_team": "Inter Miami",
+          "away_team": "Toronto",
+          "date": "2026-08-22",
+          "home_goals": 1,
+          "away_goals": 2,
+          "home_xg": 1.76,
+          "away_xg": 0.77,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
           "home_team": "LA Galaxy",
           "away_team": "SJ Earthquakes",
           "date": "2026-08-20",
@@ -1026,6 +1282,22 @@
           "status": "FINISHED"
         },
         {
+          "home_team": "Los Angeles FC",
+          "away_team": "Portland Timbers",
+          "date": "2026-08-23",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 3.08,
+          "away_xg": 0.77,
+          "home_expected_xg": 0.9,
+          "away_expected_xg": 1.76,
+          "combined_expected_xg": 2.67,
+          "home_expected_goals": 1.88,
+          "away_expected_goals": 1.75,
+          "combined_expected_goals": 3.62,
+          "status": "FINISHED"
+        },
+        {
           "home_team": "Minnesota United",
           "away_team": "Atlanta United",
           "date": "2026-08-20",
@@ -1039,6 +1311,38 @@
           "home_expected_goals": 2.08,
           "away_expected_goals": 1.25,
           "combined_expected_goals": 3.33,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Nashville SC",
+          "away_team": "Columbus Crew",
+          "date": "2026-08-23",
+          "home_goals": 3,
+          "away_goals": 2,
+          "home_xg": 0.97,
+          "away_xg": 0.36,
+          "home_expected_xg": 1.2,
+          "away_expected_xg": 1.42,
+          "combined_expected_xg": 2.62,
+          "home_expected_goals": 1.33,
+          "away_expected_goals": 1.21,
+          "combined_expected_goals": 2.54,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "New York RB",
+          "away_team": "Chicago Fire",
+          "date": "2026-08-22",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 0.73,
+          "away_xg": 0.96,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
           "status": "FINISHED"
         },
         {
@@ -1065,6 +1369,22 @@
           "away_goals": 2,
           "home_xg": 1.16,
           "away_xg": 0.35,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Orlando City",
+          "away_team": "Real Salt Lake",
+          "date": "2026-08-22",
+          "home_goals": 2,
+          "away_goals": 1,
+          "home_xg": 1.52,
+          "away_xg": 0.56,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -1122,6 +1442,22 @@
           "status": "FINISHED"
         },
         {
+          "home_team": "San Diego",
+          "away_team": "Colorado Rapids",
+          "date": "2026-08-23",
+          "home_goals": 3,
+          "away_goals": 0,
+          "home_xg": 1.12,
+          "away_xg": 0.55,
+          "home_expected_xg": 1.24,
+          "away_expected_xg": 1.06,
+          "combined_expected_xg": 2.3,
+          "home_expected_goals": 0.5,
+          "away_expected_goals": 0.67,
+          "combined_expected_goals": 1.17,
+          "status": "FINISHED"
+        },
+        {
           "home_team": "Seattle Sounders",
           "away_team": "Austin",
           "date": "2026-08-20",
@@ -1135,6 +1471,22 @@
           "home_expected_goals": 1.17,
           "away_expected_goals": 1.83,
           "combined_expected_goals": 3.0,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "SJ Earthquakes",
+          "away_team": "Minnesota United",
+          "date": "2026-08-23",
+          "home_goals": 1,
+          "away_goals": 5,
+          "home_xg": 1.96,
+          "away_xg": 1.72,
+          "home_expected_xg": 1.65,
+          "away_expected_xg": 1.38,
+          "combined_expected_xg": 3.03,
+          "home_expected_goals": 1.0,
+          "away_expected_goals": 1.83,
+          "combined_expected_goals": 2.83,
           "status": "FINISHED"
         },
         {
@@ -1154,6 +1506,22 @@
           "status": "FINISHED"
         },
         {
+          "home_team": "St. Louis City",
+          "away_team": "Houston Dynamo",
+          "date": "2026-08-23",
+          "home_goals": 2,
+          "away_goals": 1,
+          "home_xg": 1.38,
+          "away_xg": 1.38,
+          "home_expected_xg": 1.13,
+          "away_expected_xg": 0.9,
+          "combined_expected_xg": 2.03,
+          "home_expected_goals": 1.0,
+          "away_expected_goals": 1.38,
+          "combined_expected_goals": 2.38,
+          "status": "FINISHED"
+        },
+        {
           "home_team": "Toronto",
           "away_team": "Charlotte",
           "date": "2026-08-19",
@@ -1167,6 +1535,22 @@
           "home_expected_goals": null,
           "away_expected_goals": null,
           "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Vancouver Whitecaps",
+          "away_team": "Dallas",
+          "date": "2026-08-23",
+          "home_goals": 5,
+          "away_goals": 0,
+          "home_xg": 1.48,
+          "away_xg": 0.45,
+          "home_expected_xg": 1.52,
+          "away_expected_xg": 1.07,
+          "combined_expected_xg": 2.59,
+          "home_expected_goals": 0.92,
+          "away_expected_goals": 0.83,
+          "combined_expected_goals": 1.75,
           "status": "FINISHED"
         },
         {
