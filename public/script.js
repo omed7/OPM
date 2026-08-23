@@ -74,6 +74,22 @@ function localDateString(value) {
     return String(value).slice(0, 10);
 }
 
+function hasCanonicalKickoffAt(fixture) {
+    return fixture && fixture.status === 'FINISHED'
+        && typeof fixture.kickoff_at === 'string'
+        && /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\dZ$/.test(fixture.kickoff_at);
+}
+
+function fixtureLocalDateString(fixture) {
+    if (hasCanonicalKickoffAt(fixture)) {
+        const instant = new Date(fixture.kickoff_at);
+        if (!Number.isNaN(instant.getTime())) {
+            return `${instant.getFullYear()}-${String(instant.getMonth() + 1).padStart(2, '0')}-${String(instant.getDate()).padStart(2, '0')}`;
+        }
+    }
+    return localDateString(fixture && fixture.date);
+}
+
 function currentLocalDateString() {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -86,6 +102,10 @@ function formatHomeDate(value) {
 }
 
 function fixtureTimeObject(fixture) {
+    if (hasCanonicalKickoffAt(fixture)) {
+        const instant = new Date(fixture.kickoff_at);
+        if (!Number.isNaN(instant.getTime())) return instant;
+    }
     const date = localDateString(fixture.date);
     const time = fixture.kickoff_time || '00:00';
     const parsed = new Date(`${date}T${time}:00`);
@@ -860,7 +880,7 @@ async function init() {
             leagueId: league.id,
             leagueName: league.name,
             metric: league.metric || 'xg',
-            localDateStr: localDateString(fixture.date),
+            localDateStr: fixtureLocalDateString(fixture),
             timeObj: fixtureTimeObject(fixture),
         })));
         appState.activeDate = currentLocalDateString();

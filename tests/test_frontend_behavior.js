@@ -79,6 +79,17 @@ class FakeDate extends Date {
     }
 }
 
+class FakeGmtPlusThreeDate extends Date {
+    constructor(value) {
+        const instant = value === undefined ? '2026-08-23T12:00:00Z' : value;
+        super(new Date(instant).getTime() + (3 * 60 * 60 * 1000));
+    }
+
+    getFullYear() { return this.getUTCFullYear(); }
+    getMonth() { return this.getUTCMonth(); }
+    getDate() { return this.getUTCDate(); }
+}
+
 function createStorage(initialValues = {}) {
     const values = new Map(Object.entries(initialValues));
     return {
@@ -104,6 +115,7 @@ async function boot({
     badgesOk = true,
     version = 'test-version',
     initialStorage = {},
+    DateImpl = FakeDate,
 }) {
     const elements = {
         'fixtures-container': new Element('main'),
@@ -149,7 +161,7 @@ async function boot({
         },
     };
     const context = {
-        Date: FakeDate,
+        Date: DateImpl,
         URL,
         console: { error(error) { errors.push(String(error)); } },
         document,
@@ -187,7 +199,7 @@ function predictionFixture(overrides = {}) {
     };
 }
 
-function goalsOnlyFinishedFixture() {
+function goalsOnlyFinishedFixture(overrides = {}) {
     return {
         home_team: 'Goals Home',
         away_team: 'Goals Away',
@@ -200,6 +212,7 @@ function goalsOnlyFinishedFixture() {
         away_xg: null,
         home_expected_goals: 1.4,
         away_expected_goals: 0.9,
+        ...overrides,
     };
 }
 
@@ -405,6 +418,43 @@ async function testFixtureIntelligenceFiltersAvailabilityAndFreshness() {
     assert.deepStrictEqual(errors, []);
 }
 
+async function testCompletedTimestampUsesViewerLocalDateWithDateOnlyFallback() {
+    const app = await boot({
+        DateImpl: FakeGmtPlusThreeDate,
+        data: {
+            leagues: [{
+                id: 'mls',
+                name: 'Major League Soccer',
+                metric: 'xg',
+                fixtures: [
+                    goalsOnlyFinishedFixture({
+                        home_team: 'Late UTC FC',
+                        away_team: 'Local Today FC',
+                        date: '2026-08-22',
+                        kickoff_at: '2026-08-22T23:30:00Z',
+                    }),
+                    goalsOnlyFinishedFixture({
+                        home_team: 'Legacy FC',
+                        away_team: 'Date Only FC',
+                        date: '2026-08-22',
+                    }),
+                ],
+            }],
+        },
+    });
+
+    assert.strictEqual(app.context.fixtureLocalDateString({
+        date: '2026-08-22', status: 'FINISHED', kickoff_at: '2026-08-22T23:30:00Z',
+    }), '2026-08-23');
+    assert.strictEqual(app.context.fixtureLocalDateString({
+        date: '2026-08-22', status: 'FINISHED',
+    }), '2026-08-22');
+    assert.match(homeToolbar(app.elements).children[0].innerHTML, /1 match/);
+    assert.match(homeCard(app.elements).innerHTML, /Late UTC FC/);
+    assert.doesNotMatch(homeCard(app.elements).innerHTML, /Legacy FC/);
+    assert.deepStrictEqual(app.errors, []);
+}
+
 async function testGoalsOnlyFinishedFixtureExplainsMissingXg() {
     const app = await boot({
         data: { leagues: [{ id: 'admiral-bundesliga', name: 'Admiral Bundesliga', metric: 'goals', fixtures: [goalsOnlyFinishedFixture()] }] },
@@ -558,6 +608,7 @@ async function testEmptyArtifactAndDataLoadError() {
 (async () => {
     await testHomeSearchDetailsAndFavorites();
     await testFixtureIntelligenceFiltersAvailabilityAndFreshness();
+    await testCompletedTimestampUsesViewerLocalDateWithDateOnlyFallback();
     await testGoalsOnlyFinishedFixtureExplainsMissingXg();
     await testLeagueSeasonNavigationAndPaModes();
     await testLeagueCrestsAndSorting();

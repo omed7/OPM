@@ -25,6 +25,7 @@ EXPECTED_METRIC_FIELDS = {
 }
 DATE_PREFIX_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}")
 KICKOFF_TIME_PATTERN = re.compile(r"^(?:[01]\d|2[0-3]):[0-5]\d$")
+KICKOFF_AT_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\dZ$")
 SENSITIVE_CONTENT_PATTERN = re.compile(
     r"SUP(?:ER)?BASE_(?:URL|KEY)|service_role|Authorization:\s*Bearer|"
     r"Bearer\s+[A-Za-z0-9._-]{20,}|Traceback \(most recent call last\)|"
@@ -89,6 +90,12 @@ def validate_fixture(fixture, location):
     if "kickoff_time" in fixture and fixture["kickoff_time"] is not None:
         if not isinstance(fixture["kickoff_time"], str) or not KICKOFF_TIME_PATTERN.match(fixture["kickoff_time"]):
             validation_error(f"{location}.kickoff_time must be null or HH:MM")
+    if "kickoff_at" in fixture:
+        kickoff_at = fixture["kickoff_at"]
+        if fixture.get("status") != "FINISHED":
+            validation_error(f"{location}.kickoff_at requires status FINISHED")
+        if not isinstance(kickoff_at, str) or not KICKOFF_AT_PATTERN.match(kickoff_at):
+            validation_error(f"{location}.kickoff_at must be canonical UTC RFC3339")
 
     for field in EXPECTED_METRIC_FIELDS & set(fixture):
         if not is_finite_number_or_null(fixture[field]):

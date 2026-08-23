@@ -332,6 +332,47 @@ class TestPastMatchRetrieval(unittest.TestCase):
         self.assertEqual(past_matches[0]["home_goals"], 2)
 
 
+    def test_attaches_optional_public_timestamp_without_changing_result_or_prediction_fields(
+        self
+    ):
+        completed = {**self.completed_match, "league": "mls", "venue": "home"}
+        timestamp_index = {
+            ("mls", "Home FC", "Away FC", "2026-08-12"): "2026-08-12T23:30:00Z"
+        }
+
+        with patch("src.output_writer.supabase_request") as mock_supabase_request, patch(
+            "src.output_writer.datetime"
+        ) as mock_datetime:
+            mock_datetime.now.return_value = self.fixed_now
+            mock_supabase_request.side_effect = [([self.prediction], None), ([completed], None)]
+
+            past_matches = output_writer.get_past_matches(
+                [], "mls", timestamp_index=timestamp_index
+            )
+
+        self.assertEqual(past_matches[0]["kickoff_at"], "2026-08-12T23:30:00Z")
+        self.assertEqual(past_matches[0]["date"], "2026-08-12")
+        self.assertEqual(past_matches[0]["home_goals"], 2)
+        self.assertEqual(past_matches[0]["home_xg"], 1.8)
+        self.assertEqual(past_matches[0]["combined_expected_xg"], 2.0)
+
+    def test_oddalerts_timestamp_is_not_added_to_durable_match_records(self):
+        records = output_writer.map_oddalerts_to_db(
+            [{
+                "home_team": "Home FC",
+                "away_team": "Away FC",
+                "home_xg": 1.2,
+                "away_xg": 0.8,
+                "score": "1 - 0",
+                "date": "2026-08-12",
+                "kickoff_at": "2026-08-12T23:30:00Z",
+            }],
+            "mls",
+        )
+
+        self.assertEqual(len(records), 2)
+        self.assertTrue(all("kickoff_at" not in record for record in records))
+
     @patch("src.output_writer.supabase_request")
     @patch("src.output_writer.datetime")
     def test_current_run_records_override_and_extend_persisted_results(
