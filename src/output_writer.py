@@ -873,14 +873,14 @@ def main():
 
 
     leagues_data = []
+    oddalerts_leagues_data = []
 
     for league in ODDALERTS_LEAGUES:
         try:
             data = process_oddalerts_league(
                 league["id"], league["name"], league["fixtures_path"], db_records, source_health
             )
-            if data["fixtures"]:
-                leagues_data.append(data)
+            oddalerts_leagues_data.append(data)
         except Exception as e:
             record_source_health(source_health, "oddalerts", league["id"], "fetch_failed", str(e))
 
@@ -925,11 +925,22 @@ def main():
     print_source_health_summary(source_health)
     enforce_source_health(source_health, configured_providers)
 
-    # 3. Add past matches to each league from db_records
-    for league_data in leagues_data:
+    # 3. Add past matches to each OddAlerts league before deciding whether to publish it.
+    # This preserves completed results when a league has no forecast-eligible upcoming fixture.
+    for league_data in oddalerts_leagues_data:
         league_id = league_data["id"]
         past_fixtures = get_past_matches(db_records, league_id)
-        # Append to existing upcoming fixtures
+        league_data["fixtures"].extend(past_fixtures)
+        if league_data["fixtures"]:
+            leagues_data.append(league_data)
+
+    # Existing Understat behavior remains unchanged.
+    oddalerts_league_ids = {league["id"] for league in ODDALERTS_LEAGUES}
+    for league_data in leagues_data:
+        if league_data["id"] in oddalerts_league_ids:
+            continue
+        league_id = league_data["id"]
+        past_fixtures = get_past_matches(db_records, league_id)
         league_data["fixtures"].extend(past_fixtures)
 
     # Ensure public directory exists

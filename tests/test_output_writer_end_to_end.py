@@ -91,5 +91,101 @@ class TestOutputWriterMainTracer(unittest.TestCase):
                 os.chdir(original_cwd)
 
 
+    def test_main_publishes_finished_oddalerts_results_without_forecast_ready_fixtures(self):
+        league = {
+            "id": "generic-oddalerts-league",
+            "name": "Generic OddAlerts League",
+            "slug": "generic-oddalerts-league",
+            "fixtures_path": "/leagues/example/generic/fixtures",
+        }
+        finished_fixture = {
+            "home_team": "Result Home",
+            "away_team": "Result Away",
+            "date": "2026-08-23",
+            "home_goals": 2,
+            "away_goals": 1,
+            "home_xg": 1.41,
+            "away_xg": 0.62,
+            "home_expected_xg": None,
+            "away_expected_xg": None,
+            "combined_expected_xg": None,
+            "home_expected_goals": None,
+            "away_expected_goals": None,
+            "combined_expected_goals": None,
+            "status": "FINISHED",
+        }
+
+        def healthy_empty_fixture_source(_id, _name, _path, _records, source_health):
+            output_writer.record_source_health(source_health, "oddalerts", league["id"], "success_empty")
+            return {"id": league["id"], "name": league["name"], "metric": "xg", "fixtures": []}
+
+        original_cwd = os.getcwd()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            os.chdir(temp_dir)
+            try:
+                with (
+                    patch.object(output_writer, "ODDALERTS_LEAGUES", [league]),
+                    patch.object(output_writer, "UNDERSTAT_LEAGUES", []),
+                    patch.object(output_writer, "fetch_and_parse_oddalerts_league", return_value=[]),
+                    patch.object(output_writer, "process_oddalerts_league", side_effect=healthy_empty_fixture_source),
+                    patch.object(output_writer, "get_past_matches", return_value=[finished_fixture]),
+                    patch.object(
+                        output_writer,
+                        "fetch_historical_standings_records",
+                        return_value=([], [], None),
+                    ),
+                    patch.object(output_writer, "save_matches_to_supabase"),
+                    patch.object(output_writer, "save_predictions_to_supabase"),
+                    patch.object(output_writer, "get_version", return_value="test-version"),
+                ):
+                    output_writer.main()
+
+                with open("public/data.json", encoding="utf-8") as artifact:
+                    payload = json.load(artifact)
+                self.assertEqual([league_data["id"] for league_data in payload["leagues"]], [league["id"]])
+                self.assertEqual(payload["leagues"][0]["fixtures"], [finished_fixture])
+            finally:
+                os.chdir(original_cwd)
+
+    def test_main_omits_empty_oddalerts_league_without_forecasts_or_results(self):
+        league = {
+            "id": "generic-oddalerts-league",
+            "name": "Generic OddAlerts League",
+            "slug": "generic-oddalerts-league",
+            "fixtures_path": "/leagues/example/generic/fixtures",
+        }
+
+        def healthy_empty_fixture_source(_id, _name, _path, _records, source_health):
+            output_writer.record_source_health(source_health, "oddalerts", league["id"], "success_empty")
+            return {"id": league["id"], "name": league["name"], "metric": "xg", "fixtures": []}
+
+        original_cwd = os.getcwd()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            os.chdir(temp_dir)
+            try:
+                with (
+                    patch.object(output_writer, "ODDALERTS_LEAGUES", [league]),
+                    patch.object(output_writer, "UNDERSTAT_LEAGUES", []),
+                    patch.object(output_writer, "fetch_and_parse_oddalerts_league", return_value=[]),
+                    patch.object(output_writer, "process_oddalerts_league", side_effect=healthy_empty_fixture_source),
+                    patch.object(output_writer, "get_past_matches", return_value=[]),
+                    patch.object(
+                        output_writer,
+                        "fetch_historical_standings_records",
+                        return_value=([], [], None),
+                    ),
+                    patch.object(output_writer, "save_matches_to_supabase"),
+                    patch.object(output_writer, "save_predictions_to_supabase"),
+                    patch.object(output_writer, "get_version", return_value="test-version"),
+                ):
+                    output_writer.main()
+
+                with open("public/data.json", encoding="utf-8") as artifact:
+                    payload = json.load(artifact)
+                self.assertEqual(payload["leagues"], [])
+            finally:
+                os.chdir(original_cwd)
+
+
 if __name__ == "__main__":
     unittest.main()
