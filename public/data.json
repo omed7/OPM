@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "3453e32",
-    "generated_at": "2026-08-22T06:59:02Z"
+    "version": "591bb45",
+    "generated_at": "2026-08-23T07:00:50Z"
   },
   "leagues": [
     {
@@ -47,6 +47,38 @@
           "away_expected_goals": null,
           "combined_expected_goals": null,
           "status": "FINISHED"
+        },
+        {
+          "home_team": "Rayo Vallecano",
+          "away_team": "Alaves",
+          "date": "2026-08-20",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 0.566429,
+          "away_xg": 2.22075,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Real Betis",
+          "away_team": "Real Sociedad",
+          "date": "2026-08-21",
+          "home_goals": 1,
+          "away_goals": 0,
+          "home_xg": 1.69571,
+          "away_xg": 1.14003,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
         }
       ]
     },
@@ -54,7 +86,72 @@
       "id": "serie_a",
       "name": "Serie A",
       "metric": "xg",
-      "fixtures": []
+      "fixtures": [
+        {
+          "home_team": "Inter",
+          "away_team": "Monza",
+          "date": "2026-08-22",
+          "home_goals": 4,
+          "away_goals": 1,
+          "home_xg": 1.5385,
+          "away_xg": 1.21666,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Udinese",
+          "away_team": "Como",
+          "date": "2026-08-22",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 2.12071,
+          "away_xg": 2.38585,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Parma Calcio 1913",
+          "away_team": "Cagliari",
+          "date": "2026-08-22",
+          "home_goals": 0,
+          "away_goals": 1,
+          "home_xg": 1.02972,
+          "away_xg": 1.2574,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Genoa",
+          "away_team": "Napoli",
+          "date": "2026-08-22",
+          "home_goals": 0,
+          "away_goals": 2,
+          "home_xg": 0.500846,
+          "away_xg": 1.15739,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        }
+      ]
     },
     {
       "id": "bundesliga",
