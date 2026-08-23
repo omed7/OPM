@@ -15,6 +15,8 @@ let appState = {
     activeView: 'overall',
     activeSort: 'combined',
     activeSortDirection: 'asc',
+    homeStatusFilter: 'all',
+    homeForecastFilter: 'all',
 };
 
 const STANDINGS_SORT_OPTIONS = [
@@ -23,6 +25,18 @@ const STANDINGS_SORT_OPTIONS = [
     ['goals', 'Goals PA'],
     ['matches', 'Matches played'],
     ['name', 'Team name'],
+];
+
+const HOME_STATUS_FILTERS = [
+    ['all', 'All'],
+    ['upcoming', 'Upcoming'],
+    ['finished', 'Finished'],
+];
+
+const HOME_FORECAST_FILTERS = [
+    ['all', 'All forecasts'],
+    ['available', 'Available'],
+    ['unavailable', 'Unavailable'],
 ];
 
 const LEAGUE_COUNTRIES = {
@@ -204,7 +218,19 @@ function renderStandingsTeamHtml(leagueId, teamName) {
     return `<span class="standings-team">${crest}<span>${teamName}</span></span>`;
 }
 
+function fixtureHasPublishedForecast(fixture) {
+    return ['combined_expected_xg', 'combined_expected_goals']
+        .every(field => typeof fixture[field] === 'number' && Number.isFinite(fixture[field]));
+}
+
+function renderForecastStatusHtml(fixture) {
+    const available = fixtureHasPublishedForecast(fixture);
+    const label = available ? 'Forecast available' : 'Forecast unavailable';
+    return `<span class="forecast-status ${available ? 'available' : 'unavailable'}">${label}</span>`;
+}
+
 function fixtureDetailsHtml(fixture, scaleMax, metric) {
+    const forecastAvailable = fixtureHasPublishedForecast(fixture);
     if (fixture.status === 'FINISHED') {
         const goals = `${fixture.home_goals ?? '—'} - ${fixture.away_goals ?? '—'}`;
         const hasActualXg = [fixture.home_xg, fixture.away_xg]
@@ -224,8 +250,12 @@ function fixtureDetailsHtml(fixture, scaleMax, metric) {
                 <div><span>FT score</span><strong>${goals}</strong></div>
                 ${actualMetric}
             </div>
-            <div class="prediction-history">${predictionParts.length ? predictionParts.join(' · ') : 'No stored pre-match prediction.'}</div>
+            <div class="prediction-history">${forecastAvailable && predictionParts.length ? predictionParts.join(' · ') : 'No qualifying pre-match forecast is published in this artifact.'}</div>
         `;
+    }
+
+    if (!forecastAvailable) {
+        return '<p class="forecast-unavailable-copy">No qualifying pre-match forecast is published in this artifact.</p>';
     }
 
     const homeExpected = fixture[`home_expected_${metric}`];
@@ -283,6 +313,7 @@ function createFixtureCard(fixture, scaleMax, metric) {
                 </div>
             </div>
             <div class="fixture-card-actions">
+                ${renderForecastStatusHtml(fixture)}
                 <button class="favorite-toggle" type="button" aria-pressed="${favorite}" aria-label="${favorite ? 'Remove' : 'Save'} ${fixture.home_team} versus ${fixture.away_team} ${favorite ? 'from' : 'to'} favorites">${favorite ? 'Saved' : 'Save'}</button>
                 <button class="fixture-details-toggle" type="button" aria-expanded="${expanded}" aria-label="${expanded ? 'Hide' : 'Show'} details for ${fixture.home_team} versus ${fixture.away_team}">${expanded ? 'Hide details' : 'View details'} <span class="details-toggle-icon" aria-hidden="true">⌄</span></button>
             </div>
@@ -349,16 +380,83 @@ function fixtureMatchesSearch(fixture, query) {
         .some(value => String(value || '').toLocaleLowerCase().includes(normalized));
 }
 
+function fixtureStatusGroup(fixture) {
+    if (fixture.status === 'FINISHED') return 'finished';
+    if (['SCHEDULED', 'TIMED', 'IN_PLAY', 'PAUSED'].includes(fixture.status)) return 'upcoming';
+    return 'other';
+}
+
+function fixtureMatchesHomeFilters(fixture) {
+    const statusMatches = appState.homeStatusFilter === 'all'
+        || fixtureStatusGroup(fixture) === appState.homeStatusFilter;
+    const forecastMatches = appState.homeForecastFilter === 'all'
+        || (appState.homeForecastFilter === 'available') === fixtureHasPublishedForecast(fixture);
+    return statusMatches && forecastMatches;
+}
+
+function hasActiveHomeConstraints() {
+    return Boolean(appState.activeSearchQuery.trim())
+        || appState.homeStatusFilter !== 'all'
+        || appState.homeForecastFilter !== 'all';
+}
+
+function resetHomeConstraints() {
+    appState.activeSearchQuery = '';
+    appState.homeStatusFilter = 'all';
+    appState.homeForecastFilter = 'all';
+    renderActiveTab();
+}
+
+function formatArtifactFreshness(value) {
+    const parsed = new Date(value || '');
+    if (Number.isNaN(parsed.getTime())) return null;
+    return parsed.toISOString().replace('T', ' ').replace(/\.\d{3}Z$/, ' UTC');
+}
+
+function createFilterGroup(labelText, stateKey, options) {
+    const group = document.createElement('div');
+    group.className = 'fixture-filter-group';
+    const label = document.createElement('span');
+    label.className = 'fixture-filter-label';
+    label.textContent = labelText;
+    group.appendChild(label);
+    const controls = document.createElement('div');
+    controls.className = 'fixture-filter-controls';
+    options.forEach(([value, text]) => {
+        const button = document.createElement('button');
+        const selected = appState[stateKey] === value;
+        button.className = `fixture-filter-button ${selected ? 'active' : ''}`;
+        button.setAttribute('type', 'button');
+        button.setAttribute('aria-pressed', String(selected));
+        button.textContent = text;
+        button.addEventListener('click', () => {
+            appState[stateKey] = value;
+            renderActiveTab();
+        });
+        controls.appendChild(button);
+    });
+    group.appendChild(controls);
+    return group;
+}
+
 function createHomeToolbar(totalCount, visibleCount) {
     const toolbar = document.createElement('section');
     toolbar.className = 'home-toolbar';
-    const countText = appState.activeSearchQuery
+    const countText = hasActiveHomeConstraints()
         ? `${visibleCount} of ${totalCount} matches`
         : `${totalCount} ${totalCount === 1 ? 'match' : 'matches'}`;
 
     const copy = document.createElement('div');
     copy.className = 'home-toolbar-copy';
     copy.innerHTML = `<p class="eyebrow">Match centre</p><h2>${formatHomeDate(appState.activeDate)} <span class="fixture-count">${countText}</span></h2><p>Browse scheduled and completed fixtures by competition.</p>`;
+    const freshness = formatArtifactFreshness(appState.fixtureData && appState.fixtureData.meta && appState.fixtureData.meta.generated_at);
+    if (freshness) {
+        const freshnessLine = document.createElement('p');
+        freshnessLine.className = 'artifact-freshness';
+        freshnessLine.textContent = `Data updated ${freshness}`;
+        freshnessLine.setAttribute('aria-label', `Fixture data artifact generated at ${freshness}`);
+        copy.appendChild(freshnessLine);
+    }
 
     const searchField = document.createElement('div');
     searchField.className = 'home-search-field';
@@ -382,9 +480,36 @@ function createHomeToolbar(totalCount, visibleCount) {
     searchField.appendChild(label);
     searchField.appendChild(input);
     searchField.appendChild(help);
+    const filters = document.createElement('div');
+    filters.className = 'fixture-filters';
+    filters.setAttribute('aria-label', 'Fixture filters');
+    filters.appendChild(createFilterGroup('Status', 'homeStatusFilter', HOME_STATUS_FILTERS));
+    filters.appendChild(createFilterGroup('Forecast', 'homeForecastFilter', HOME_FORECAST_FILTERS));
     toolbar.appendChild(copy);
     toolbar.appendChild(searchField);
+    toolbar.appendChild(filters);
     return toolbar;
+}
+
+function createHomeEmptyState(hasFixturesOnDate) {
+    const state = document.createElement('div');
+    state.className = 'no-fixtures';
+    if (!hasFixturesOnDate) {
+        state.innerHTML = '<div><strong>No fixtures on this date.</strong>Select another date to view available matches.</div>';
+        return state;
+    }
+    const statusPhrase = appState.homeStatusFilter === 'all' ? '' : `${appState.homeStatusFilter} `;
+    const forecastPhrase = appState.homeForecastFilter === 'all' ? '' : `${appState.homeForecastFilter} forecast `;
+    const searchPhrase = appState.activeSearchQuery.trim() ? ' matching this search' : '';
+    const message = `No ${statusPhrase}${forecastPhrase}fixtures${searchPhrase}.`.replace(/\\s+/g, ' ');
+    state.innerHTML = `<div><strong>${message}</strong>Try another filter or clear the current constraints.</div>`;
+    const reset = document.createElement('button');
+    reset.className = 'empty-state-reset';
+    reset.setAttribute('type', 'button');
+    reset.textContent = 'Clear filters';
+    reset.addEventListener('click', resetHomeConstraints);
+    state.appendChild(reset);
+    return state;
 }
 
 function renderHome() {
@@ -395,16 +520,13 @@ function renderHome() {
     container.innerHTML = '';
 
     const fixturesOnDate = appState.allFixtures.filter(fixture => fixture.localDateStr === appState.activeDate);
-    const visibleFixtures = fixturesOnDate.filter(fixture => fixtureMatchesSearch(fixture, appState.activeSearchQuery));
+    const visibleFixtures = fixturesOnDate
+        .filter(fixture => fixtureMatchesSearch(fixture, appState.activeSearchQuery))
+        .filter(fixtureMatchesHomeFilters);
     container.appendChild(createHomeToolbar(fixturesOnDate.length, visibleFixtures.length));
 
     if (fixturesOnDate.length === 0 || visibleFixtures.length === 0) {
-        const state = document.createElement('div');
-        state.className = 'no-fixtures';
-        state.innerHTML = fixturesOnDate.length === 0
-            ? '<div><strong>No fixtures on this date.</strong>Select another date to view available matches.</div>'
-            : '<div><strong>No fixtures match this search.</strong>Try a different team or league name.</div>';
-        container.appendChild(state);
+        container.appendChild(createHomeEmptyState(fixturesOnDate.length > 0));
         return;
     }
 
