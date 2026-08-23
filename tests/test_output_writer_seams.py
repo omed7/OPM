@@ -332,5 +332,50 @@ class TestPastMatchRetrieval(unittest.TestCase):
         self.assertEqual(past_matches[0]["home_goals"], 2)
 
 
+    @patch("src.output_writer.supabase_request")
+    @patch("src.output_writer.datetime")
+    def test_current_run_records_override_and_extend_persisted_results(
+        self, mock_datetime, mock_supabase_request
+    ):
+        mock_datetime.now.return_value = self.fixed_now
+        mock_supabase_request.side_effect = [
+            ([self.prediction], None),
+            ([self.completed_match], None),
+        ]
+        refreshed_same_fixture = {
+            **self.completed_match,
+            "league": "generic-oddalerts-league",
+            "venue": "home",
+            "goals_for": 3,
+            "goals_against": 2,
+            "xg_for": 2.4,
+            "xg_against": 1.1,
+        }
+        newly_completed_fixture = {
+            **self.completed_match,
+            "league": "generic-oddalerts-league",
+            "venue": "home",
+            "team": "New Home FC",
+            "opponent": "New Away FC",
+            "date": "2026-08-13",
+            "goals_for": 1,
+            "goals_against": 0,
+            "xg_for": 1.2,
+            "xg_against": 0.4,
+        }
+
+        past_matches = output_writer.get_past_matches(
+            [refreshed_same_fixture, newly_completed_fixture], "generic-oddalerts-league"
+        )
+
+        self.assertEqual(len(past_matches), 2)
+        result_by_date = {match["date"][:10]: match for match in past_matches}
+        self.assertEqual(result_by_date["2026-08-12"]["home_goals"], 3)
+        self.assertEqual(result_by_date["2026-08-12"]["home_xg"], 2.4)
+        self.assertEqual(result_by_date["2026-08-12"]["combined_expected_goals"], 2.5)
+        self.assertEqual(result_by_date["2026-08-13"]["home_team"], "New Home FC")
+        self.assertIsNone(result_by_date["2026-08-13"]["combined_expected_goals"])
+
+
 if __name__ == "__main__":
     unittest.main()

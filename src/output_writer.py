@@ -731,61 +731,44 @@ def get_past_matches(db_records, league_id):
             key = f"{p['home_team']}-{p['away_team']}-{p['date'][:10]}"
             predictions_map[key] = p
 
-    # 2. Check supabase first if available
+    # 2. Merge persisted rows with freshly fetched current-run rows. The latter is
+    # authoritative for a matching fixture because it reflects the source snapshot
+    # that is about to be persisted after this publication pass.
     endpoint = f"/matches?league=eq.{league_id}&venue=eq.home&date=gte.{start_date}&date=lte.{end_date}&goals_for=not.is.null"
     res, err = supabase_request(endpoint)
+    result_records = {}
     if err is None and res:
         for r in res:
             key = f"{r['team']}-{r['opponent']}-{r['date'][:10]}"
-            pred = predictions_map.get(key, {})
-            past_matches.append({
-                "home_team": r["team"],
-                "away_team": r["opponent"],
-                "date": r["date"],
-                "home_goals": r["goals_for"],
-                "away_goals": r["goals_against"],
-                "home_xg": r.get("xg_for"),
-                "away_xg": r.get("xg_against"),
-                "home_expected_xg": pred.get("home_expected_xg"),
-                "away_expected_xg": pred.get("away_expected_xg"),
-                "combined_expected_xg": pred.get("combined_expected_xg"),
-                "home_expected_goals": pred.get("home_expected_goals"),
-                "away_expected_goals": pred.get("away_expected_goals"),
-                "combined_expected_goals": pred.get("combined_expected_goals"),
-                "status": "FINISHED"
-            })
-        return past_matches
+            result_records[key] = r
 
-    # Fallback to local db_records if supabase fetch fails
     for r in db_records:
-        if r.get("league") == league_id and r.get("venue") == "home" and r.get("goals_for") is not None and r.get("date"):
-            date_str = r["date"][:10]
-            if start_date <= date_str <= end_date:
-                key = f"{r['team']}-{r['opponent']}-{date_str}"
-                pred = predictions_map.get(key, {})
-                past_matches.append({
-                    "home_team": r["team"],
-                    "away_team": r["opponent"],
-                    "date": r["date"],
-                    "home_goals": r["goals_for"],
-                    "away_goals": r["goals_against"],
-                    "home_xg": r.get("xg_for"),
-                    "away_xg": r.get("xg_against"),
-                    "home_expected_xg": pred.get("home_expected_xg"),
-                    "away_expected_xg": pred.get("away_expected_xg"),
-                    "combined_expected_xg": pred.get("combined_expected_xg"),
-                    "home_expected_goals": pred.get("home_expected_goals"),
-                    "away_expected_goals": pred.get("away_expected_goals"),
-                    "combined_expected_goals": pred.get("combined_expected_goals"),
-                    "status": "FINISHED"
-                })
+        if r.get("league") != league_id or r.get("venue") != "home" or r.get("goals_for") is None or not r.get("date"):
+            continue
+        date_str = r["date"][:10]
+        if start_date <= date_str <= end_date:
+            key = f"{r['team']}-{r['opponent']}-{date_str}"
+            result_records[key] = r
 
-    # Deduplicate fallback matches
-    unique_matches = {}
-    for m in past_matches:
-        key = f"{m['home_team']}-{m['away_team']}-{m['date'][:10]}"
-        unique_matches[key] = m
-    return list(unique_matches.values())
+    for key, r in result_records.items():
+        pred = predictions_map.get(key, {})
+        past_matches.append({
+            "home_team": r["team"],
+            "away_team": r["opponent"],
+            "date": r["date"],
+            "home_goals": r["goals_for"],
+            "away_goals": r["goals_against"],
+            "home_xg": r.get("xg_for"),
+            "away_xg": r.get("xg_against"),
+            "home_expected_xg": pred.get("home_expected_xg"),
+            "away_expected_xg": pred.get("away_expected_xg"),
+            "combined_expected_xg": pred.get("combined_expected_xg"),
+            "home_expected_goals": pred.get("home_expected_goals"),
+            "away_expected_goals": pred.get("away_expected_goals"),
+            "combined_expected_goals": pred.get("combined_expected_goals"),
+            "status": "FINISHED"
+        })
+    return past_matches
 
 
 def league_name_map():
