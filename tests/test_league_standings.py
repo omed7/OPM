@@ -279,6 +279,48 @@ class TestLeagueStandingsArtifact(unittest.TestCase):
             "average": -0.2125,
         })
 
+    def test_canonicalizes_brazil_aliases_and_ignores_wrong_source_boundary_rows(self):
+        def fixture(date, home, away, source):
+            return {
+                "team": home,
+                "opponent": away,
+                "date": date,
+                "venue": "home",
+                "league": "serie-a-brazil",
+                "goals_for": 1,
+                "goals_against": 0,
+                "xg_for": 1.1,
+                "xg_against": 0.7,
+                "source": source,
+            }
+
+        matches = [
+            fixture("2026-08-09", "Athletico", "Legacy Opponent", "thestatsapi"),
+            fixture("2026-08-09", "Athletico PR", "Legacy Opponent", "oddalerts"),
+            fixture("2026-08-15", "Athletico PR", "Current Opponent", "oddalerts"),
+            fixture("2026-08-09", "Red Bull Bragantino", "Legacy Opponent", "thestatsapi"),
+            fixture("2026-08-09", "Bragantino", "Legacy Opponent", "oddalerts"),
+            fixture("2026-08-15", "Bragantino", "Current Opponent", "oddalerts"),
+        ]
+
+        artifact = build_standings_artifact(
+            matches,
+            [],
+            {"serie-a-brazil": "Serie A Brazil"},
+            version="test-version",
+            generated_at="2026-08-16T00:00:00Z",
+        )
+
+        teams = {
+            team["name"]: team
+            for team in artifact["leagues"][0]["seasons"][0]["teams"]
+        }
+        self.assertEqual(set(teams), {"Athletico PR", "Bragantino", "Current Opponent", "Legacy Opponent"})
+        self.assertEqual(teams["Athletico PR"]["matches_played"], 2)
+        self.assertEqual(teams["Bragantino"]["matches_played"], 2)
+        self.assertNotIn("Athletico", teams)
+        self.assertNotIn("Red Bull Bragantino", teams)
+
 
 if __name__ == "__main__":
     unittest.main()
