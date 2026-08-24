@@ -213,6 +213,96 @@ class TestOddAlertsFixtureProcessing(unittest.TestCase):
             ],
         )
 
+    @patch("src.output_writer.parse_upcoming_fixtures")
+    @patch("src.output_writer.urllib.request.urlopen")
+    def test_uses_canonicalized_retained_history_for_oddalerts_upcoming_fixture(
+        self, mock_urlopen, mock_parser
+    ):
+        mock_urlopen.return_value.__enter__.return_value.read.return_value = b"<html>fixtures</html>"
+        mock_parser.return_value = [{
+            "home_team": "Botafogo",
+            "away_team": "Athletico PR",
+            "date": "2026-08-25",
+            "kickoff_time": "00:00",
+        }]
+
+        records = []
+        for team, name in (("Botafogo", "Botafogo"), ("Athletico", "Athletico")):
+            for index, venue in enumerate(("home", "away", "home", "away"), start=1):
+                records.append({
+                    "team": team,
+                    "opponent": f"Opponent {name} {index}",
+                    "date": f"2026-08-{10 - index:02d}",
+                    "venue": venue,
+                    "xg_for": 1.0 + index / 10,
+                    "xg_against": 0.8 + index / 10,
+                    "goals_for": 1,
+                    "goals_against": 0,
+                    "league": "serie-a-brazil",
+                    "source": "thestatsapi",
+                })
+
+        league = output_writer.process_oddalerts_league(
+            "serie-a-brazil", "Serie A Brazil", "/leagues/brazil/serie-a/fixtures", records
+        )
+
+        self.assertEqual(len(league["fixtures"]), 1)
+        fixture = league["fixtures"][0]
+        self.assertEqual(fixture["home_team"], "Botafogo")
+        self.assertEqual(fixture["away_team"], "Athletico PR")
+        self.assertEqual(fixture["kickoff_time"], "00:00")
+        self.assertEqual(len(fixture["home_last_4_matches"]), 4)
+        self.assertEqual(len(fixture["away_last_4_matches"]), 4)
+
+    def test_merges_retained_and_current_oddalerts_history_by_canonical_identity(self):
+        retained = [
+            {
+                "team": "Athletico",
+                "opponent": "Legacy Opponent",
+                "date": "2026-08-09",
+                "venue": "home",
+                "goals_for": 1,
+                "goals_against": 0,
+                "xg_for": 1.0,
+                "xg_against": 0.8,
+                "league": "serie-a-brazil",
+                "source": "thestatsapi",
+            }
+        ]
+        current_run = [
+            {
+                "team": "Athletico PR",
+                "opponent": "Current Opponent",
+                "date": "2026-08-15",
+                "venue": "away",
+                "goals_for": 1,
+                "goals_against": 1,
+                "xg_for": 1.1,
+                "xg_against": 1.1,
+                "league": "serie-a-brazil",
+                "source": "oddalerts",
+            },
+            {
+                "team": "Athletico PR",
+                "opponent": "Invalid Boundary Opponent",
+                "date": "2026-08-09",
+                "venue": "away",
+                "goals_for": 0,
+                "goals_against": 0,
+                "xg_for": 0.5,
+                "xg_against": 0.5,
+                "league": "serie-a-brazil",
+                "source": "oddalerts",
+            },
+        ]
+
+        history = output_writer.oddalerts_forecast_history(
+            "serie-a-brazil", retained, current_run
+        )
+
+        self.assertEqual({record["team"] for record in history}, {"Athletico PR"})
+        self.assertEqual({record["date"] for record in history}, {"2026-08-09", "2026-08-15"})
+
 
 class TestPastMatchRetrieval(unittest.TestCase):
     def setUp(self):

@@ -23,6 +23,10 @@ from src.compute.venue_weighted_methodology import (
 )
 from src.compute.season_policy import summarize_history_filter
 from src.compute.source_boundary import accepts_provider_record
+from src.compute.team_identity import (
+    canonical_boundary_valid_records,
+    canonical_team_name,
+)
 from src.compute.league_standings import build_standings_artifact
 from src.supabase_client import supabase_request
 
@@ -330,6 +334,16 @@ def process_understat_league(league_code, league_name, output_id, source_health=
     }
 
 
+def oddalerts_forecast_history(league_id, retained_records, current_run_records):
+    """Merge retained and current-run rows for forecast history without persisting changes."""
+    records = [
+        record
+        for record in [*retained_records, *current_run_records]
+        if record.get("league") == league_id
+    ]
+    return canonical_boundary_valid_records(records)
+
+
 def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, source_health=None):
     print(f"Fetching upcoming {league_name} fixtures from OddAlerts...")
 
@@ -357,12 +371,14 @@ def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, 
         record_source_health(source_health, "oddalerts", league_id, status, detail)
 
     output_fixtures = []
-    league_matches = [m for m in db_records if m.get('league') == league_id]
+    league_matches = canonical_boundary_valid_records(
+        [record for record in db_records if record.get("league") == league_id]
+    )
 
     for fixture in fixtures:
         fixture_date, kickoff_time = fixture_date_and_kickoff_time(fixture)
-        home_team = fixture['home_team']
-        away_team = fixture['away_team']
+        home_team = canonical_team_name(league_id, fixture['home_team'])
+        away_team = canonical_team_name(league_id, fixture['away_team'])
         try:
             fixture_records, season_counts = summarize_history_filter(
                 league_matches, league_id, fixture_date
@@ -531,8 +547,8 @@ def map_oddalerts_to_db(matches, league_id):
             away_xg = None
 
         date = m.get("date")
-        home_team = m.get("home_team")
-        away_team = m.get("away_team")
+        home_team = canonical_team_name(league_id, m.get("home_team"))
+        away_team = canonical_team_name(league_id, m.get("away_team"))
 
         try:
             accepted_by_boundary = accepts_provider_record("oddalerts", league_id, date)
@@ -815,7 +831,7 @@ def fetch_historical_standings_records():
     """Return retained result and prediction rows required by the standings artifact."""
     matches, matches_error = fetch_all_supabase_rows(
         "matches",
-        "team,opponent,date,venue,league,goals_for,goals_against,xg_for,xg_against",
+        "team,opponent,date,venue,league,goals_for,goals_against,xg_for,xg_against,source",
     )
     if matches_error is not None:
         return None, None, f"Could not read matches for standings: {matches_error}"
@@ -874,13 +890,20 @@ def main():
             )
 
 
+    retained_matches, _retained_predictions, retained_history_error = fetch_historical_standings_records()
+    if retained_history_error is not None:
+        retained_matches = []
+
     leagues_data = []
     oddalerts_leagues_data = []
 
     for league in ODDALERTS_LEAGUES:
         try:
+            history_records = oddalerts_forecast_history(
+                league["id"], retained_matches, db_records
+            )
             data = process_oddalerts_league(
-                league["id"], league["name"], league["fixtures_path"], db_records, source_health
+                league["id"], league["name"], league["fixtures_path"], history_records, source_health
             )
             oddalerts_leagues_data.append(data)
         except Exception as e:

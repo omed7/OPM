@@ -20,6 +20,10 @@ from src.compute.venue_weighted_methodology import (
     MissingMetricDataError,
     calculate_fixture_expectation,
 )
+from src.compute.team_identity import (
+    canonical_boundary_valid_records,
+    canonicalize_prediction_record,
+)
 
 
 VIEWS = ("overall", "for", "against")
@@ -250,7 +254,8 @@ def build_standings_artifact(matches, predictions, league_names, version, genera
     reconstructed only from earlier same-season team records.
     """
     predictions_by_key = {}
-    for prediction in predictions:
+    for raw_prediction in predictions:
+        prediction = canonicalize_prediction_record(raw_prediction)
         league = prediction.get("league")
         home_team = prediction.get("home_team")
         away_team = prediction.get("away_team")
@@ -259,7 +264,7 @@ def build_standings_artifact(matches, predictions, league_names, version, genera
             predictions_by_key[_fixture_key(league, home_team, away_team, fixture_date)] = prediction
 
     seasons = {}
-    for match in matches:
+    for match in canonical_boundary_valid_records(matches):
         fixture = _normalise_completed_home_fixture(match)
         if fixture is None:
             continue
