@@ -671,13 +671,50 @@ h2 {
     text-transform: none;
 }
 
+.home-forecast-summary {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 9px 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-color) 18%, var(--border-color));
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--accent-soft) 42%, var(--card-bg));
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+}
+
+.home-forecast-summary.private {
+    border-color: color-mix(in srgb, var(--accent-color) 42%, var(--border-color));
+    background: var(--accent-soft);
+}
+
+.home-forecast-summary span,
+.home-forecast-summary small {
+    font-weight: 800;
+}
+
+.home-forecast-summary strong {
+    color: var(--accent-strong);
+    font-size: 0.88rem;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+}
+
+.home-forecast-summary small {
+    color: var(--text-secondary);
+    font-size: 0.68rem;
+    white-space: nowrap;
+}
+
 .fixture-card-actions {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    margin-top: 14px;
-    padding-top: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
     border-top: 1px solid var(--border-color);
 }
 
@@ -1468,6 +1505,15 @@ footer p {
     .fixture-filter-group {
         width: 100%;
         justify-content: space-between;
+    }
+
+    .home-forecast-summary {
+        grid-template-columns: 1fr auto;
+    }
+
+    .home-forecast-summary small {
+        grid-column: 1 / -1;
+        text-align: center;
     }
 
     .fixture-card-actions {
