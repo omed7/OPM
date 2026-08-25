@@ -30,6 +30,13 @@
         };
     }
 
+    function canCalculateXg(fixture) {
+        const histories = historyKeys(fixture);
+        const validHistory = matches => matches.length === 4
+            && matches.every(match => ['xg_for', 'xg_against'].every(field => Number.isFinite(Number(match[field]))));
+        return validHistory(histories.homeMatches) && validHistory(histories.awayMatches);
+    }
+
     function evenlyDistributedWeights(length) {
         if (!length) return [];
         const base = Math.floor(TOTAL_BASIS_POINTS / length);
@@ -163,7 +170,7 @@
     }
 
     function fixtureEditorHtml(fixture) {
-        if (fixture.status === 'FINISHED') return '';
+        if (fixture.status === 'FINISHED' || !canCalculateXg(fixture)) return '';
         try {
             const preview = fixturePreview(fixture);
             return `
@@ -293,6 +300,7 @@
         fixtureEditorHtml,
         bindEditor,
         fixtureKey,
+        canCalculateXg,
         readFixtureStorage,
         writeFixtureStorage,
         selectedRows,
