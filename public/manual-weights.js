@@ -159,14 +159,33 @@
         return String(value).replace(/[&<>'"]/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
     }
 
+    function allocationSummary(rows) {
+        const pinnedTotal = rows
+            .filter(row => row.pinned)
+            .reduce((total, row) => total + row.weight_bps, 0);
+        return `Pinned ${percentage(pinnedTotal)}% · ${percentage(TOTAL_BASIS_POINTS - pinnedTotal)}% shared`;
+    }
+
     function editorRows(team, side, rows) {
         return rows.map((row, index) => `
-            <label class="manual-weight-row">
+            <label class="manual-weight-row ${row.pinned ? 'is-pinned' : ''}">
                 <span>${escapeHtml(row.match.date)} · ${escapeHtml(row.match.venue)} · ${escapeHtml(row.match.opponent)}</span>
                 <input class="manual-weight-input" type="number" min="0" max="100" step="0.01" value="${percentage(row.weight_bps)}" data-manual-side="${side}" data-manual-index="${index}" data-manual-pinned="${row.pinned ? 'true' : 'false'}" aria-label="Manual percentage for ${escapeHtml(team)} versus ${escapeHtml(row.match.opponent)}">
-                <small>${row.pinned ? 'Pinned for this fixture' : 'Shares this fixture’s remainder'}</small>
+                <small class="manual-row-state">${row.pinned ? 'Pinned' : 'Shares remainder'}</small>
             </label>
         `).join('');
+    }
+
+    function editorColumn(team, side, rows) {
+        return `
+            <section class="manual-team-group">
+                <div class="manual-team-heading">
+                    <strong>${escapeHtml(team)} allocation</strong>
+                    <span class="manual-allocation-summary" data-manual-side="${side}">${allocationSummary(rows)}</span>
+                </div>
+                ${editorRows(team, side, rows)}
+            </section>
+        `;
     }
 
     function fixtureEditorHtml(fixture) {
@@ -175,14 +194,14 @@
             const preview = fixturePreview(fixture);
             return `
                 <section class="manual-weights-panel" aria-label="Manual match weights">
-                    <div class="manual-weights-heading"><div><p class="eyebrow">Private Safari adjustment</p><h3>Manual match weights</h3></div><span class="manual-preview-value">Manual xG: ${preview.home_expected_xg.toFixed(2)} – ${preview.away_expected_xg.toFixed(2)}${preview.home_expected_goals === null ? '' : `<br>Goals: ${preview.home_expected_goals.toFixed(2)} – ${preview.away_expected_goals.toFixed(2)}`}</span></div>
-                    <p class="manual-weights-copy">This adjustment applies only to this fixture and is saved privately in Safari. Future fixtures start at equal weights.</p>
+                    <div class="manual-weights-heading"><div><p class="eyebrow">Private to this iPhone</p><h3>Manual match weights</h3></div><span class="manual-preview-value">Manual xG: ${preview.home_expected_xg.toFixed(2)} – ${preview.away_expected_xg.toFixed(2)}${preview.home_expected_goals === null ? '' : `<br>Goals: ${preview.home_expected_goals.toFixed(2)} – ${preview.away_expected_goals.toFixed(2)}`}</span></div>
+                    <p class="manual-weights-copy">Adjust one match to pin it; the other matches share the remainder. This applies only to this fixture.</p>
                     <div class="manual-weights-columns">
-                        <div><strong>${escapeHtml(fixture.home_team)}</strong>${editorRows(fixture.home_team, 'home', preview.homeRows)}</div>
-                        <div><strong>${escapeHtml(fixture.away_team)}</strong>${editorRows(fixture.away_team, 'away', preview.awayRows)}</div>
+                        ${editorColumn(fixture.home_team, 'home', preview.homeRows)}
+                        ${editorColumn(fixture.away_team, 'away', preview.awayRows)}
                     </div>
                     <p class="manual-weights-error" hidden role="alert"></p>
-                    <div class="manual-weights-actions"><button class="secondary-button manual-weights-reset" type="button">Reset to 25%</button><button class="primary-button manual-weights-save" type="button">Save in Safari</button></div>
+                    <div class="manual-weights-actions"><button class="secondary-button manual-weights-reset" type="button">Reset this fixture</button><button class="primary-button manual-weights-save" type="button">Save private adjustment</button></div>
                 </section>
             `;
         } catch (error) {
@@ -208,12 +227,30 @@
         return `Manual xG: ${preview.home_expected_xg.toFixed(2)} – ${preview.away_expected_xg.toFixed(2)}${goals}`;
     }
 
+    function updateAllocationSummary(root, side) {
+        const inputs = inputsForSide(root, side);
+        const pinnedTotal = inputs
+            .filter(input => input.dataset.manualPinned === 'true')
+            .reduce((total, input) => total + Math.round(Number(input.value) * 100), 0);
+        const summary = root.querySelector(`.manual-allocation-summary[data-manual-side="${side}"]`);
+        if (summary) summary.textContent = `Pinned ${percentage(pinnedTotal)}% · ${percentage(TOTAL_BASIS_POINTS - pinnedTotal)}% shared`;
+        inputs.forEach(input => {
+            const row = input.closest('.manual-weight-row');
+            const state = row && row.querySelector('.manual-row-state');
+            const pinned = input.dataset.manualPinned === 'true';
+            if (row) row.classList.toggle('is-pinned', pinned);
+            if (state) state.textContent = pinned ? 'Pinned' : 'Shares remainder';
+        });
+    }
+
     function updateEditorPreview(root, fixture) {
         const home = valuesFromEditor(root, 'home');
         const away = valuesFromEditor(root, 'away');
         const preview = previewForWeights(fixture, home.weights, away.weights, home.pinned, away.pinned);
         const target = root.querySelector('.manual-preview-value');
         if (target) target.innerHTML = previewSummaryHtml(preview);
+        updateAllocationSummary(root, 'home');
+        updateAllocationSummary(root, 'away');
     }
 
     function redistribute(sideInputs, changedInput) {

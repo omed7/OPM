@@ -1634,9 +1634,14 @@ footer p {
 }
 
 .manual-preview-value {
+    padding: 8px 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-color) 30%, var(--border-color));
+    border-radius: var(--radius-sm);
+    background: var(--card-bg);
     color: var(--accent-strong);
     font-size: 0.82rem;
     font-weight: 800;
+    text-align: right;
     white-space: nowrap;
 }
 
@@ -1650,6 +1655,31 @@ footer p {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
+}
+
+.manual-team-group {
+    padding: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent-color) 18%, var(--border-color));
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--card-bg) 78%, transparent);
+}
+
+.manual-team-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid color-mix(in srgb, var(--border-color) 78%, transparent);
+    color: var(--text-primary);
+    font-size: 0.78rem;
+}
+
+.manual-allocation-summary {
+    color: var(--text-secondary);
+    font-size: 0.67rem;
+    font-weight: 800;
+    text-align: right;
 }
 
 .manual-weight-row {
@@ -1669,8 +1699,8 @@ footer p {
 
 .manual-weight-row input {
     width: 100%;
-    min-height: 34px;
-    padding: 4px 7px;
+    min-height: 40px;
+    padding: 6px 8px;
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-sm);
     background: var(--bg-elevated);
@@ -1678,10 +1708,20 @@ footer p {
     text-align: right;
 }
 
+.manual-weight-row.is-pinned input {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-color) 14%, transparent);
+}
+
 .manual-weight-row small {
     grid-column: 1 / -1;
     color: var(--text-tertiary);
     font-size: 0.68rem;
+}
+
+.manual-row-state {
+    color: var(--accent-strong) !important;
+    font-weight: 800;
 }
 
 .manual-weights-error {
@@ -1711,6 +1751,22 @@ footer p {
     }
 
     .manual-weights-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         align-items: stretch;
+    }
+
+    .manual-preview-value {
+        width: 100%;
+        text-align: left;
+    }
+
+    .manual-team-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .manual-allocation-summary {
+        text-align: left;
     }
 }

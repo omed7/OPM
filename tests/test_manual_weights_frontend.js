@@ -39,6 +39,12 @@ function fixture(date) {
 }
 
 const selectedFixture = fixture('2026-08-30');
+const editorHtml = manualWeights.fixtureEditorHtml(selectedFixture);
+assert.match(editorHtml, /Home FC allocation/);
+assert.match(editorHtml, /Away FC allocation/);
+assert.match(editorHtml, /Pinned 0\.00% · 100\.00% shared/);
+assert.match(editorHtml, /Reset this fixture/);
+assert.match(editorHtml, /Save private adjustment/);
 let preview = manualWeights.fixturePreview(selectedFixture);
 assert.deepStrictEqual(preview.homeRows.map(row => row.weight_bps), [2500, 2500, 2500, 2500]);
 assert.deepStrictEqual(preview.awayRows.map(row => row.weight_bps), [2500, 2500, 2500, 2500]);
