@@ -414,13 +414,33 @@ h2 {
 }
 
 .fixture-filter-button {
-    min-height: 30px;
+    min-height: 36px;
     border-radius: 7px;
-    padding: 5px 8px;
+    padding: 6px 9px;
     background: transparent;
     color: var(--text-secondary);
     font-size: 0.72rem;
     font-weight: 800;
+}
+
+.home-filter-actions {
+    display: none;
+}
+
+.home-filter-toggle,
+.home-filter-clear {
+    min-height: 40px;
+    border: 1px solid var(--border-strong);
+    border-radius: 9px;
+    padding: 8px 11px;
+    background: var(--card-bg);
+    color: var(--accent-strong);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.home-filter-clear {
+    color: var(--text-secondary);
 }
 
 .fixture-filter-button:hover {
@@ -777,7 +797,7 @@ h2 {
 .secondary-button,
 .primary-button,
 .text-button {
-    min-height: 34px;
+    min-height: 40px;
     border-radius: 9px;
     padding: 7px 10px;
     font-size: 0.74rem;
@@ -1499,12 +1519,31 @@ footer p {
     }
 
     .fixture-filters {
+        display: none;
         gap: 10px;
+    }
+
+    .fixture-filters.mobile-open {
+        display: flex;
     }
 
     .fixture-filter-group {
         width: 100%;
         justify-content: space-between;
+    }
+
+    .fixture-filter-button {
+        min-height: 40px;
+    }
+
+    .home-filter-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .home-filter-toggle {
+        flex: 1;
     }
 
     .home-forecast-summary {

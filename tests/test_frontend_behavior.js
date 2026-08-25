@@ -377,6 +377,7 @@ async function testHomeSearchDetailsAndFavorites() {
     assert.match(homeToolbar(elements).children[0].innerHTML, /2 matches/);
     assert.match(card.innerHTML, /UTC\+03:00 · 21:30/);
     assert.match(card.innerHTML, /View details/);
+    assert.match(card.innerHTML, />Favorite<\/button>/);
     assert.doesNotMatch(card.innerHTML, /Predicted xG/);
 
     activateCardControl(card, '.fixture-details-toggle');
@@ -386,6 +387,7 @@ async function testHomeSearchDetailsAndFavorites() {
 
     activateCardControl(card, '.favorite-toggle');
     assert.match(storage.getItem('opm:favorites:v1'), /Home FC/);
+    assert.match(homeCard(elements).innerHTML, />Favorited<\/button>/);
 
     let search = homeToolbar(elements).children[1].children[1];
     search.listeners.input({ target: { value: 'Madrid' } });
@@ -460,6 +462,35 @@ async function testUnavailableUpcomingFixtureStillRendersManualEditor() {
     activateCardControl(card, '.fixture-details-toggle');
     assert.match(card.innerHTML, /Manual match weights/);
     assert.match(card.innerHTML, /Manual xG:/);
+    assert.deepStrictEqual(app.errors, []);
+}
+
+async function testHomeMobileFilterDisclosureReflectsConstraints() {
+    const app = await boot({
+        data: { leagues: [{ id: 'premier_league', name: 'Premier League', metric: 'xg', fixtures: [predictionFixture()] }] },
+    });
+    let toolbar = homeToolbar(app.elements);
+    let actions = toolbar.children[3];
+    assert.match(actions.children[0].textContent, /Filters/);
+    assert.strictEqual(actions.children[0].getAttribute('aria-expanded'), 'false');
+    actions.children[0].click();
+
+    toolbar = homeToolbar(app.elements);
+    const filters = toolbar.children[2];
+    actions = toolbar.children[3];
+    assert.match(filters.className, /mobile-open/);
+    assert.strictEqual(actions.children[0].getAttribute('aria-expanded'), 'true');
+    filters.children[0].children[1].children[1].click();
+
+    toolbar = homeToolbar(app.elements);
+    actions = toolbar.children[3];
+    assert.match(actions.children[0].textContent, /Filters \(1\)/);
+    assert.strictEqual(actions.children[1].textContent, 'Clear');
+    actions.children[1].click();
+    toolbar = homeToolbar(app.elements);
+    actions = toolbar.children[3];
+    assert.strictEqual(actions.children.length, 1);
+    assert.strictEqual(actions.children[0].textContent, 'Filters');
     assert.deepStrictEqual(app.errors, []);
 }
 
@@ -767,6 +798,7 @@ async function testEmptyArtifactAndDataLoadError() {
     await testHomeSearchDetailsAndFavorites();
     await testHomeCardShowsPublishedAndPrivateForecastSummary();
     await testUnavailableUpcomingFixtureStillRendersManualEditor();
+    await testHomeMobileFilterDisclosureReflectsConstraints();
     await testXgOnlyForecastStaysAvailableOnHome();
     await testFixtureIntelligenceFiltersAvailabilityAndFreshness();
     await testCompletedTimestampUsesViewerLocalDateWithDateOnlyFallback();
