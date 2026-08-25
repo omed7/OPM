@@ -415,6 +415,19 @@ async function testHomeSearchDetailsAndFavorites() {
     assert.deepStrictEqual(errors, []);
 }
 
+async function testEmptyFavoritesUsesFavoriteActionCopy() {
+    const app = await boot({
+        data: {
+            leagues: [
+                { id: 'premier_league', name: 'Premier League', metric: 'xg', fixtures: [predictionFixture()] },
+            ],
+        },
+    });
+    app.elements['favorite-tab'].click();
+    assert.match(app.elements['fixtures-container'].innerHTML, /Use Favorite on a Home fixture to keep it here\./);
+    assert.doesNotMatch(app.elements['fixtures-container'].innerHTML, /Use Save on a Home fixture/);
+}
+
 async function testHomeCardShowsPublishedAndPrivateForecastSummary() {
     const fixture = manuallyAdjustableFixture({ leagueId: 'premier_league' });
     const app = await boot({
@@ -796,6 +809,7 @@ async function testEmptyArtifactAndDataLoadError() {
 
 (async () => {
     await testHomeSearchDetailsAndFavorites();
+    await testEmptyFavoritesUsesFavoriteActionCopy();
     await testHomeCardShowsPublishedAndPrivateForecastSummary();
     await testUnavailableUpcomingFixtureStillRendersManualEditor();
     await testHomeMobileFilterDisclosureReflectsConstraints();

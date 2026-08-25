@@ -956,7 +956,7 @@ function renderFavorites() {
     const favorites = appState.allFixtures.filter(isFavorite).sort((left, right) => left.timeObj - right.timeObj);
     container.innerHTML = `<div class="favorites-heading-row"><div><p class="eyebrow">Your match list</p><h2 class="tab-heading">Favorites</h2></div><span class="favorites-count">${favorites.length} saved</span></div><p class="tab-description">Saved fixtures are kept only in this browser.</p>`;
     if (!favorites.length) {
-        container.innerHTML += '<div class="no-fixtures"><div><strong>No saved fixtures yet.</strong>Use Save on a Home fixture to keep it here.</div></div>';
+        container.innerHTML += '<div class="no-fixtures"><div><strong>No saved fixtures yet.</strong>Use Favorite on a Home fixture to keep it here.</div></div>';
         return;
     }
     const grid = document.createElement('div');
