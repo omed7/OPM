@@ -246,14 +246,23 @@ function fixtureHasPublishedForecast(fixture) {
         .every(field => typeof fixture[field] === 'number' && Number.isFinite(fixture[field]));
 }
 
+function safariDisplayPrediction(fixture) {
+    const manualWeights = manualWeightsModule();
+    if (!manualWeights) return null;
+    return manualWeights.displayPrediction(fixture);
+}
+
 function renderForecastStatusHtml(fixture) {
-    const available = fixtureHasPublishedForecast(fixture);
-    const label = available ? 'Forecast available' : 'Forecast unavailable';
+    const manualPrediction = safariDisplayPrediction(fixture);
+    const available = fixtureHasPublishedForecast(manualPrediction || fixture);
+    const label = manualPrediction ? 'Private Safari forecast' : (available ? 'Forecast available' : 'Forecast unavailable');
     return `<span class="forecast-status ${available ? 'available' : 'unavailable'}">${label}</span>`;
 }
 
 function fixtureDetailsHtml(fixture, scaleMax, metric) {
-    const forecastAvailable = fixtureHasPublishedForecast(fixture);
+    const manualPrediction = safariDisplayPrediction(fixture);
+    const displayFixture = manualPrediction ? { ...fixture, ...manualPrediction } : fixture;
+    const forecastAvailable = fixtureHasPublishedForecast(displayFixture);
     if (fixture.status === 'FINISHED') {
         const goals = `${fixture.home_goals ?? '—'} - ${fixture.away_goals ?? '—'}`;
         const hasActualXg = [fixture.home_xg, fixture.away_xg]
@@ -281,9 +290,9 @@ function fixtureDetailsHtml(fixture, scaleMax, metric) {
         return '<p class="forecast-unavailable-copy">No qualifying pre-match forecast is published in this artifact.</p>';
     }
 
-    const homeExpected = fixture[`home_expected_${metric}`];
-    const awayExpected = fixture[`away_expected_${metric}`];
-    const combined = fixture[`combined_expected_${metric}`];
+    const homeExpected = displayFixture[`home_expected_${metric}`];
+    const awayExpected = displayFixture[`away_expected_${metric}`];
+    const combined = displayFixture[`combined_expected_${metric}`];
     const safeScale = Math.max(scaleMax || 3, 0.1);
     const homePercent = typeof homeExpected === 'number' ? Math.max(0, Math.min(100, (homeExpected / safeScale) * 100)) : 0;
     const awayPercent = typeof awayExpected === 'number' ? Math.max(0, Math.min(100, (awayExpected / safeScale) * 100)) : 0;
@@ -297,8 +306,8 @@ function fixtureDetailsHtml(fixture, scaleMax, metric) {
     const metricLabel = metric === 'xg' ? 'xG' : 'Goals';
 
     return `
-        <div class="fixture-detail-prediction">
-            <div class="detail-metric-label">Predicted ${metricLabel}</div>
+            <div class="fixture-detail-prediction">
+            <div class="detail-metric-label">${manualPrediction ? 'Private Safari ' : 'Predicted '}${metricLabel}</div>
             <div class="detail-metric-value">${formatNumber(combined)}</div>
             <div class="detail-metric-split">${formatNumber(homeExpected)} - ${formatNumber(awayExpected)}</div>
         </div>

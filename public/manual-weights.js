@@ -109,10 +109,10 @@
         };
     }
 
-    function fixturePreview(fixture, stored = readFixtureStorage(fixture)) {
+    function previewForWeights(fixture, homeWeights, awayWeights, homePinned = [], awayPinned = []) {
         const histories = historyKeys(fixture);
-        const homeRows = selectedRows(histories.homeMatches, stored && stored.home_weights, stored && stored.home_pinned);
-        const awayRows = selectedRows(histories.awayMatches, stored && stored.away_weights, stored && stored.away_pinned);
+        const homeRows = selectedRows(histories.homeMatches, homeWeights, homePinned);
+        const awayRows = selectedRows(histories.awayMatches, awayWeights, awayPinned);
         const xg = metricExpectation(homeRows, awayRows, 'xg');
         const goals = metricExpectation(homeRows, awayRows, 'goals');
         return {
@@ -125,6 +125,23 @@
             homeRows,
             awayRows,
         };
+    }
+
+    function fixturePreview(fixture, stored = readFixtureStorage(fixture)) {
+        return previewForWeights(
+            fixture,
+            stored && stored.home_weights,
+            stored && stored.away_weights,
+            stored && stored.home_pinned,
+            stored && stored.away_pinned,
+        );
+    }
+
+    function displayPrediction(fixture) {
+        if (fixture.status === 'FINISHED') return null;
+        const stored = readFixtureStorage(fixture);
+        if (!stored) return null;
+        return fixturePreview(fixture, stored);
     }
 
     function percentage(value) {
@@ -177,6 +194,21 @@
         target.hidden = !message;
     }
 
+    function previewSummaryHtml(preview) {
+        const goals = preview.home_expected_goals === null
+            ? ''
+            : `<br>Goals: ${preview.home_expected_goals.toFixed(2)} – ${preview.away_expected_goals.toFixed(2)}`;
+        return `Manual xG: ${preview.home_expected_xg.toFixed(2)} – ${preview.away_expected_xg.toFixed(2)}${goals}`;
+    }
+
+    function updateEditorPreview(root, fixture) {
+        const home = valuesFromEditor(root, 'home');
+        const away = valuesFromEditor(root, 'away');
+        const preview = previewForWeights(fixture, home.weights, away.weights, home.pinned, away.pinned);
+        const target = root.querySelector('.manual-preview-value');
+        if (target) target.innerHTML = previewSummaryHtml(preview);
+    }
+
     function redistribute(sideInputs, changedInput) {
         changedInput.dataset.manualPinned = 'true';
         const pinned = sideInputs.filter(input => input.dataset.manualPinned === 'true');
@@ -224,6 +256,7 @@
             if (!input || !input.classList.contains('manual-weight-input')) return;
             try {
                 redistribute(inputsForSide(root, input.dataset.manualSide), input);
+                updateEditorPreview(root, fixture);
                 setError(root, '');
             } catch (error) {
                 setError(root, error.message || 'Invalid percentage.');
@@ -264,6 +297,8 @@
         writeFixtureStorage,
         selectedRows,
         fixturePreview,
+        previewForWeights,
+        displayPrediction,
         evenlyDistributedWeights,
     };
 })();

@@ -54,6 +54,25 @@ assert.deepStrictEqual(preview.homeRows.map(row => row.weight_bps), [0, 3334, 33
 assert.strictEqual(preview.homeRows.reduce((total, row) => total + row.weight_bps, 0), 10000);
 assert.notStrictEqual(preview.home_expected_goals, null);
 
+const baselinePreview = manualWeights.previewForWeights(
+    selectedFixture,
+    [2500, 2500, 2500, 2500],
+    [2500, 2500, 2500, 2500],
+);
+const editedPreview = manualWeights.previewForWeights(
+    selectedFixture,
+    [0, 3334, 3333, 3333],
+    [2500, 2500, 2500, 2500],
+);
+assert.notStrictEqual(
+    editedPreview.home_expected_xg,
+    baselinePreview.home_expected_xg,
+    'editing a weight must change the displayed manual xG preview',
+);
+const savedDisplayPrediction = manualWeights.displayPrediction(selectedFixture);
+assert.strictEqual(savedDisplayPrediction.home_expected_xg, editedPreview.home_expected_xg);
+assert.strictEqual(savedDisplayPrediction.away_expected_goals, editedPreview.away_expected_goals);
+
 const futureFixture = fixture('2026-09-06');
 const futurePreview = manualWeights.fixturePreview(futureFixture);
 assert.deepStrictEqual(futurePreview.homeRows.map(row => row.weight_bps), [2500, 2500, 2500, 2500]);
