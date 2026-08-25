@@ -700,6 +700,12 @@ h2 {
     color: var(--accent-strong);
 }
 
+.forecast-status.xg-only {
+    border-color: color-mix(in srgb, var(--accent-color) 40%, var(--border-color));
+    background: color-mix(in srgb, var(--accent-soft) 68%, var(--card-bg));
+    color: var(--accent-strong);
+}
+
 .forecast-status.unavailable {
     border-color: color-mix(in srgb, var(--amber) 35%, transparent);
     background: var(--amber-soft);
@@ -714,6 +720,17 @@ h2 {
     background: var(--amber-soft);
     color: var(--text-secondary);
     font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.manual-estimate-note {
+    margin: 10px 0 0;
+    padding: 10px 11px;
+    border: 1px solid color-mix(in srgb, var(--accent-color) 28%, var(--border-color));
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--accent-soft) 48%, var(--card-bg));
+    color: var(--text-secondary);
+    font-size: 0.76rem;
     line-height: 1.45;
 }
 

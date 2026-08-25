@@ -242,8 +242,18 @@ function renderStandingsTeamHtml(leagueId, teamName) {
 }
 
 function fixtureHasPublishedForecast(fixture) {
-    return ['combined_expected_xg', 'combined_expected_goals']
+    return ['home_expected_xg', 'away_expected_xg', 'combined_expected_xg']
         .every(field => typeof fixture[field] === 'number' && Number.isFinite(fixture[field]));
+}
+
+function fixtureHasPublishedGoalsForecast(fixture) {
+    return ['home_expected_goals', 'away_expected_goals', 'combined_expected_goals']
+        .every(field => typeof fixture[field] === 'number' && Number.isFinite(fixture[field]));
+}
+
+function fixtureForecastAvailability(fixture) {
+    if (!fixtureHasPublishedForecast(fixture)) return 'unavailable';
+    return fixtureHasPublishedGoalsForecast(fixture) ? 'full' : 'xg-only';
 }
 
 function safariDisplayPrediction(fixture) {
@@ -252,11 +262,25 @@ function safariDisplayPrediction(fixture) {
     return manualWeights.displayPrediction(fixture);
 }
 
+function manualEstimateHtml(fixture) {
+    const manualWeights = manualWeightsModule();
+    if (!manualWeights || !manualWeights.canCalculateXg(fixture)) return '';
+    return `
+        <p class="manual-estimate-note">A private Safari xG estimate is available from these selected histories. It does not change OPM’s published forecast, standings, or future fixtures.</p>
+        ${manualWeights.fixtureEditorHtml(fixture)}
+    `;
+}
+
 function renderForecastStatusHtml(fixture) {
     const manualPrediction = safariDisplayPrediction(fixture);
-    const available = fixtureHasPublishedForecast(manualPrediction || fixture);
-    const label = manualPrediction ? 'Private Safari forecast' : (available ? 'Forecast available' : 'Forecast unavailable');
-    return `<span class="forecast-status ${available ? 'available' : 'unavailable'}">${label}</span>`;
+    const displayedForecast = manualPrediction || fixture;
+    const availability = fixtureForecastAvailability(displayedForecast);
+    const available = availability !== 'unavailable';
+    const label = manualPrediction
+        ? 'Private Safari forecast'
+        : (availability === 'full' ? 'Forecast available' : (availability === 'xg-only' ? 'xG forecast available' : 'Forecast unavailable'));
+    const statusClass = availability === 'xg-only' ? 'xg-only' : (available ? 'available' : 'unavailable');
+    return `<span class="forecast-status ${statusClass}">${label}</span>`;
 }
 
 function fixtureDetailsHtml(fixture, scaleMax, metric) {
@@ -289,24 +313,25 @@ function fixtureDetailsHtml(fixture, scaleMax, metric) {
     if (!forecastAvailable) {
         return `
             <p class="forecast-unavailable-copy">No qualifying pre-match forecast is published in this artifact.</p>
-            ${manualWeightsModule() ? manualWeightsModule().fixtureEditorHtml(fixture) : ''}
+            ${manualEstimateHtml(fixture)}
         `;
     }
 
-    const homeExpected = displayFixture[`home_expected_${metric}`];
-    const awayExpected = displayFixture[`away_expected_${metric}`];
-    const combined = displayFixture[`combined_expected_${metric}`];
+    const displayMetric = metric === 'goals' && !fixtureHasPublishedGoalsForecast(displayFixture) ? 'xg' : metric;
+    const homeExpected = displayFixture[`home_expected_${displayMetric}`];
+    const awayExpected = displayFixture[`away_expected_${displayMetric}`];
+    const combined = displayFixture[`combined_expected_${displayMetric}`];
     const safeScale = Math.max(scaleMax || 3, 0.1);
     const homePercent = typeof homeExpected === 'number' ? Math.max(0, Math.min(100, (homeExpected / safeScale) * 100)) : 0;
     const awayPercent = typeof awayExpected === 'number' ? Math.max(0, Math.min(100, (awayExpected / safeScale) * 100)) : 0;
     const homeHistoryKey = Object.keys(fixture).find(key => key.startsWith('home_last_') && key.endsWith('_matches'));
     const awayHistoryKey = Object.keys(fixture).find(key => key.startsWith('away_last_') && key.endsWith('_matches'));
     const historyHtml = records => (records || []).map(match => {
-        const valueFor = match[`${metric}_for`];
-        const valueAgainst = match[`${metric}_against`];
+        const valueFor = match[`${displayMetric}_for`];
+        const valueAgainst = match[`${displayMetric}_against`];
         return `<div class="history-item">${formatNumber(valueFor)} - ${formatNumber(valueAgainst)} vs ${match.opponent}</div>`;
     }).join('') || '<div class="history-item">No history available.</div>';
-    const metricLabel = metric === 'xg' ? 'xG' : 'Goals';
+    const metricLabel = displayMetric === 'xg' ? 'xG' : 'Goals';
 
     return `
             <div class="fixture-detail-prediction">

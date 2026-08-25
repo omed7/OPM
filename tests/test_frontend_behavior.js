@@ -426,6 +426,25 @@ async function testUnavailableUpcomingFixtureStillRendersManualEditor() {
     assert.deepStrictEqual(app.errors, []);
 }
 
+async function testXgOnlyForecastStaysAvailableOnHome() {
+    const xgOnly = predictionFixture({
+        home_expected_goals: null,
+        away_expected_goals: null,
+        combined_expected_goals: null,
+    });
+    const app = await boot({
+        data: { leagues: [{ id: 'premier_league', name: 'Premier League', metric: 'xg', fixtures: [xgOnly] }] },
+    });
+    const card = homeCard(app.elements);
+    assert.match(card.innerHTML, /xG forecast available/);
+    assert.doesNotMatch(card.innerHTML, /Forecast unavailable/);
+    activateCardControl(card, '.fixture-details-toggle');
+    assert.match(card.innerHTML, /Predicted xG/);
+    assert.match(card.innerHTML, /1\.70 - 1\.20/);
+    assert.doesNotMatch(card.innerHTML, /No qualifying pre-match forecast/);
+    assert.deepStrictEqual(app.errors, []);
+}
+
 async function testFixtureIntelligenceFiltersAvailabilityAndFreshness() {
     const app = await boot({
         data: {
@@ -710,6 +729,7 @@ async function testEmptyArtifactAndDataLoadError() {
 (async () => {
     await testHomeSearchDetailsAndFavorites();
     await testUnavailableUpcomingFixtureStillRendersManualEditor();
+    await testXgOnlyForecastStaysAvailableOnHome();
     await testFixtureIntelligenceFiltersAvailabilityAndFreshness();
     await testCompletedTimestampUsesViewerLocalDateWithDateOnlyFallback();
     await testHomeRendersEverySameLeagueFixtureOnTheSelectedDate();
