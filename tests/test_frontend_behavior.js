@@ -5,6 +5,8 @@ const vm = require('vm');
 
 const scriptPath = path.join(__dirname, '..', 'public', 'script.js');
 const scriptSource = fs.readFileSync(scriptPath, 'utf8');
+const manualWeightsPath = path.join(__dirname, '..', 'public', 'manual-weights.js');
+const manualWeightsSource = fs.readFileSync(manualWeightsPath, 'utf8');
 
 class ClassList {
     constructor() {
@@ -66,6 +68,10 @@ class Element {
 
     getAttribute(name) {
         return this.attributes[name] || null;
+    }
+
+    querySelector() {
+        return null;
     }
 
     click() {
@@ -160,6 +166,22 @@ async function boot({
             if (eventName === 'DOMContentLoaded') readyHandler = listener;
         },
     };
+    const manualWindow = {};
+    vm.runInNewContext(manualWeightsSource, {
+        window: manualWindow,
+        localStorage: storage,
+        console,
+        Math,
+        Number,
+        String,
+        Map,
+        Array,
+        Error,
+        JSON,
+        Date: DateImpl,
+        encodeURIComponent,
+        Object,
+    }, { filename: manualWeightsPath });
     const context = {
         Date: DateImpl,
         URL,
@@ -173,6 +195,7 @@ async function boot({
             throw new Error(`Unexpected fetch: ${url}`);
         },
         localStorage: storage,
+        window: manualWindow,
         setImmediate,
     };
     vm.runInNewContext(scriptSource, context, { filename: scriptPath });
@@ -371,6 +394,36 @@ async function testHomeSearchDetailsAndFavorites() {
     assert.strictEqual(elements['theme-toggle'].getAttribute('aria-pressed'), 'true');
     assert.strictEqual(storage.getItem('theme'), 'dark');
     assert.deepStrictEqual(errors, []);
+}
+
+async function testUnavailableUpcomingFixtureStillRendersManualEditor() {
+    const history = (prefix, xgFor, xgAgainst) => Array.from({ length: 4 }, (_, index) => ({
+        opponent: `${prefix}${index + 1}`,
+        date: `2026-08-${String(12 - index).padStart(2, '0')}`,
+        venue: index % 2 ? 'away' : 'home',
+        xg_for: xgFor + index / 10,
+        xg_against: xgAgainst + index / 10,
+        goals_for: 1,
+        goals_against: 1,
+    }));
+    const unavailable = predictionFixture({
+        home_expected_xg: null,
+        away_expected_xg: null,
+        combined_expected_xg: null,
+        home_expected_goals: null,
+        away_expected_goals: null,
+        combined_expected_goals: null,
+        home_last_4_matches: history('Home history ', 0.8, 1.1),
+        away_last_4_matches: history('Away history ', 0.7, 1.2),
+    });
+    const app = await boot({
+        data: { leagues: [{ id: 'premier_league', name: 'Premier League', metric: 'xg', fixtures: [unavailable] }] },
+    });
+    const card = homeCard(app.elements);
+    activateCardControl(card, '.fixture-details-toggle');
+    assert.match(card.innerHTML, /Manual match weights/);
+    assert.match(card.innerHTML, /Manual xG:/);
+    assert.deepStrictEqual(app.errors, []);
 }
 
 async function testFixtureIntelligenceFiltersAvailabilityAndFreshness() {
@@ -656,6 +709,7 @@ async function testEmptyArtifactAndDataLoadError() {
 
 (async () => {
     await testHomeSearchDetailsAndFavorites();
+    await testUnavailableUpcomingFixtureStillRendersManualEditor();
     await testFixtureIntelligenceFiltersAvailabilityAndFreshness();
     await testCompletedTimestampUsesViewerLocalDateWithDateOnlyFallback();
     await testHomeRendersEverySameLeagueFixtureOnTheSelectedDate();

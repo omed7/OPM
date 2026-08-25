@@ -287,7 +287,10 @@ function fixtureDetailsHtml(fixture, scaleMax, metric) {
     }
 
     if (!forecastAvailable) {
-        return '<p class="forecast-unavailable-copy">No qualifying pre-match forecast is published in this artifact.</p>';
+        return `
+            <p class="forecast-unavailable-copy">No qualifying pre-match forecast is published in this artifact.</p>
+            ${manualWeightsModule() ? manualWeightsModule().fixtureEditorHtml(fixture) : ''}
+        `;
     }
 
     const homeExpected = displayFixture[`home_expected_${metric}`];
