@@ -222,6 +222,23 @@ function predictionFixture(overrides = {}) {
     };
 }
 
+function manuallyAdjustableFixture(overrides = {}) {
+    const history = (prefix, xgFor, xgAgainst) => Array.from({ length: 4 }, (_, index) => ({
+        opponent: `${prefix}${index + 1}`,
+        date: `2026-08-${String(12 - index).padStart(2, '0')}`,
+        venue: index % 2 ? 'away' : 'home',
+        xg_for: xgFor + index / 10,
+        xg_against: xgAgainst + index / 10,
+        goals_for: 1 + (index % 2),
+        goals_against: index % 2,
+    }));
+    return predictionFixture({
+        home_last_4_matches: history('Home history ', 0.8, 1.1),
+        away_last_4_matches: history('Away history ', 0.7, 1.2),
+        ...overrides,
+    });
+}
+
 function goalsOnlyFinishedFixture(overrides = {}) {
     return {
         home_team: 'Goals Home',
@@ -394,6 +411,26 @@ async function testHomeSearchDetailsAndFavorites() {
     assert.strictEqual(elements['theme-toggle'].getAttribute('aria-pressed'), 'true');
     assert.strictEqual(storage.getItem('theme'), 'dark');
     assert.deepStrictEqual(errors, []);
+}
+
+async function testHomeCardShowsPublishedAndPrivateForecastSummary() {
+    const fixture = manuallyAdjustableFixture({ leagueId: 'premier_league' });
+    const app = await boot({
+        data: { leagues: [{ id: 'premier_league', name: 'Premier League', metric: 'xg', fixtures: [fixture] }] },
+    });
+    assert.match(homeCard(app.elements).innerHTML, /Published xG/);
+    assert.match(homeCard(app.elements).innerHTML, /1\.70 – 1\.20/);
+
+    app.context.window.OPMManualWeights.writeFixtureStorage(fixture, {
+        homeWeights: [10000, 0, 0, 0],
+        awayWeights: [10000, 0, 0, 0],
+        homePinned: [true, false, false, false],
+        awayPinned: [true, false, false, false],
+    });
+    app.context.renderActiveTab();
+    assert.match(homeCard(app.elements).innerHTML, /Private Safari xG/);
+    assert.doesNotMatch(homeCard(app.elements).innerHTML, /1\.70 – 1\.20/);
+    assert.deepStrictEqual(app.errors, []);
 }
 
 async function testUnavailableUpcomingFixtureStillRendersManualEditor() {
@@ -728,6 +765,7 @@ async function testEmptyArtifactAndDataLoadError() {
 
 (async () => {
     await testHomeSearchDetailsAndFavorites();
+    await testHomeCardShowsPublishedAndPrivateForecastSummary();
     await testUnavailableUpcomingFixtureStillRendersManualEditor();
     await testXgOnlyForecastStaysAvailableOnHome();
     await testFixtureIntelligenceFiltersAvailabilityAndFreshness();

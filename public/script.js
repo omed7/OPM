@@ -283,6 +283,21 @@ function renderForecastStatusHtml(fixture) {
     return `<span class="forecast-status ${statusClass}">${label}</span>`;
 }
 
+function homeForecastSummaryHtml(fixture) {
+    if (fixture.status === 'FINISHED') return '';
+    const manualPrediction = safariDisplayPrediction(fixture);
+    const displayedForecast = manualPrediction || fixture;
+    if (!fixtureHasPublishedForecast(displayedForecast)) return '';
+    const source = manualPrediction ? 'Private Safari' : 'Published';
+    return `
+        <div class="home-forecast-summary ${manualPrediction ? 'private' : 'published'}" aria-label="${source} expected goals forecast">
+            <span>${source} xG</span>
+            <strong>${formatNumber(displayedForecast.home_expected_xg)} – ${formatNumber(displayedForecast.away_expected_xg)}</strong>
+            <small>Total ${formatNumber(displayedForecast.combined_expected_xg)}</small>
+        </div>
+    `;
+}
+
 function fixtureDetailsHtml(fixture, scaleMax, metric) {
     const manualPrediction = safariDisplayPrediction(fixture);
     const displayFixture = manualPrediction ? { ...fixture, ...manualPrediction } : fixture;
@@ -373,6 +388,7 @@ function createFixtureCard(fixture, scaleMax, metric) {
                     <div class="team-name">${fixture.away_team}</div>
                 </div>
             </div>
+            ${homeForecastSummaryHtml(fixture)}
             <div class="fixture-card-actions">
                 ${renderForecastStatusHtml(fixture)}
                 <button class="favorite-toggle" type="button" aria-pressed="${favorite}" aria-label="${favorite ? 'Remove' : 'Save'} ${fixture.home_team} versus ${fixture.away_team} ${favorite ? 'from' : 'to'} favorites">${favorite ? 'Saved' : 'Save'}</button>
