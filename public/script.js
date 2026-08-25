@@ -20,6 +20,7 @@ let appState = {
     activeSortDirection: 'asc',
     homeStatusFilter: 'all',
     homeForecastFilter: 'all',
+    homeFiltersOpen: false,
 };
 
 const STANDINGS_SORT_OPTIONS = [
@@ -391,7 +392,7 @@ function createFixtureCard(fixture, scaleMax, metric) {
             ${homeForecastSummaryHtml(fixture)}
             <div class="fixture-card-actions">
                 ${renderForecastStatusHtml(fixture)}
-                <button class="favorite-toggle" type="button" aria-pressed="${favorite}" aria-label="${favorite ? 'Remove' : 'Save'} ${fixture.home_team} versus ${fixture.away_team} ${favorite ? 'from' : 'to'} favorites">${favorite ? 'Saved' : 'Save'}</button>
+                <button class="favorite-toggle" type="button" aria-pressed="${favorite}" aria-label="${favorite ? 'Remove' : 'Add'} ${fixture.home_team} versus ${fixture.away_team} ${favorite ? 'from' : 'to'} favorites">${favorite ? 'Favorited' : 'Favorite'}</button>
                 <button class="fixture-details-toggle" type="button" aria-expanded="${expanded}" aria-label="${expanded ? 'Hide' : 'Show'} details for ${fixture.home_team} versus ${fixture.away_team}">${expanded ? 'Hide details' : 'View details'} <span class="details-toggle-icon" aria-hidden="true">⌄</span></button>
             </div>
             <div class="fixture-details ${expanded ? '' : 'hidden'}">${expanded ? fixtureDetailsHtml(fixture, scaleMax, metric) : ''}</div>
@@ -483,7 +484,13 @@ function resetHomeConstraints() {
     appState.activeSearchQuery = '';
     appState.homeStatusFilter = 'all';
     appState.homeForecastFilter = 'all';
+    appState.homeFiltersOpen = false;
     renderActiveTab();
+}
+
+function activeHomeFilterCount() {
+    return [appState.homeStatusFilter, appState.homeForecastFilter]
+        .filter(value => value !== 'all').length;
 }
 
 function formatArtifactFreshness(value) {
@@ -560,13 +567,39 @@ function createHomeToolbar(totalCount, visibleCount) {
     searchField.appendChild(input);
     searchField.appendChild(help);
     const filters = document.createElement('div');
-    filters.className = 'fixture-filters';
+    filters.className = `fixture-filters ${appState.homeFiltersOpen ? 'mobile-open' : ''}`;
     filters.setAttribute('aria-label', 'Fixture filters');
     filters.appendChild(createFilterGroup('Status', 'homeStatusFilter', HOME_STATUS_FILTERS));
     filters.appendChild(createFilterGroup('Forecast', 'homeForecastFilter', HOME_FORECAST_FILTERS));
+
+    const filterActions = document.createElement('div');
+    filterActions.className = 'home-filter-actions';
+    const filterToggle = document.createElement('button');
+    const activeFilterCount = activeHomeFilterCount();
+    filterToggle.className = 'home-filter-toggle';
+    filterToggle.setAttribute('type', 'button');
+    filterToggle.setAttribute('aria-expanded', String(appState.homeFiltersOpen));
+    filterToggle.setAttribute('aria-controls', 'home-fixture-filters');
+    filterToggle.textContent = activeFilterCount ? `Filters (${activeFilterCount})` : 'Filters';
+    filterToggle.addEventListener('click', () => {
+        appState.homeFiltersOpen = !appState.homeFiltersOpen;
+        renderActiveTab();
+    });
+    filters.id = 'home-fixture-filters';
+    filterActions.appendChild(filterToggle);
+    if (hasActiveHomeConstraints()) {
+        const clear = document.createElement('button');
+        clear.className = 'home-filter-clear';
+        clear.setAttribute('type', 'button');
+        clear.textContent = 'Clear';
+        clear.addEventListener('click', resetHomeConstraints);
+        filterActions.appendChild(clear);
+    }
+
     toolbar.appendChild(copy);
     toolbar.appendChild(searchField);
     toolbar.appendChild(filters);
+    toolbar.appendChild(filterActions);
     return toolbar;
 }
 
