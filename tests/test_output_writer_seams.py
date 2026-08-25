@@ -508,5 +508,40 @@ class TestPastMatchRetrieval(unittest.TestCase):
         self.assertIsNone(result_by_date["2026-08-13"]["combined_expected_goals"])
 
 
+class TestStandingsCurrentRunMerge(unittest.TestCase):
+    def test_includes_current_run_completed_result_when_post_write_read_is_stale(self):
+        retained = [{
+            "league": "liga-portugal",
+            "team": "Porto",
+            "opponent": "Arouca",
+            "date": "2026-08-22",
+            "venue": "home",
+            "goals_for": 1,
+            "goals_against": 0,
+            "xg_for": 1.1,
+            "xg_against": 0.4,
+            "source": "oddalerts",
+        }]
+        current_run = [{
+            "league": "liga-portugal",
+            "team": "Porto",
+            "opponent": "Arouca",
+            "date": "2026-08-23",
+            "venue": "home",
+            "goals_for": 2,
+            "goals_against": 0,
+            "xg_for": 2.72,
+            "xg_against": 0.45,
+            "source": "oddalerts",
+        }]
+
+        records = output_writer.standings_records_with_current_run(retained, current_run)
+
+        self.assertEqual(
+            {(record["date"], record["team"], record["opponent"]) for record in records},
+            {("2026-08-22", "Porto", "Arouca"), ("2026-08-23", "Porto", "Arouca")},
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

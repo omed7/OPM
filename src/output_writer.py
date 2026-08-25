@@ -344,6 +344,11 @@ def oddalerts_forecast_history(league_id, retained_records, current_run_records)
     return canonical_boundary_valid_records(records)
 
 
+def standings_records_with_current_run(retained_records, current_run_records):
+    """Return source-valid canonical records for standings without waiting for read-after-write visibility."""
+    return canonical_boundary_valid_records([*retained_records, *current_run_records])
+
+
 def process_oddalerts_league(league_id, league_name, fixtures_path, db_records, source_health=None):
     print(f"Fetching upcoming {league_name} fixtures from OddAlerts...")
 
@@ -1023,7 +1028,7 @@ def main():
         print(f"Warning: {standings_error}; retaining any existing league standings artifact.")
     else:
         standings_artifact = write_league_standings_artifact(
-            standings_matches,
+            standings_records_with_current_run(standings_matches, db_records),
             standings_predictions,
             version,
             generated_at,
