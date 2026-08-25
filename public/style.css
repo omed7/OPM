@@ -1503,3 +1503,112 @@ footer p {
         transition-duration: 0.01ms !important;
     }
 }
+
+.header-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.manual-weights-panel {
+    margin-top: 16px;
+    padding: 16px;
+    border: 1px solid color-mix(in srgb, var(--accent-color) 36%, var(--border-color));
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--accent-soft) 38%, var(--card-bg));
+}
+
+.manual-weights-heading,
+.manual-weights-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.manual-weights-heading h3 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.manual-preview-value {
+    color: var(--accent-strong);
+    font-size: 0.82rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.manual-weights-copy {
+    margin: 10px 0 14px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.manual-weights-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.manual-weight-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 76px;
+    gap: 4px 10px;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--border-color) 78%, transparent);
+    color: var(--text-secondary);
+    font-size: 0.76rem;
+}
+
+.manual-weight-row:last-child {
+    border-bottom: 0;
+}
+
+.manual-weight-row input {
+    width: 100%;
+    min-height: 34px;
+    padding: 4px 7px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    text-align: right;
+}
+
+.manual-weight-row small {
+    grid-column: 1 / -1;
+    color: var(--text-tertiary);
+    font-size: 0.68rem;
+}
+
+.manual-weights-error {
+    margin: 12px 0 0;
+    color: var(--danger);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.manual-weights-actions {
+    margin-top: 14px;
+}
+
+@media (max-width: 640px) {
+    .header-actions {
+        gap: 6px;
+    }
+
+    .manual-weights-columns {
+        grid-template-columns: 1fr;
+    }
+
+    .manual-weights-heading,
+    .manual-weights-actions {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .manual-weights-actions {
+        align-items: stretch;
+    }
+}

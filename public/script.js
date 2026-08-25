@@ -1,6 +1,10 @@
 const FAVORITES_STORAGE_KEY = 'opm:favorites:v1';
 
 let teamBadgeManifest = { badges: {} };
+
+function manualWeightsModule() {
+    return typeof window !== 'undefined' ? window.OPMManualWeights : null;
+}
 let logoDialogState = { teamName: null, trigger: null };
 let appState = {
     fixtureData: null,
@@ -306,6 +310,7 @@ function fixtureDetailsHtml(fixture, scaleMax, metric) {
             <div class="history-list home">${historyHtml(fixture[homeHistoryKey])}</div>
             <div class="history-list away">${historyHtml(fixture[awayHistoryKey])}</div>
         </div>
+        ${manualWeightsModule() ? manualWeightsModule().fixtureEditorHtml(fixture) : ''}
     `;
 }
 
@@ -338,6 +343,8 @@ function createFixtureCard(fixture, scaleMax, metric) {
             </div>
             <div class="fixture-details ${expanded ? '' : 'hidden'}">${expanded ? fixtureDetailsHtml(fixture, scaleMax, metric) : ''}</div>
         `;
+        const manualWeights = manualWeightsModule();
+        if (expanded && manualWeights) manualWeights.bindEditor(card, fixture, renderCard);
     }
 
     function toggleDetails() {
