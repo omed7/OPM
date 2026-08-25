@@ -86,7 +86,14 @@ class TestOutputWriterMainTracer(unittest.TestCase):
                     standings = json.load(artifact)
                 self.assertEqual(standings["schema_version"], 2)
                 self.assertEqual(standings["meta"]["version"], "test-version")
-                self.assertEqual(standings["leagues"], [])
+                self.assertEqual(len(standings["leagues"]), 1)
+                season = standings["leagues"][0]["seasons"][0]
+                self.assertEqual(standings["leagues"][0]["id"], "mls")
+                self.assertEqual(season["label"], "2026")
+                self.assertEqual(
+                    sum(team["matches_played"] for team in season["teams"]) // 2,
+                    8,
+                )
             finally:
                 os.chdir(original_cwd)
 
