@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "f5c310f",
-    "generated_at": "2026-08-26T07:08:49Z"
+    "version": "f08bcd0",
+    "generated_at": "2026-08-26T16:29:02Z"
   },
   "leagues": [
     {
@@ -1761,6 +1761,23 @@
           "kickoff_time": "22:30"
         },
         {
+          "home_team": "Botafogo",
+          "away_team": "Athletico PR",
+          "date": "2026-08-24",
+          "home_goals": 2,
+          "away_goals": 3,
+          "home_xg": 2.97,
+          "away_xg": 0.5,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-08-24T23:00:00Z"
+        },
+        {
           "home_team": "Bragantino",
           "away_team": "Gr\u00eamio",
           "date": "2026-08-23",
@@ -1912,23 +1929,6 @@
           "combined_expected_goals": 2.12,
           "status": "FINISHED",
           "kickoff_at": "2026-08-23T19:00:00Z"
-        },
-        {
-          "home_team": "Botafogo",
-          "away_team": "Athletico PR",
-          "date": "2026-08-24",
-          "home_goals": 2,
-          "away_goals": 3,
-          "home_xg": 2.97,
-          "away_xg": 0.5,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-08-24T23:00:00Z"
         }
       ]
     },
@@ -2764,7 +2764,7 @@
               "xg_against": 1.21
             }
           ],
-          "kickoff_time": "04:00"
+          "kickoff_time": "04:10"
         },
         {
           "home_team": "Pachuca",
@@ -2980,7 +2980,7 @@
               "xg_against": 1.33
             }
           ],
-          "kickoff_time": "02:00"
+          "kickoff_time": "02:05"
         },
         {
           "home_team": "Santos Laguna",
@@ -3052,7 +3052,7 @@
               "xg_against": 0.5
             }
           ],
-          "kickoff_time": "04:00"
+          "kickoff_time": "04:10"
         },
         {
           "home_team": "Toluca",
@@ -3196,7 +3196,7 @@
               "xg_against": 1.34
             }
           ],
-          "kickoff_time": "03:00"
+          "kickoff_time": "03:10"
         },
         {
           "home_team": "Puebla",
@@ -4568,6 +4568,74 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-08-24T16:40:00Z"
+        },
+        {
+          "home_team": "Al Ettifaq",
+          "away_team": "Al Nassr",
+          "date": "2026-08-25",
+          "home_goals": 2,
+          "away_goals": 3,
+          "home_xg": 0.75,
+          "away_xg": 1.85,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-08-25T18:00:00Z"
+        },
+        {
+          "home_team": "Al Shabab",
+          "away_team": "Al Riyadh",
+          "date": "2026-08-25",
+          "home_goals": 3,
+          "away_goals": 3,
+          "home_xg": 3.61,
+          "away_xg": 1.08,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-08-25T18:00:00Z"
+        },
+        {
+          "home_team": "Al Taawoun",
+          "away_team": "Al-Fayha",
+          "date": "2026-08-25",
+          "home_goals": 0,
+          "away_goals": 0,
+          "home_xg": 2.75,
+          "away_xg": 0.84,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-08-25T16:10:00Z"
+        },
+        {
+          "home_team": "Abha",
+          "away_team": "Al Khaleej",
+          "date": "2026-08-25",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 0.92,
+          "away_xg": 0.79,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-08-25T16:05:00Z"
         }
       ]
     },
