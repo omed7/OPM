@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "meta": {
-    "version": "1771325",
-    "generated_at": "2026-08-29T12:47:26Z"
+    "version": "e8df315",
+    "generated_at": "2026-08-29T18:24:58Z"
   },
   "leagues": [
     {
@@ -124,7 +124,7 @@
             },
             {
               "name": "Dynamo Dresden",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -178,7 +178,7 @@
             },
             {
               "name": "Eintracht Braunschweig",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -232,7 +232,7 @@
             },
             {
               "name": "Energie Cottbus",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -286,7 +286,7 @@
             },
             {
               "name": "FC Heidenheim",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -394,7 +394,7 @@
             },
             {
               "name": "Hertha BSC",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -556,7 +556,7 @@
             },
             {
               "name": "Karlsruher SC",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -718,7 +718,7 @@
             },
             {
               "name": "Osnabr\u00fcck",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -772,7 +772,7 @@
             },
             {
               "name": "SpVgg Greuther F\u00fcrth",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -880,7 +880,7 @@
             },
             {
               "name": "VfL Bochum 1848",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -934,7 +934,7 @@
             },
             {
               "name": "VfL Wolfsburg",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -4101,7 +4101,217 @@
           "prediction_provenance": "unavailable",
           "teams": [
             {
+              "name": "Bayer Leverkusen",
+              "matches_played": 1,
+              "views": {
+                "overall": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "for": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "against": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                }
+              }
+            },
+            {
               "name": "Bayern Munich",
+              "matches_played": 1,
+              "views": {
+                "overall": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "for": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "against": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                }
+              }
+            },
+            {
+              "name": "Borussia M.Gladbach",
+              "matches_played": 1,
+              "views": {
+                "overall": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "for": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "against": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                }
+              }
+            },
+            {
+              "name": "Eintracht Frankfurt",
+              "matches_played": 1,
+              "views": {
+                "overall": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "for": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "against": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                }
+              }
+            },
+            {
+              "name": "Elversberg",
+              "matches_played": 1,
+              "views": {
+                "overall": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "for": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "against": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                }
+              }
+            },
+            {
+              "name": "FC Cologne",
+              "matches_played": 1,
+              "views": {
+                "overall": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "for": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "against": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                }
+              }
+            },
+            {
+              "name": "Hoffenheim",
+              "matches_played": 1,
+              "views": {
+                "overall": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "for": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "against": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                }
+              }
+            },
+            {
+              "name": "Mainz 05",
+              "matches_played": 1,
+              "views": {
+                "overall": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "for": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "against": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                }
+              }
+            },
+            {
+              "name": "Paderborn",
+              "matches_played": 1,
+              "views": {
+                "overall": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "for": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "against": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                }
+              }
+            },
+            {
+              "name": "RasenBallsport Leipzig",
+              "matches_played": 1,
+              "views": {
+                "overall": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "for": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                },
+                "against": {
+                  "xg": null,
+                  "goals": null,
+                  "xg_goals": null
+                }
+              }
+            },
+            {
+              "name": "Union Berlin",
               "matches_played": 1,
               "views": {
                 "overall": {
@@ -9052,7 +9262,7 @@
           "teams": [
             {
               "name": "Almere City",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9106,7 +9316,7 @@
             },
             {
               "name": "De Graafschap",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9160,7 +9370,7 @@
             },
             {
               "name": "FC Den Bosch",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9214,7 +9424,7 @@
             },
             {
               "name": "FC Dordrecht",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9376,7 +9586,7 @@
             },
             {
               "name": "FC Volendam",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9430,7 +9640,7 @@
             },
             {
               "name": "Helmond Sport",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9538,7 +9748,7 @@
             },
             {
               "name": "Jong Ajax",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9592,7 +9802,7 @@
             },
             {
               "name": "Jong AZ",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9646,7 +9856,7 @@
             },
             {
               "name": "Jong FC Utrecht",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9700,7 +9910,7 @@
             },
             {
               "name": "Jong PSV",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9754,7 +9964,7 @@
             },
             {
               "name": "MVV Maastricht",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9808,7 +10018,7 @@
             },
             {
               "name": "NAC Breda",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9862,7 +10072,7 @@
             },
             {
               "name": "RKC Waalwijk",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9916,7 +10126,7 @@
             },
             {
               "name": "Roda JC Kerkrade",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -9970,7 +10180,7 @@
             },
             {
               "name": "TOP Oss",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -10024,7 +10234,7 @@
             },
             {
               "name": "Vitesse",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -19770,7 +19980,7 @@
             },
             {
               "name": "Levante",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": null,
@@ -19875,7 +20085,7 @@
             },
             {
               "name": "Real Betis",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": null,
@@ -28082,7 +28292,7 @@
             },
             {
               "name": "Rio Ave",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -28211,7 +28421,7 @@
             },
             {
               "name": "Sporting CP",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -31975,7 +32185,7 @@
             },
             {
               "name": "Lens",
-              "matches_played": 1,
+              "matches_played": 2,
               "views": {
                 "overall": {
                   "xg": null,
@@ -32185,7 +32395,7 @@
             },
             {
               "name": "Strasbourg",
-              "matches_played": 1,
+              "matches_played": 2,
               "views": {
                 "overall": {
                   "xg": null,
@@ -43820,7 +44030,7 @@
             },
             {
               "name": "Bournemouth",
-              "matches_played": 1,
+              "matches_played": 2,
               "views": {
                 "overall": {
                   "xg": null,
@@ -43904,7 +44114,7 @@
             },
             {
               "name": "Coventry",
-              "matches_played": 1,
+              "matches_played": 2,
               "views": {
                 "overall": {
                   "xg": null,
@@ -43946,7 +44156,7 @@
             },
             {
               "name": "Everton",
-              "matches_played": 1,
+              "matches_played": 2,
               "views": {
                 "overall": {
                   "xg": null,
@@ -43988,7 +44198,7 @@
             },
             {
               "name": "Hull",
-              "matches_played": 1,
+              "matches_played": 2,
               "views": {
                 "overall": {
                   "xg": null,
@@ -44051,7 +44261,7 @@
             },
             {
               "name": "Liverpool",
-              "matches_played": 1,
+              "matches_played": 2,
               "views": {
                 "overall": {
                   "xg": null,
@@ -44135,7 +44345,7 @@
             },
             {
               "name": "Nottingham Forest",
-              "matches_played": 1,
+              "matches_played": 2,
               "views": {
                 "overall": {
                   "xg": null,
@@ -54284,7 +54494,7 @@
             },
             {
               "name": "Al Ahli",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -54575,7 +54785,7 @@
             },
             {
               "name": "Al Hilal",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -54683,7 +54893,7 @@
             },
             {
               "name": "Al Khaleej",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -54737,7 +54947,7 @@
             },
             {
               "name": "Al Kholood",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -54791,7 +55001,7 @@
             },
             {
               "name": "Al Nassr",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -54953,7 +55163,7 @@
             },
             {
               "name": "Al Taawoun",
-              "matches_played": 3,
+              "matches_played": 4,
               "views": {
                 "overall": {
                   "xg": {
@@ -69846,7 +70056,7 @@
             },
             {
               "name": "Erzurumspor FK",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": null,
@@ -70050,7 +70260,7 @@
             },
             {
               "name": "Gen\u00e7lerbirli\u011fi",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -70266,7 +70476,7 @@
             },
             {
               "name": "Kocaelispor",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
@@ -70320,7 +70530,7 @@
             },
             {
               "name": "Konyaspor",
-              "matches_played": 2,
+              "matches_played": 3,
               "views": {
                 "overall": {
                   "xg": {
