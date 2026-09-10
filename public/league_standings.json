@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "meta": {
-    "version": "e04216b",
-    "generated_at": "2026-09-10T11:18:53Z"
+    "version": "8b23d69",
+    "generated_at": "2026-09-10T18:27:21Z"
   },
   "leagues": [
     {
@@ -28019,7 +28019,7 @@
             },
             {
               "name": "Benfica",
-              "matches_played": 4,
+              "matches_played": 5,
               "views": {
                 "overall": {
                   "xg": {
@@ -28364,7 +28364,7 @@
             },
             {
               "name": "Moreirense",
-              "matches_played": 4,
+              "matches_played": 5,
               "views": {
                 "overall": {
                   "xg": {
@@ -37816,1054 +37816,498 @@
           "teams": [
             {
               "name": "Atlanta United",
-              "matches_played": 24,
+              "matches_played": 25,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -4.28625,
-                    "average": -0.2143125,
-                    "eligible_matches": 20
+                    "total": -4.125,
+                    "average": -0.196428571429,
+                    "eligible_matches": 21
                   },
                   "goals": {
-                    "total": -2.085,
-                    "average": -0.10425,
-                    "eligible_matches": 20
+                    "total": -0.585,
+                    "average": -0.027857142857,
+                    "eligible_matches": 21
                   },
                   "xg_goals": {
-                    "total": -3.185625,
-                    "average": -0.15928125
+                    "total": -2.355,
+                    "average": -0.112142857143
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -1.825,
-                    "average": -0.09125,
-                    "eligible_matches": 20
+                    "total": -2.36625,
+                    "average": -0.112678571429,
+                    "eligible_matches": 21
                   },
                   "goals": {
-                    "total": -2.13,
-                    "average": -0.1065,
-                    "eligible_matches": 20
+                    "total": -1.755,
+                    "average": -0.083571428571,
+                    "eligible_matches": 21
                   },
                   "xg_goals": {
-                    "total": -1.9775,
-                    "average": -0.098875
+                    "total": -2.060625,
+                    "average": -0.098125
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": -2.46125,
-                    "average": -0.1230625,
-                    "eligible_matches": 20
+                    "total": -1.75875,
+                    "average": -0.08375,
+                    "eligible_matches": 21
                   },
                   "goals": {
-                    "total": 0.045,
-                    "average": 0.00225,
-                    "eligible_matches": 20
+                    "total": 1.17,
+                    "average": 0.055714285714,
+                    "eligible_matches": 21
                   },
                   "xg_goals": {
-                    "total": -1.208125,
-                    "average": -0.06040625
+                    "total": -0.294375,
+                    "average": -0.014017857143
                   }
                 }
               }
             },
             {
               "name": "Austin",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": 0.52875,
-                    "average": 0.031102941176,
-                    "eligible_matches": 17
+                    "total": -0.13125,
+                    "average": -0.007291666667,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 5.085,
-                    "average": 0.299117647059,
-                    "eligible_matches": 17
+                    "total": 4.835,
+                    "average": 0.268611111111,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 2.806875,
-                    "average": 0.165110294118
+                    "total": 2.351875,
+                    "average": 0.130659722222
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -3.35875,
-                    "average": -0.197573529412,
-                    "eligible_matches": 17
+                    "total": -3.47875,
+                    "average": -0.193263888889,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": -3.205,
-                    "average": -0.188529411765,
-                    "eligible_matches": 17
+                    "total": -3.705,
+                    "average": -0.205833333333,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": -3.281875,
-                    "average": -0.193051470588
+                    "total": -3.591875,
+                    "average": -0.199548611111
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 3.8875,
-                    "average": 0.228676470588,
-                    "eligible_matches": 17
+                    "total": 3.3475,
+                    "average": 0.185972222222,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 8.29,
-                    "average": 0.487647058824,
-                    "eligible_matches": 17
+                    "total": 8.54,
+                    "average": 0.474444444444,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 6.08875,
-                    "average": 0.358161764706
+                    "total": 5.94375,
+                    "average": 0.330208333333
                   }
                 }
               }
             },
             {
               "name": "CF Montr\u00e9al",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -2.02125,
-                    "average": -0.13475,
-                    "eligible_matches": 15
+                    "total": -2.5325,
+                    "average": -0.15828125,
+                    "eligible_matches": 16
                   },
                   "goals": {
-                    "total": -2.875,
-                    "average": -0.191666666667,
-                    "eligible_matches": 15
+                    "total": -3.375,
+                    "average": -0.2109375,
+                    "eligible_matches": 16
                   },
                   "xg_goals": {
-                    "total": -2.448125,
-                    "average": -0.163208333333
+                    "total": -2.95375,
+                    "average": -0.184609375
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -1.435,
-                    "average": -0.095666666667,
-                    "eligible_matches": 15
+                    "total": -1.715,
+                    "average": -0.1071875,
+                    "eligible_matches": 16
                   },
                   "goals": {
                     "total": -3.375,
-                    "average": -0.225,
-                    "eligible_matches": 15
+                    "average": -0.2109375,
+                    "eligible_matches": 16
                   },
                   "xg_goals": {
-                    "total": -2.405,
-                    "average": -0.160333333333
+                    "total": -2.545,
+                    "average": -0.1590625
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": -0.58625,
-                    "average": -0.039083333333,
-                    "eligible_matches": 15
+                    "total": -0.8175,
+                    "average": -0.05109375,
+                    "eligible_matches": 16
                   },
                   "goals": {
-                    "total": 0.5,
-                    "average": 0.033333333333,
-                    "eligible_matches": 15
+                    "total": 0.0,
+                    "average": 0.0,
+                    "eligible_matches": 16
                   },
                   "xg_goals": {
-                    "total": -0.043125,
-                    "average": -0.002875
+                    "total": -0.40875,
+                    "average": -0.025546875
                   }
                 }
               }
             },
             {
               "name": "Charlotte",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -0.16625,
-                    "average": -0.00875,
-                    "eligible_matches": 19
+                    "total": -0.6775,
+                    "average": -0.033875,
+                    "eligible_matches": 20
                   },
                   "goals": {
-                    "total": 2.75,
-                    "average": 0.144736842105,
-                    "eligible_matches": 19
+                    "total": 2.25,
+                    "average": 0.1125,
+                    "eligible_matches": 20
                   },
                   "xg_goals": {
-                    "total": 1.291875,
-                    "average": 0.067993421053
+                    "total": 0.78625,
+                    "average": 0.0393125
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -0.70375,
-                    "average": -0.037039473684,
-                    "eligible_matches": 19
+                    "total": -0.935,
+                    "average": -0.04675,
+                    "eligible_matches": 20
                   },
                   "goals": {
-                    "total": 5.0,
-                    "average": 0.263157894737,
-                    "eligible_matches": 19
+                    "total": 4.5,
+                    "average": 0.225,
+                    "eligible_matches": 20
                   },
                   "xg_goals": {
-                    "total": 2.148125,
-                    "average": 0.113059210526
+                    "total": 1.7825,
+                    "average": 0.089125
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 0.5375,
-                    "average": 0.028289473684,
-                    "eligible_matches": 19
+                    "total": 0.2575,
+                    "average": 0.012875,
+                    "eligible_matches": 20
                   },
                   "goals": {
                     "total": -2.25,
-                    "average": -0.118421052632,
-                    "eligible_matches": 19
+                    "average": -0.1125,
+                    "eligible_matches": 20
                   },
                   "xg_goals": {
-                    "total": -0.85625,
-                    "average": -0.045065789474
+                    "total": -0.99625,
+                    "average": -0.0498125
                   }
                 }
               }
             },
             {
               "name": "Chicago Fire",
-              "matches_played": 22,
+              "matches_played": 23,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -1.8725,
-                    "average": -0.104027777778,
-                    "eligible_matches": 18
+                    "total": -2.2525,
+                    "average": -0.118552631579,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 4.245,
-                    "average": 0.235833333333,
-                    "eligible_matches": 18
+                    "total": 1.865,
+                    "average": 0.098157894737,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 1.18625,
-                    "average": 0.065902777778
+                    "total": -0.19375,
+                    "average": -0.010197368421
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": 0.81375,
-                    "average": 0.045208333333,
-                    "eligible_matches": 18
+                    "total": 0.03375,
+                    "average": 0.001776315789,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 5.795,
-                    "average": 0.321944444444,
-                    "eligible_matches": 18
+                    "total": 4.295,
+                    "average": 0.226052631579,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 3.304375,
-                    "average": 0.183576388889
+                    "total": 2.164375,
+                    "average": 0.113914473684
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": -2.68625,
-                    "average": -0.149236111111,
-                    "eligible_matches": 18
+                    "total": -2.28625,
+                    "average": -0.120328947368,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": -1.55,
-                    "average": -0.086111111111,
-                    "eligible_matches": 18
+                    "total": -2.43,
+                    "average": -0.127894736842,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": -2.118125,
-                    "average": -0.117673611111
+                    "total": -2.358125,
+                    "average": -0.124111842105
                   }
                 }
               }
             },
             {
               "name": "Cincinnati",
-              "matches_played": 22,
+              "matches_played": 23,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": 4.7,
-                    "average": 0.276470588235,
-                    "eligible_matches": 17
+                    "total": 5.07,
+                    "average": 0.281666666667,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 12.62,
-                    "average": 0.742352941176,
-                    "eligible_matches": 17
+                    "total": 14.745,
+                    "average": 0.819166666667,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 8.66,
-                    "average": 0.509411764706
+                    "total": 9.9075,
+                    "average": 0.550416666667
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": 3.6075,
-                    "average": 0.212205882353,
-                    "eligible_matches": 17
+                    "total": 2.29875,
+                    "average": 0.127708333333,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 7.0,
-                    "average": 0.411764705882,
-                    "eligible_matches": 17
+                    "total": 6.0,
+                    "average": 0.333333333333,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 5.30375,
-                    "average": 0.311985294118
+                    "total": 4.149375,
+                    "average": 0.230520833333
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 1.0925,
-                    "average": 0.064264705882,
-                    "eligible_matches": 17
+                    "total": 2.77125,
+                    "average": 0.153958333333,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 5.62,
-                    "average": 0.330588235294,
-                    "eligible_matches": 17
+                    "total": 8.745,
+                    "average": 0.485833333333,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 3.35625,
-                    "average": 0.197426470588
+                    "total": 5.758125,
+                    "average": 0.319895833333
                   }
                 }
               }
             },
             {
               "name": "Colorado Rapids",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -5.8225,
-                    "average": -0.3425,
-                    "eligible_matches": 17
+                    "total": -6.4825,
+                    "average": -0.360138888889,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": -12.545,
-                    "average": -0.737941176471,
-                    "eligible_matches": 17
+                    "total": -12.795,
+                    "average": -0.710833333333,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": -9.18375,
-                    "average": -0.540220588235
+                    "total": -9.63875,
+                    "average": -0.535486111111
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -0.83,
-                    "average": -0.048823529412,
-                    "eligible_matches": 17
+                    "total": -1.37,
+                    "average": -0.076111111111,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": -8.96,
-                    "average": -0.527058823529,
-                    "eligible_matches": 17
+                    "total": -8.71,
+                    "average": -0.483888888889,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": -4.895,
-                    "average": -0.287941176471
+                    "total": -5.04,
+                    "average": -0.28
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": -4.9925,
-                    "average": -0.293676470588,
-                    "eligible_matches": 17
+                    "total": -5.1125,
+                    "average": -0.284027777778,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": -3.585,
-                    "average": -0.210882352941,
-                    "eligible_matches": 17
+                    "total": -4.085,
+                    "average": -0.226944444444,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": -4.28875,
-                    "average": -0.252279411765
+                    "total": -4.59875,
+                    "average": -0.255486111111
                   }
                 }
               }
             },
             {
               "name": "Columbus Crew",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -4.59875,
-                    "average": -0.255486111111,
-                    "eligible_matches": 18
+                    "total": -4.51625,
+                    "average": -0.237697368421,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 4.705,
-                    "average": 0.261388888889,
-                    "eligible_matches": 18
+                    "total": 4.58,
+                    "average": 0.241052631579,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 0.053125,
-                    "average": 0.002951388889
+                    "total": 0.031875,
+                    "average": 0.001677631579
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -3.2,
-                    "average": -0.177777777778,
-                    "eligible_matches": 18
+                    "total": -3.92,
+                    "average": -0.206315789474,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 1.66,
-                    "average": 0.092222222222,
-                    "eligible_matches": 18
+                    "total": 0.91,
+                    "average": 0.047894736842,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": -0.77,
-                    "average": -0.042777777778
+                    "total": -1.505,
+                    "average": -0.079210526316
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": -1.39875,
-                    "average": -0.077708333333,
-                    "eligible_matches": 18
+                    "total": -0.59625,
+                    "average": -0.031381578947,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 3.045,
-                    "average": 0.169166666667,
-                    "eligible_matches": 18
+                    "total": 3.67,
+                    "average": 0.193157894737,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 0.823125,
-                    "average": 0.045729166667
+                    "total": 1.536875,
+                    "average": 0.080888157895
                   }
                 }
               }
             },
             {
               "name": "Dallas",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": 0.1325,
-                    "average": 0.007794117647,
-                    "eligible_matches": 17
+                    "total": 0.2425,
+                    "average": 0.013472222222,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 13.42,
-                    "average": 0.789411764706,
-                    "eligible_matches": 17
+                    "total": 10.42,
+                    "average": 0.578888888889,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 6.77625,
-                    "average": 0.398602941176
+                    "total": 5.33125,
+                    "average": 0.296180555556
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -0.68375,
-                    "average": -0.040220588235,
-                    "eligible_matches": 17
+                    "total": -0.11375,
+                    "average": -0.006319444444,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 6.295,
-                    "average": 0.370294117647,
-                    "eligible_matches": 17
+                    "total": 5.675,
+                    "average": 0.315277777778,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 2.805625,
-                    "average": 0.165036764706
+                    "total": 2.780625,
+                    "average": 0.154479166667
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 0.81625,
-                    "average": 0.048014705882,
-                    "eligible_matches": 17
+                    "total": 0.35625,
+                    "average": 0.019791666667,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 7.125,
-                    "average": 0.419117647059,
-                    "eligible_matches": 17
+                    "total": 4.745,
+                    "average": 0.263611111111,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 3.970625,
-                    "average": 0.233566176471
+                    "total": 2.550625,
+                    "average": 0.141701388889
                   }
                 }
               }
             },
             {
               "name": "DC United",
-              "matches_played": 22,
-              "views": {
-                "overall": {
-                  "xg": {
-                    "total": 1.95,
-                    "average": 0.114705882353,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": 0.75,
-                    "average": 0.044117647059,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": 1.35,
-                    "average": 0.079411764706
-                  }
-                },
-                "for": {
-                  "xg": {
-                    "total": 0.235,
-                    "average": 0.013823529412,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": -0.92,
-                    "average": -0.054117647059,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": -0.3425,
-                    "average": -0.020147058824
-                  }
-                },
-                "against": {
-                  "xg": {
-                    "total": 1.715,
-                    "average": 0.100882352941,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": 1.67,
-                    "average": 0.098235294118,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": 1.6925,
-                    "average": 0.099558823529
-                  }
-                }
-              }
-            },
-            {
-              "name": "Houston Dynamo",
               "matches_played": 23,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -9.9025,
-                    "average": -0.5825,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": -19.305,
-                    "average": -1.135588235294,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": -14.60375,
-                    "average": -0.859044117647
-                  }
-                },
-                "for": {
-                  "xg": {
-                    "total": -5.86125,
-                    "average": -0.344779411765,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": -7.34,
-                    "average": -0.431764705882,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": -6.600625,
-                    "average": -0.388272058824
-                  }
-                },
-                "against": {
-                  "xg": {
-                    "total": -4.04125,
-                    "average": -0.237720588235,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": -11.965,
-                    "average": -0.703823529412,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": -8.003125,
-                    "average": -0.470772058824
-                  }
-                }
-              }
-            },
-            {
-              "name": "Inter Miami",
-              "matches_played": 24,
-              "views": {
-                "overall": {
-                  "xg": {
-                    "total": 5.35125,
-                    "average": 0.314779411765,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": 14.445,
-                    "average": 0.849705882353,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": 9.898125,
-                    "average": 0.582242647059
-                  }
-                },
-                "for": {
-                  "xg": {
-                    "total": 4.7225,
-                    "average": 0.277794117647,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": 12.995,
-                    "average": 0.764411764706,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": 8.85875,
-                    "average": 0.521102941176
-                  }
-                },
-                "against": {
-                  "xg": {
-                    "total": 0.62875,
-                    "average": 0.036985294118,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": 1.45,
-                    "average": 0.085294117647,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": 1.039375,
-                    "average": 0.061139705882
-                  }
-                }
-              }
-            },
-            {
-              "name": "LA Galaxy",
-              "matches_played": 24,
-              "views": {
-                "overall": {
-                  "xg": {
-                    "total": 1.71,
-                    "average": 0.095,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": -2.875,
-                    "average": -0.159722222222,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": -0.5825,
-                    "average": -0.032361111111
-                  }
-                },
-                "for": {
-                  "xg": {
-                    "total": 0.08,
-                    "average": 0.004444444444,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": -2.62,
-                    "average": -0.145555555556,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": -1.27,
-                    "average": -0.070555555556
-                  }
-                },
-                "against": {
-                  "xg": {
-                    "total": 1.63,
-                    "average": 0.090555555556,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": -0.255,
-                    "average": -0.014166666667,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": 0.6875,
-                    "average": 0.038194444444
-                  }
-                }
-              }
-            },
-            {
-              "name": "Los Angeles FC",
-              "matches_played": 24,
-              "views": {
-                "overall": {
-                  "xg": {
-                    "total": 2.61,
-                    "average": 0.137368421053,
-                    "eligible_matches": 19
-                  },
-                  "goals": {
-                    "total": -0.75,
-                    "average": -0.039473684211,
-                    "eligible_matches": 19
-                  },
-                  "xg_goals": {
-                    "total": 0.93,
-                    "average": 0.048947368421
-                  }
-                },
-                "for": {
-                  "xg": {
-                    "total": 0.85875,
-                    "average": 0.045197368421,
-                    "eligible_matches": 19
-                  },
-                  "goals": {
-                    "total": -0.17,
-                    "average": -0.008947368421,
-                    "eligible_matches": 19
-                  },
-                  "xg_goals": {
-                    "total": 0.344375,
-                    "average": 0.018125
-                  }
-                },
-                "against": {
-                  "xg": {
-                    "total": 1.75125,
-                    "average": 0.092171052632,
-                    "eligible_matches": 19
-                  },
-                  "goals": {
-                    "total": -0.58,
-                    "average": -0.030526315789,
-                    "eligible_matches": 19
-                  },
-                  "xg_goals": {
-                    "total": 0.585625,
-                    "average": 0.030822368421
-                  }
-                }
-              }
-            },
-            {
-              "name": "Minnesota United",
-              "matches_played": 23,
-              "views": {
-                "overall": {
-                  "xg": {
-                    "total": 1.6525,
-                    "average": 0.091805555556,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": 3.89,
-                    "average": 0.216111111111,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": 2.77125,
-                    "average": 0.153958333333
-                  }
-                },
-                "for": {
-                  "xg": {
-                    "total": 2.4,
-                    "average": 0.133333333333,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": 2.385,
-                    "average": 0.1325,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": 2.3925,
-                    "average": 0.132916666667
-                  }
-                },
-                "against": {
-                  "xg": {
-                    "total": -0.7475,
-                    "average": -0.041527777778,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": 1.505,
-                    "average": 0.083611111111,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": 0.37875,
-                    "average": 0.021041666667
-                  }
-                }
-              }
-            },
-            {
-              "name": "Nashville SC",
-              "matches_played": 23,
-              "views": {
-                "overall": {
-                  "xg": {
-                    "total": -3.73625,
-                    "average": -0.207569444444,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": -2.345,
-                    "average": -0.130277777778,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": -3.040625,
-                    "average": -0.168923611111
-                  }
-                },
-                "for": {
-                  "xg": {
-                    "total": -4.3375,
-                    "average": -0.240972222222,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": 2.79,
-                    "average": 0.155,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": -0.77375,
-                    "average": -0.042986111111
-                  }
-                },
-                "against": {
-                  "xg": {
-                    "total": 0.60125,
-                    "average": 0.033402777778,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": -5.135,
-                    "average": -0.285277777778,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": -2.266875,
-                    "average": -0.1259375
-                  }
-                }
-              }
-            },
-            {
-              "name": "New England",
-              "matches_played": 23,
-              "views": {
-                "overall": {
-                  "xg": {
-                    "total": 2.84625,
-                    "average": 0.158125,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": -2.005,
-                    "average": -0.111388888889,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": 0.420625,
-                    "average": 0.023368055556
-                  }
-                },
-                "for": {
-                  "xg": {
-                    "total": 3.49625,
-                    "average": 0.194236111111,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": -0.545,
-                    "average": -0.030277777778,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": 1.475625,
-                    "average": 0.081979166667
-                  }
-                },
-                "against": {
-                  "xg": {
-                    "total": -0.65,
-                    "average": -0.036111111111,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": -1.46,
-                    "average": -0.081111111111,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": -1.055,
-                    "average": -0.058611111111
-                  }
-                }
-              }
-            },
-            {
-              "name": "New York City",
-              "matches_played": 23,
-              "views": {
-                "overall": {
-                  "xg": {
-                    "total": -4.39625,
-                    "average": -0.258602941176,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": -8.955,
-                    "average": -0.526764705882,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": -6.675625,
-                    "average": -0.392683823529
-                  }
-                },
-                "for": {
-                  "xg": {
-                    "total": -1.49875,
-                    "average": -0.088161764706,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": -4.705,
-                    "average": -0.276764705882,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": -3.101875,
-                    "average": -0.182463235294
-                  }
-                },
-                "against": {
-                  "xg": {
-                    "total": -2.8975,
-                    "average": -0.170441176471,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": -4.25,
-                    "average": -0.25,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": -3.57375,
-                    "average": -0.210220588235
-                  }
-                }
-              }
-            },
-            {
-              "name": "New York RB",
-              "matches_played": 23,
-              "views": {
-                "overall": {
-                  "xg": {
-                    "total": 6.185,
-                    "average": 0.363823529412,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": -0.63,
-                    "average": -0.037058823529,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": 2.7775,
-                    "average": 0.163382352941
-                  }
-                },
-                "for": {
-                  "xg": {
-                    "total": 3.485,
-                    "average": 0.205,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": -2.005,
-                    "average": -0.117941176471,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": 0.74,
-                    "average": 0.043529411765
-                  }
-                },
-                "against": {
-                  "xg": {
-                    "total": 2.7,
-                    "average": 0.158823529412,
-                    "eligible_matches": 17
-                  },
-                  "goals": {
-                    "total": 1.375,
-                    "average": 0.080882352941,
-                    "eligible_matches": 17
-                  },
-                  "xg_goals": {
-                    "total": 2.0375,
-                    "average": 0.119852941176
-                  }
-                }
-              }
-            },
-            {
-              "name": "Orlando City",
-              "matches_played": 23,
-              "views": {
-                "overall": {
-                  "xg": {
-                    "total": 2.2225,
-                    "average": 0.123472222222,
-                    "eligible_matches": 18
-                  },
-                  "goals": {
-                    "total": 5.875,
-                    "average": 0.326388888889,
-                    "eligible_matches": 18
-                  },
-                  "xg_goals": {
-                    "total": 4.04875,
-                    "average": 0.224930555556
-                  }
-                },
-                "for": {
-                  "xg": {
-                    "total": 0.35125,
-                    "average": 0.019513888889,
+                    "total": 2.0325,
+                    "average": 0.112916666667,
                     "eligible_matches": 18
                   },
                   "goals": {
@@ -38872,240 +38316,796 @@
                     "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 0.488125,
-                    "average": 0.027118055556
+                    "total": 1.32875,
+                    "average": 0.073819444444
+                  }
+                },
+                "for": {
+                  "xg": {
+                    "total": 1.0375,
+                    "average": 0.057638888889,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": -0.295,
+                    "average": -0.016388888889,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": 0.37125,
+                    "average": 0.020625
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 1.87125,
-                    "average": 0.103958333333,
+                    "total": 0.995,
+                    "average": 0.055277777778,
                     "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 5.25,
-                    "average": 0.291666666667,
+                    "total": 0.92,
+                    "average": 0.051111111111,
                     "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 3.560625,
-                    "average": 0.1978125
+                    "total": 0.9575,
+                    "average": 0.053194444444
+                  }
+                }
+              }
+            },
+            {
+              "name": "Houston Dynamo",
+              "matches_played": 24,
+              "views": {
+                "overall": {
+                  "xg": {
+                    "total": -9.7725,
+                    "average": -0.542916666667,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": -18.685,
+                    "average": -1.038055555556,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": -14.22875,
+                    "average": -0.790486111111
+                  }
+                },
+                "for": {
+                  "xg": {
+                    "total": -6.01125,
+                    "average": -0.333958333333,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": -6.72,
+                    "average": -0.373333333333,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": -6.365625,
+                    "average": -0.353645833333
+                  }
+                },
+                "against": {
+                  "xg": {
+                    "total": -3.76125,
+                    "average": -0.208958333333,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": -11.965,
+                    "average": -0.664722222222,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": -7.863125,
+                    "average": -0.436840277778
+                  }
+                }
+              }
+            },
+            {
+              "name": "Inter Miami",
+              "matches_played": 25,
+              "views": {
+                "overall": {
+                  "xg": {
+                    "total": 4.97125,
+                    "average": 0.276180555556,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": 12.065,
+                    "average": 0.670277777778,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": 8.518125,
+                    "average": 0.473229166667
+                  }
+                },
+                "for": {
+                  "xg": {
+                    "total": 5.1225,
+                    "average": 0.284583333333,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": 12.115,
+                    "average": 0.673055555556,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": 8.61875,
+                    "average": 0.478819444444
+                  }
+                },
+                "against": {
+                  "xg": {
+                    "total": -0.15125,
+                    "average": -0.008402777778,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": -0.05,
+                    "average": -0.002777777778,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": -0.100625,
+                    "average": -0.005590277778
+                  }
+                }
+              }
+            },
+            {
+              "name": "LA Galaxy",
+              "matches_played": 25,
+              "views": {
+                "overall": {
+                  "xg": {
+                    "total": 2.09,
+                    "average": 0.11,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": -3.115,
+                    "average": -0.163947368421,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": -0.5125,
+                    "average": -0.026973684211
+                  }
+                },
+                "for": {
+                  "xg": {
+                    "total": -0.14,
+                    "average": -0.007368421053,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": -3.74,
+                    "average": -0.196842105263,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": -1.94,
+                    "average": -0.102105263158
+                  }
+                },
+                "against": {
+                  "xg": {
+                    "total": 2.23,
+                    "average": 0.117368421053,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": 0.625,
+                    "average": 0.032894736842,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": 1.4275,
+                    "average": 0.075131578947
+                  }
+                }
+              }
+            },
+            {
+              "name": "Los Angeles FC",
+              "matches_played": 25,
+              "views": {
+                "overall": {
+                  "xg": {
+                    "total": 1.64,
+                    "average": 0.082,
+                    "eligible_matches": 20
+                  },
+                  "goals": {
+                    "total": -0.75,
+                    "average": -0.0375,
+                    "eligible_matches": 20
+                  },
+                  "xg_goals": {
+                    "total": 0.445,
+                    "average": 0.02225
+                  }
+                },
+                "for": {
+                  "xg": {
+                    "total": 0.46875,
+                    "average": 0.0234375,
+                    "eligible_matches": 20
+                  },
+                  "goals": {
+                    "total": 0.71,
+                    "average": 0.0355,
+                    "eligible_matches": 20
+                  },
+                  "xg_goals": {
+                    "total": 0.589375,
+                    "average": 0.02946875
+                  }
+                },
+                "against": {
+                  "xg": {
+                    "total": 1.17125,
+                    "average": 0.0585625,
+                    "eligible_matches": 20
+                  },
+                  "goals": {
+                    "total": -1.46,
+                    "average": -0.073,
+                    "eligible_matches": 20
+                  },
+                  "xg_goals": {
+                    "total": -0.144375,
+                    "average": -0.00721875
+                  }
+                }
+              }
+            },
+            {
+              "name": "Minnesota United",
+              "matches_played": 24,
+              "views": {
+                "overall": {
+                  "xg": {
+                    "total": 1.7625,
+                    "average": 0.092763157895,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": 0.89,
+                    "average": 0.046842105263,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": 1.32625,
+                    "average": 0.069802631579
+                  }
+                },
+                "for": {
+                  "xg": {
+                    "total": 1.94,
+                    "average": 0.102105263158,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": 0.005,
+                    "average": 0.000263157895,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": 0.9725,
+                    "average": 0.051184210526
+                  }
+                },
+                "against": {
+                  "xg": {
+                    "total": -0.1775,
+                    "average": -0.009342105263,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": 0.885,
+                    "average": 0.046578947368,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": 0.35375,
+                    "average": 0.018618421053
+                  }
+                }
+              }
+            },
+            {
+              "name": "Nashville SC",
+              "matches_played": 24,
+              "views": {
+                "overall": {
+                  "xg": {
+                    "total": -3.11875,
+                    "average": -0.164144736842,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": -2.47,
+                    "average": -0.13,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": -2.794375,
+                    "average": -0.147072368421
+                  }
+                },
+                "for": {
+                  "xg": {
+                    "total": -5.0425,
+                    "average": -0.265394736842,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": 1.915,
+                    "average": 0.100789473684,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": -1.56375,
+                    "average": -0.082302631579
+                  }
+                },
+                "against": {
+                  "xg": {
+                    "total": 1.92375,
+                    "average": 0.10125,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": -4.385,
+                    "average": -0.230789473684,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": -1.230625,
+                    "average": -0.064769736842
+                  }
+                }
+              }
+            },
+            {
+              "name": "New England",
+              "matches_played": 24,
+              "views": {
+                "overall": {
+                  "xg": {
+                    "total": 3.82625,
+                    "average": 0.201381578947,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": -1.505,
+                    "average": -0.079210526316,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": 1.160625,
+                    "average": 0.061085526316
+                  }
+                },
+                "for": {
+                  "xg": {
+                    "total": 3.91625,
+                    "average": 0.206118421053,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": 0.205,
+                    "average": 0.010789473684,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": 2.060625,
+                    "average": 0.108453947368
+                  }
+                },
+                "against": {
+                  "xg": {
+                    "total": -0.09,
+                    "average": -0.004736842105,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": -1.71,
+                    "average": -0.09,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": -0.9,
+                    "average": -0.047368421053
+                  }
+                }
+              }
+            },
+            {
+              "name": "New York City",
+              "matches_played": 24,
+              "views": {
+                "overall": {
+                  "xg": {
+                    "total": -3.41625,
+                    "average": -0.189791666667,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": -8.455,
+                    "average": -0.469722222222,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": -5.935625,
+                    "average": -0.329756944444
+                  }
+                },
+                "for": {
+                  "xg": {
+                    "total": -0.93875,
+                    "average": -0.052152777778,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": -4.955,
+                    "average": -0.275277777778,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": -2.946875,
+                    "average": -0.163715277778
+                  }
+                },
+                "against": {
+                  "xg": {
+                    "total": -2.4775,
+                    "average": -0.137638888889,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": -3.5,
+                    "average": -0.194444444444,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": -2.98875,
+                    "average": -0.166041666667
+                  }
+                }
+              }
+            },
+            {
+              "name": "New York RB",
+              "matches_played": 24,
+              "views": {
+                "overall": {
+                  "xg": {
+                    "total": 5.215,
+                    "average": 0.289722222222,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": -0.63,
+                    "average": -0.035,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": 2.2925,
+                    "average": 0.127361111111
+                  }
+                },
+                "for": {
+                  "xg": {
+                    "total": 2.905,
+                    "average": 0.161388888889,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": -2.885,
+                    "average": -0.160277777778,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": 0.01,
+                    "average": 0.000555555556
+                  }
+                },
+                "against": {
+                  "xg": {
+                    "total": 2.31,
+                    "average": 0.128333333333,
+                    "eligible_matches": 18
+                  },
+                  "goals": {
+                    "total": 2.255,
+                    "average": 0.125277777778,
+                    "eligible_matches": 18
+                  },
+                  "xg_goals": {
+                    "total": 2.2825,
+                    "average": 0.126805555556
+                  }
+                }
+              }
+            },
+            {
+              "name": "Orlando City",
+              "matches_played": 24,
+              "views": {
+                "overall": {
+                  "xg": {
+                    "total": 2.38375,
+                    "average": 0.125460526316,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": 7.375,
+                    "average": 0.388157894737,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": 4.879375,
+                    "average": 0.256809210526
+                  }
+                },
+                "for": {
+                  "xg": {
+                    "total": 1.05375,
+                    "average": 0.055460526316,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": 1.75,
+                    "average": 0.092105263158,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": 1.401875,
+                    "average": 0.073782894737
+                  }
+                },
+                "against": {
+                  "xg": {
+                    "total": 1.33,
+                    "average": 0.07,
+                    "eligible_matches": 19
+                  },
+                  "goals": {
+                    "total": 5.625,
+                    "average": 0.296052631579,
+                    "eligible_matches": 19
+                  },
+                  "xg_goals": {
+                    "total": 3.4775,
+                    "average": 0.183026315789
                   }
                 }
               }
             },
             {
               "name": "Philadelphia Union",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": 7.065,
-                    "average": 0.3925,
-                    "eligible_matches": 18
+                    "total": 7.435,
+                    "average": 0.391315789474,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 5.045,
-                    "average": 0.280277777778,
-                    "eligible_matches": 18
+                    "total": 7.17,
+                    "average": 0.377368421053,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 6.055,
-                    "average": 0.336388888889
+                    "total": 7.3025,
+                    "average": 0.384342105263
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": 4.24875,
-                    "average": 0.236041666667,
-                    "eligible_matches": 18
+                    "total": 5.9275,
+                    "average": 0.311973684211,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 2.42,
-                    "average": 0.134444444444,
-                    "eligible_matches": 18
+                    "total": 5.545,
+                    "average": 0.291842105263,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 3.334375,
-                    "average": 0.185243055556
+                    "total": 5.73625,
+                    "average": 0.301907894737
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 2.81625,
-                    "average": 0.156458333333,
-                    "eligible_matches": 18
+                    "total": 1.5075,
+                    "average": 0.079342105263,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 2.625,
-                    "average": 0.145833333333,
-                    "eligible_matches": 18
+                    "total": 1.625,
+                    "average": 0.085526315789,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 2.720625,
-                    "average": 0.151145833333
+                    "total": 1.56625,
+                    "average": 0.082434210526
                   }
                 }
               }
             },
             {
               "name": "Portland Timbers",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": 2.67875,
-                    "average": 0.157573529412,
-                    "eligible_matches": 17
+                    "total": 2.64875,
+                    "average": 0.147152777778,
+                    "eligible_matches": 18
                   },
                   "goals": {
                     "total": 3.47,
-                    "average": 0.204117647059,
-                    "eligible_matches": 17
+                    "average": 0.192777777778,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 3.074375,
-                    "average": 0.180845588235
+                    "total": 3.059375,
+                    "average": 0.169965277778
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": 1.20125,
-                    "average": 0.070661764706,
-                    "eligible_matches": 17
+                    "total": 0.96125,
+                    "average": 0.053402777778,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 1.005,
-                    "average": 0.059117647059,
-                    "eligible_matches": 17
+                    "total": 1.255,
+                    "average": 0.069722222222,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 1.103125,
-                    "average": 0.064889705882
+                    "total": 1.108125,
+                    "average": 0.0615625
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 1.4775,
-                    "average": 0.086911764706,
-                    "eligible_matches": 17
+                    "total": 1.6875,
+                    "average": 0.09375,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 2.465,
-                    "average": 0.145,
-                    "eligible_matches": 17
+                    "total": 2.215,
+                    "average": 0.123055555556,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 1.97125,
-                    "average": 0.115955882353
+                    "total": 1.95125,
+                    "average": 0.108402777778
                   }
                 }
               }
             },
             {
               "name": "Real Salt Lake",
-              "matches_played": 22,
+              "matches_played": 23,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": 3.50875,
-                    "average": 0.194930555556,
-                    "eligible_matches": 18
+                    "total": 3.63875,
+                    "average": 0.191513157895,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 3.0,
-                    "average": 0.166666666667,
-                    "eligible_matches": 18
+                    "total": 3.62,
+                    "average": 0.190526315789,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 3.254375,
-                    "average": 0.180798611111
+                    "total": 3.629375,
+                    "average": 0.191019736842
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": 2.66375,
-                    "average": 0.147986111111,
-                    "eligible_matches": 18
+                    "total": 2.94375,
+                    "average": 0.154934210526,
+                    "eligible_matches": 19
                   },
                   "goals": {
                     "total": 2.0,
-                    "average": 0.111111111111,
-                    "eligible_matches": 18
+                    "average": 0.105263157895,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 2.331875,
-                    "average": 0.129548611111
+                    "total": 2.471875,
+                    "average": 0.130098684211
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 0.845,
-                    "average": 0.046944444444,
-                    "eligible_matches": 18
+                    "total": 0.695,
+                    "average": 0.036578947368,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 1.0,
-                    "average": 0.055555555556,
-                    "eligible_matches": 18
+                    "total": 1.62,
+                    "average": 0.085263157895,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 0.9225,
-                    "average": 0.05125
+                    "total": 1.1575,
+                    "average": 0.060921052632
                   }
                 }
               }
             },
             {
               "name": "San Diego",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": 2.5475,
-                    "average": 0.134078947368,
-                    "eligible_matches": 19
+                    "total": 3.1975,
+                    "average": 0.159875,
+                    "eligible_matches": 20
                   },
                   "goals": {
-                    "total": 5.885,
-                    "average": 0.309736842105,
-                    "eligible_matches": 19
+                    "total": 7.885,
+                    "average": 0.39425,
+                    "eligible_matches": 20
                   },
                   "xg_goals": {
-                    "total": 4.21625,
-                    "average": 0.221907894737
+                    "total": 5.54125,
+                    "average": 0.2770625
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -1.14375,
-                    "average": -0.060197368421,
-                    "eligible_matches": 19
+                    "total": -0.72375,
+                    "average": -0.0361875,
+                    "eligible_matches": 20
                   },
                   "goals": {
                     "total": 3.72,
-                    "average": 0.195789473684,
-                    "eligible_matches": 19
+                    "average": 0.186,
+                    "eligible_matches": 20
                   },
                   "xg_goals": {
-                    "total": 1.288125,
-                    "average": 0.067796052632
+                    "total": 1.498125,
+                    "average": 0.07490625
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 3.69125,
-                    "average": 0.194276315789,
-                    "eligible_matches": 19
+                    "total": 3.92125,
+                    "average": 0.1960625,
+                    "eligible_matches": 20
                   },
                   "goals": {
-                    "total": 2.165,
-                    "average": 0.113947368421,
-                    "eligible_matches": 19
+                    "total": 4.165,
+                    "average": 0.20825,
+                    "eligible_matches": 20
                   },
                   "xg_goals": {
-                    "total": 2.928125,
-                    "average": 0.154111842105
+                    "total": 4.043125,
+                    "average": 0.20215625
                   }
                 }
               }
@@ -39166,54 +39166,54 @@
             },
             {
               "name": "SJ Earthquakes",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": 5.5375,
-                    "average": 0.307638888889,
-                    "eligible_matches": 18
+                    "total": 6.1875,
+                    "average": 0.325657894737,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 6.995,
-                    "average": 0.388611111111,
-                    "eligible_matches": 18
+                    "total": 8.995,
+                    "average": 0.473421052632,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 6.26625,
-                    "average": 0.348125
+                    "total": 7.59125,
+                    "average": 0.399539473684
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": 0.63875,
-                    "average": 0.035486111111,
-                    "eligible_matches": 18
+                    "total": 0.86875,
+                    "average": 0.045723684211,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 4.37,
-                    "average": 0.242777777778,
-                    "eligible_matches": 18
+                    "total": 6.37,
+                    "average": 0.335263157895,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 2.504375,
-                    "average": 0.139131944444
+                    "total": 3.619375,
+                    "average": 0.190493421053
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 4.89875,
-                    "average": 0.272152777778,
-                    "eligible_matches": 18
+                    "total": 5.31875,
+                    "average": 0.279934210526,
+                    "eligible_matches": 19
                   },
                   "goals": {
                     "total": 2.625,
-                    "average": 0.145833333333,
-                    "eligible_matches": 18
+                    "average": 0.138157894737,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 3.761875,
-                    "average": 0.208993055556
+                    "total": 3.971875,
+                    "average": 0.209046052632
                   }
                 }
               }
@@ -39274,162 +39274,162 @@
             },
             {
               "name": "St. Louis City",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -1.36,
-                    "average": -0.08,
-                    "eligible_matches": 17
+                    "total": -1.39,
+                    "average": -0.077222222222,
+                    "eligible_matches": 18
                   },
                   "goals": {
                     "total": -5.325,
-                    "average": -0.313235294118,
-                    "eligible_matches": 17
+                    "average": -0.295833333333,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": -3.3425,
-                    "average": -0.196617647059
+                    "total": -3.3575,
+                    "average": -0.186527777778
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": 0.91875,
-                    "average": 0.054044117647,
-                    "eligible_matches": 17
+                    "total": 1.12875,
+                    "average": 0.062708333333,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": 0.505,
-                    "average": 0.029705882353,
-                    "eligible_matches": 17
+                    "total": 0.255,
+                    "average": 0.014166666667,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": 0.711875,
-                    "average": 0.041875
+                    "total": 0.691875,
+                    "average": 0.0384375
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": -2.27875,
-                    "average": -0.134044117647,
-                    "eligible_matches": 17
+                    "total": -2.51875,
+                    "average": -0.139930555556,
+                    "eligible_matches": 18
                   },
                   "goals": {
-                    "total": -5.83,
-                    "average": -0.342941176471,
-                    "eligible_matches": 17
+                    "total": -5.58,
+                    "average": -0.31,
+                    "eligible_matches": 18
                   },
                   "xg_goals": {
-                    "total": -4.054375,
-                    "average": -0.238492647059
+                    "total": -4.049375,
+                    "average": -0.224965277778
                   }
                 }
               }
             },
             {
               "name": "Toronto",
-              "matches_played": 23,
+              "matches_played": 24,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -2.6525,
-                    "average": -0.147361111111,
-                    "eligible_matches": 18
+                    "total": -2.035,
+                    "average": -0.107105263158,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 7.875,
-                    "average": 0.4375,
-                    "eligible_matches": 18
+                    "total": 7.75,
+                    "average": 0.407894736842,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 2.61125,
-                    "average": 0.145069444444
+                    "total": 2.8575,
+                    "average": 0.150394736842
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -0.98375,
-                    "average": -0.054652777778,
-                    "eligible_matches": 18
+                    "total": 0.33875,
+                    "average": 0.017828947368,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 3.875,
-                    "average": 0.215277777778,
-                    "eligible_matches": 18
+                    "total": 4.625,
+                    "average": 0.243421052632,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 1.445625,
-                    "average": 0.0803125
+                    "total": 2.481875,
+                    "average": 0.130625
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": -1.66875,
-                    "average": -0.092708333333,
-                    "eligible_matches": 18
+                    "total": -2.37375,
+                    "average": -0.124934210526,
+                    "eligible_matches": 19
                   },
                   "goals": {
-                    "total": 4.0,
-                    "average": 0.222222222222,
-                    "eligible_matches": 18
+                    "total": 3.125,
+                    "average": 0.164473684211,
+                    "eligible_matches": 19
                   },
                   "xg_goals": {
-                    "total": 1.165625,
-                    "average": 0.064756944444
+                    "total": 0.375625,
+                    "average": 0.019769736842
                   }
                 }
               }
             },
             {
               "name": "Vancouver Whitecaps",
-              "matches_played": 22,
+              "matches_played": 23,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -3.41125,
-                    "average": -0.284270833333,
-                    "eligible_matches": 12
+                    "total": -3.03125,
+                    "average": -0.233173076923,
+                    "eligible_matches": 13
                   },
                   "goals": {
-                    "total": -1.26,
-                    "average": -0.105,
-                    "eligible_matches": 12
+                    "total": -1.5,
+                    "average": -0.115384615385,
+                    "eligible_matches": 13
                   },
                   "xg_goals": {
-                    "total": -2.335625,
-                    "average": -0.194635416667
+                    "total": -2.265625,
+                    "average": -0.174278846154
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": 0.65875,
-                    "average": 0.054895833333,
-                    "eligible_matches": 12
+                    "total": 1.25875,
+                    "average": 0.096826923077,
+                    "eligible_matches": 13
                   },
                   "goals": {
-                    "total": 2.495,
-                    "average": 0.207916666667,
-                    "eligible_matches": 12
+                    "total": 3.375,
+                    "average": 0.259615384615,
+                    "eligible_matches": 13
                   },
                   "xg_goals": {
-                    "total": 1.576875,
-                    "average": 0.13140625
+                    "total": 2.316875,
+                    "average": 0.178221153846
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": -4.07,
-                    "average": -0.339166666667,
-                    "eligible_matches": 12
+                    "total": -4.29,
+                    "average": -0.33,
+                    "eligible_matches": 13
                   },
                   "goals": {
-                    "total": -3.755,
-                    "average": -0.312916666667,
-                    "eligible_matches": 12
+                    "total": -4.875,
+                    "average": -0.375,
+                    "eligible_matches": 13
                   },
                   "xg_goals": {
-                    "total": -3.9125,
-                    "average": -0.326041666667
+                    "total": -4.5825,
+                    "average": -0.3525
                   }
                 }
               }
@@ -50111,54 +50111,54 @@
             },
             {
               "name": "Celtic",
-              "matches_played": 5,
+              "matches_played": 6,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -1.16,
-                    "average": -1.16,
-                    "eligible_matches": 1
+                    "total": -1.83,
+                    "average": -0.915,
+                    "eligible_matches": 2
                   },
                   "goals": {
-                    "total": -0.5,
-                    "average": -0.5,
-                    "eligible_matches": 1
+                    "total": -3.26,
+                    "average": -1.63,
+                    "eligible_matches": 2
                   },
                   "xg_goals": {
-                    "total": -0.83,
-                    "average": -0.83
+                    "total": -2.545,
+                    "average": -1.2725
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -0.65,
-                    "average": -0.65,
-                    "eligible_matches": 1
+                    "total": -1.05,
+                    "average": -0.525,
+                    "eligible_matches": 2
                   },
                   "goals": {
-                    "total": -0.75,
-                    "average": -0.75,
-                    "eligible_matches": 1
+                    "total": -2.13,
+                    "average": -1.065,
+                    "eligible_matches": 2
                   },
                   "xg_goals": {
-                    "total": -0.7,
-                    "average": -0.7
+                    "total": -1.59,
+                    "average": -0.795
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": -0.51,
-                    "average": -0.51,
-                    "eligible_matches": 1
+                    "total": -0.78,
+                    "average": -0.39,
+                    "eligible_matches": 2
                   },
                   "goals": {
-                    "total": 0.25,
-                    "average": 0.25,
-                    "eligible_matches": 1
+                    "total": -1.13,
+                    "average": -0.565,
+                    "eligible_matches": 2
                   },
                   "xg_goals": {
-                    "total": -0.13,
-                    "average": -0.13
+                    "total": -0.955,
+                    "average": -0.4775
                   }
                 }
               }
@@ -50519,97 +50519,163 @@
             },
             {
               "name": "Rangers",
-              "matches_played": 5,
+              "matches_played": 6,
               "views": {
                 "overall": {
-                  "xg": null,
-                  "goals": null,
-                  "xg_goals": null
+                  "xg": {
+                    "total": -0.18,
+                    "average": -0.18,
+                    "eligible_matches": 1
+                  },
+                  "goals": {
+                    "total": -1.5,
+                    "average": -1.5,
+                    "eligible_matches": 1
+                  },
+                  "xg_goals": {
+                    "total": -0.84,
+                    "average": -0.84
+                  }
                 },
                 "for": {
-                  "xg": null,
-                  "goals": null,
-                  "xg_goals": null
+                  "xg": {
+                    "total": 0.2,
+                    "average": 0.2,
+                    "eligible_matches": 1
+                  },
+                  "goals": {
+                    "total": -0.25,
+                    "average": -0.25,
+                    "eligible_matches": 1
+                  },
+                  "xg_goals": {
+                    "total": -0.025,
+                    "average": -0.025
+                  }
                 },
                 "against": {
-                  "xg": null,
-                  "goals": null,
-                  "xg_goals": null
+                  "xg": {
+                    "total": -0.38,
+                    "average": -0.38,
+                    "eligible_matches": 1
+                  },
+                  "goals": {
+                    "total": -1.25,
+                    "average": -1.25,
+                    "eligible_matches": 1
+                  },
+                  "xg_goals": {
+                    "total": -0.815,
+                    "average": -0.815
+                  }
                 }
               }
             },
             {
               "name": "St. Johnstone",
-              "matches_played": 5,
+              "matches_played": 6,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -0.74,
-                    "average": -0.74,
-                    "eligible_matches": 1
+                    "total": -1.41,
+                    "average": -0.705,
+                    "eligible_matches": 2
                   },
                   "goals": {
-                    "total": -0.74,
-                    "average": -0.74,
-                    "eligible_matches": 1
+                    "total": -3.5,
+                    "average": -1.75,
+                    "eligible_matches": 2
                   },
                   "xg_goals": {
-                    "total": -0.74,
-                    "average": -0.74
+                    "total": -2.455,
+                    "average": -1.2275
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -0.91,
-                    "average": -0.91,
-                    "eligible_matches": 1
+                    "total": -1.18,
+                    "average": -0.59,
+                    "eligible_matches": 2
                   },
                   "goals": {
-                    "total": -0.62,
-                    "average": -0.62,
-                    "eligible_matches": 1
+                    "total": -2.0,
+                    "average": -1.0,
+                    "eligible_matches": 2
                   },
                   "xg_goals": {
-                    "total": -0.765,
-                    "average": -0.765
+                    "total": -1.59,
+                    "average": -0.795
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 0.17,
-                    "average": 0.17,
-                    "eligible_matches": 1
+                    "total": -0.23,
+                    "average": -0.115,
+                    "eligible_matches": 2
                   },
                   "goals": {
-                    "total": -0.12,
-                    "average": -0.12,
-                    "eligible_matches": 1
+                    "total": -1.5,
+                    "average": -0.75,
+                    "eligible_matches": 2
                   },
                   "xg_goals": {
-                    "total": 0.025,
-                    "average": 0.025
+                    "total": -0.865,
+                    "average": -0.4325
                   }
                 }
               }
             },
             {
               "name": "St. Mirren",
-              "matches_played": 5,
+              "matches_played": 6,
               "views": {
                 "overall": {
-                  "xg": null,
-                  "goals": null,
-                  "xg_goals": null
+                  "xg": {
+                    "total": -0.18,
+                    "average": -0.18,
+                    "eligible_matches": 1
+                  },
+                  "goals": {
+                    "total": -1.5,
+                    "average": -1.5,
+                    "eligible_matches": 1
+                  },
+                  "xg_goals": {
+                    "total": -0.84,
+                    "average": -0.84
+                  }
                 },
                 "for": {
-                  "xg": null,
-                  "goals": null,
-                  "xg_goals": null
+                  "xg": {
+                    "total": -0.38,
+                    "average": -0.38,
+                    "eligible_matches": 1
+                  },
+                  "goals": {
+                    "total": -1.25,
+                    "average": -1.25,
+                    "eligible_matches": 1
+                  },
+                  "xg_goals": {
+                    "total": -0.815,
+                    "average": -0.815
+                  }
                 },
                 "against": {
-                  "xg": null,
-                  "goals": null,
-                  "xg_goals": null
+                  "xg": {
+                    "total": 0.2,
+                    "average": 0.2,
+                    "eligible_matches": 1
+                  },
+                  "goals": {
+                    "total": -0.25,
+                    "average": -0.25,
+                    "eligible_matches": 1
+                  },
+                  "xg_goals": {
+                    "total": -0.025,
+                    "average": -0.025
+                  }
                 }
               }
             }
