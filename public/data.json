@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "2df5559",
-    "generated_at": "2026-09-21T20:10:56Z"
+    "version": "10f08fa",
+    "generated_at": "2026-09-22T11:39:17Z"
   },
   "leagues": [
     {
@@ -2505,22 +2505,6 @@
           "status": "FINISHED"
         },
         {
-          "home_team": "Malaga",
-          "away_team": "Villarreal",
-          "date": "2026-09-17",
-          "home_goals": 1,
-          "away_goals": 3,
-          "home_xg": 0.361392,
-          "away_xg": 4.2474,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED"
-        },
-        {
           "home_team": "Osasuna",
           "away_team": "Rayo Vallecano",
           "date": "2026-09-19",
@@ -2528,22 +2512,6 @@
           "away_goals": 1,
           "home_xg": 0.926414,
           "away_xg": 1.35649,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED"
-        },
-        {
-          "home_team": "Real Betis",
-          "away_team": "Getafe",
-          "date": "2026-09-17",
-          "home_goals": 1,
-          "away_goals": 0,
-          "home_xg": 2.60912,
-          "away_xg": 0.327032,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -15114,10 +15082,10 @@
           "home_team": "Porto",
           "away_team": "Benfica",
           "date": "2026-09-20",
-          "home_goals": 1,
-          "away_goals": 0,
-          "home_xg": 0.88,
-          "away_xg": 0.52,
+          "home_goals": 3,
+          "away_goals": 1,
+          "home_xg": 2.07,
+          "away_xg": 1.07,
           "home_expected_xg": 1.37,
           "away_expected_xg": 1.65,
           "combined_expected_xg": 3.02,
@@ -18624,6 +18592,23 @@
           "kickoff_at": "2026-09-20T00:30:00Z"
         },
         {
+          "home_team": "Inter Miami",
+          "away_team": "San Diego",
+          "date": "2026-09-20",
+          "home_goals": 2,
+          "away_goals": 2,
+          "home_xg": 1.58,
+          "away_xg": 0.96,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-09-20T23:00:00Z"
+        },
+        {
           "home_team": "Minnesota United",
           "away_team": "LA Galaxy",
           "date": "2026-09-20",
@@ -18775,23 +18760,6 @@
           "combined_expected_goals": 4.62,
           "status": "FINISHED",
           "kickoff_at": "2026-09-20T00:30:00Z"
-        },
-        {
-          "home_team": "Inter Miami",
-          "away_team": "San Diego",
-          "date": "2026-09-20",
-          "home_goals": 2,
-          "away_goals": 2,
-          "home_xg": 1.58,
-          "away_xg": 0.96,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-09-20T23:00:00Z"
         }
       ]
     }
