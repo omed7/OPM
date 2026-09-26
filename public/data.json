@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "a6bfa4e",
-    "generated_at": "2026-09-25T19:26:47Z"
+    "version": "ddc9f8d",
+    "generated_at": "2026-09-26T11:28:38Z"
   },
   "leagues": [
     {
@@ -9728,150 +9728,6 @@
       "metric": "xg",
       "fixtures": [
         {
-          "home_team": "Atlante",
-          "away_team": "Monterrey",
-          "date": "2026-09-26",
-          "combined_expected_xg": 2.26,
-          "home_expected_xg": 1.1,
-          "away_expected_xg": 1.17,
-          "home_expected_goals": 0.62,
-          "away_expected_goals": 1.12,
-          "combined_expected_goals": 1.75,
-          "home_last_4_matches": [
-            {
-              "opponent": "Puebla",
-              "date": "2026-09-19",
-              "venue": "away",
-              "xg_for": 1.17,
-              "xg_against": 0.57
-            },
-            {
-              "opponent": "Pachuca",
-              "date": "2026-09-12",
-              "venue": "home",
-              "xg_for": 1.78,
-              "xg_against": 1.31
-            },
-            {
-              "opponent": "Atlas",
-              "date": "2026-09-06",
-              "venue": "away",
-              "xg_for": 1.39,
-              "xg_against": 1.13
-            },
-            {
-              "opponent": "Le\u00f3n",
-              "date": "2026-08-29",
-              "venue": "home",
-              "xg_for": 0.9,
-              "xg_against": 1.53
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Cruz Azul",
-              "date": "2026-09-20",
-              "venue": "home",
-              "xg_for": 0.85,
-              "xg_against": 1.16
-            },
-            {
-              "opponent": "Tigres UANL",
-              "date": "2026-09-13",
-              "venue": "home",
-              "xg_for": 0.64,
-              "xg_against": 0.02
-            },
-            {
-              "opponent": "Le\u00f3n",
-              "date": "2026-08-22",
-              "venue": "away",
-              "xg_for": 1.49,
-              "xg_against": 1.92
-            },
-            {
-              "opponent": "Atlas",
-              "date": "2026-08-02",
-              "venue": "away",
-              "xg_for": 1.83,
-              "xg_against": 0.43
-            }
-          ],
-          "kickoff_time": "02:00"
-        },
-        {
-          "home_team": "Tijuana",
-          "away_team": "Atlas",
-          "date": "2026-09-26",
-          "combined_expected_xg": 3.36,
-          "home_expected_xg": 1.83,
-          "away_expected_xg": 1.53,
-          "home_expected_goals": 1.62,
-          "away_expected_goals": 1.75,
-          "combined_expected_goals": 3.38,
-          "home_last_4_matches": [
-            {
-              "opponent": "Pachuca",
-              "date": "2026-09-21",
-              "venue": "away",
-              "xg_for": 2.05,
-              "xg_against": 2.72
-            },
-            {
-              "opponent": "Quer\u00e9taro",
-              "date": "2026-09-12",
-              "venue": "home",
-              "xg_for": 2.44,
-              "xg_against": 0.83
-            },
-            {
-              "opponent": "Pumas UNAM",
-              "date": "2026-08-29",
-              "venue": "home",
-              "xg_for": 2.62,
-              "xg_against": 0.47
-            },
-            {
-              "opponent": "Guadalajara",
-              "date": "2026-08-22",
-              "venue": "away",
-              "xg_for": 0.48,
-              "xg_against": 1.91
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Pumas UNAM",
-              "date": "2026-09-19",
-              "venue": "home",
-              "xg_for": 2.49,
-              "xg_against": 1.21
-            },
-            {
-              "opponent": "Toluca",
-              "date": "2026-09-12",
-              "venue": "away",
-              "xg_for": 0.71,
-              "xg_against": 2.1
-            },
-            {
-              "opponent": "Atlante",
-              "date": "2026-09-06",
-              "venue": "home",
-              "xg_for": 1.13,
-              "xg_against": 1.39
-            },
-            {
-              "opponent": "Cruz Azul",
-              "date": "2026-08-23",
-              "venue": "away",
-              "xg_for": 2.01,
-              "xg_against": 2.36
-            }
-          ],
-          "kickoff_time": "04:00"
-        },
-        {
           "home_team": "Cruz Azul",
           "away_team": "Toluca",
           "date": "2026-09-26",
@@ -10376,55 +10232,38 @@
           "kickoff_time": "04:10"
         },
         {
-          "home_team": "Pachuca",
-          "away_team": "Tijuana",
-          "date": "2026-09-21",
-          "home_goals": 2,
-          "away_goals": 2,
-          "home_xg": 2.72,
-          "away_xg": 2.05,
-          "home_expected_xg": 1.27,
-          "away_expected_xg": 1.48,
-          "combined_expected_xg": 2.76,
-          "home_expected_goals": 1.75,
-          "away_expected_goals": 1.0,
-          "combined_expected_goals": 2.75,
-          "status": "FINISHED",
-          "kickoff_at": "2026-09-21T00:00:00Z"
-        },
-        {
-          "home_team": "Quer\u00e9taro",
-          "away_team": "Le\u00f3n",
-          "date": "2026-09-21",
-          "home_goals": 1,
-          "away_goals": 1,
-          "home_xg": 1.67,
-          "away_xg": 1.78,
-          "home_expected_xg": 1.43,
-          "away_expected_xg": 1.89,
-          "combined_expected_xg": 3.32,
-          "home_expected_goals": 1.5,
-          "away_expected_goals": 1.38,
-          "combined_expected_goals": 2.88,
-          "status": "FINISHED",
-          "kickoff_at": "2026-09-21T02:10:00Z"
-        },
-        {
-          "home_team": "Toluca",
-          "away_team": "Santos Laguna",
-          "date": "2026-09-21",
+          "home_team": "Tijuana",
+          "away_team": "Atlas",
+          "date": "2026-09-26",
           "home_goals": 2,
           "away_goals": 3,
-          "home_xg": 2.78,
-          "away_xg": 1.95,
-          "home_expected_xg": 1.75,
-          "away_expected_xg": 0.87,
-          "combined_expected_xg": 2.62,
-          "home_expected_goals": 2.12,
-          "away_expected_goals": 0.75,
-          "combined_expected_goals": 2.88,
+          "home_xg": 1.91,
+          "away_xg": 2.64,
+          "home_expected_xg": 1.83,
+          "away_expected_xg": 1.53,
+          "combined_expected_xg": 3.36,
+          "home_expected_goals": 1.62,
+          "away_expected_goals": 1.75,
+          "combined_expected_goals": 3.38,
           "status": "FINISHED",
-          "kickoff_at": "2026-09-21T00:00:00Z"
+          "kickoff_at": "2026-09-26T03:00:00Z"
+        },
+        {
+          "home_team": "Atlante",
+          "away_team": "Monterrey",
+          "date": "2026-09-26",
+          "home_goals": 4,
+          "away_goals": 2,
+          "home_xg": 1.22,
+          "away_xg": 1.41,
+          "home_expected_xg": 1.1,
+          "away_expected_xg": 1.17,
+          "combined_expected_xg": 2.26,
+          "home_expected_goals": 0.62,
+          "away_expected_goals": 1.12,
+          "combined_expected_goals": 1.75,
+          "status": "FINISHED",
+          "kickoff_at": "2026-09-26T01:00:00Z"
         }
       ]
     },
