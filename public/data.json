@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "d7ba235",
-    "generated_at": "2026-10-01T13:13:04Z"
+    "version": "8222867",
+    "generated_at": "2026-10-01T20:28:37Z"
   },
   "leagues": [
     {
@@ -16239,6 +16239,23 @@
           "combined_expected_goals": 2.62,
           "status": "FINISHED",
           "kickoff_at": "2026-09-27T02:30:00Z"
+        },
+        {
+          "home_team": "New York RB",
+          "away_team": "St. Louis City",
+          "date": "2026-09-30",
+          "home_goals": 0,
+          "away_goals": 3,
+          "home_xg": 1.1,
+          "away_xg": 1.66,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-09-30T23:30:00Z"
         }
       ]
     }
