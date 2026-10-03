@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "meta": {
-    "version": "203d86f",
-    "generated_at": "2026-10-02T20:05:00Z"
+    "version": "fa306ee",
+    "generated_at": "2026-10-03T11:45:39Z"
   },
   "leagues": [
     {
@@ -9766,108 +9766,108 @@
             },
             {
               "name": "Helmond Sport",
-              "matches_played": 8,
+              "matches_played": 9,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": -1.65,
-                    "average": -0.33,
-                    "eligible_matches": 5
+                    "total": -0.82,
+                    "average": -0.136666666667,
+                    "eligible_matches": 6
                   },
                   "goals": {
-                    "total": -2.87,
-                    "average": -0.574,
-                    "eligible_matches": 5
+                    "total": -2.25,
+                    "average": -0.375,
+                    "eligible_matches": 6
                   },
                   "xg_goals": {
-                    "total": -2.26,
-                    "average": -0.452
+                    "total": -1.535,
+                    "average": -0.255833333333
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": -1.72,
-                    "average": -0.344,
-                    "eligible_matches": 5
+                    "total": -1.03,
+                    "average": -0.171666666667,
+                    "eligible_matches": 6
                   },
                   "goals": {
-                    "total": -3.49,
-                    "average": -0.698,
-                    "eligible_matches": 5
+                    "total": -2.99,
+                    "average": -0.498333333333,
+                    "eligible_matches": 6
                   },
                   "xg_goals": {
-                    "total": -2.605,
-                    "average": -0.521
+                    "total": -2.01,
+                    "average": -0.335
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": 0.07,
-                    "average": 0.014,
-                    "eligible_matches": 5
+                    "total": 0.21,
+                    "average": 0.035,
+                    "eligible_matches": 6
                   },
                   "goals": {
-                    "total": 0.62,
-                    "average": 0.124,
-                    "eligible_matches": 5
+                    "total": 0.74,
+                    "average": 0.123333333333,
+                    "eligible_matches": 6
                   },
                   "xg_goals": {
-                    "total": 0.345,
-                    "average": 0.069
+                    "total": 0.475,
+                    "average": 0.079166666667
                   }
                 }
               }
             },
             {
               "name": "Heracles Almelo",
-              "matches_played": 8,
+              "matches_played": 9,
               "views": {
                 "overall": {
                   "xg": {
-                    "total": 0.79,
-                    "average": 0.1975,
-                    "eligible_matches": 4
+                    "total": 1.62,
+                    "average": 0.324,
+                    "eligible_matches": 5
                   },
                   "goals": {
-                    "total": -4.75,
-                    "average": -1.1875,
-                    "eligible_matches": 4
+                    "total": -4.13,
+                    "average": -0.826,
+                    "eligible_matches": 5
                   },
                   "xg_goals": {
-                    "total": -1.98,
-                    "average": -0.495
+                    "total": -1.255,
+                    "average": -0.251
                   }
                 },
                 "for": {
                   "xg": {
-                    "total": 2.93,
-                    "average": 0.7325,
-                    "eligible_matches": 4
+                    "total": 3.07,
+                    "average": 0.614,
+                    "eligible_matches": 5
                   },
                   "goals": {
-                    "total": -2.75,
-                    "average": -0.6875,
-                    "eligible_matches": 4
+                    "total": -2.63,
+                    "average": -0.526,
+                    "eligible_matches": 5
                   },
                   "xg_goals": {
-                    "total": 0.09,
-                    "average": 0.0225
+                    "total": 0.22,
+                    "average": 0.044
                   }
                 },
                 "against": {
                   "xg": {
-                    "total": -2.14,
-                    "average": -0.535,
-                    "eligible_matches": 4
+                    "total": -1.45,
+                    "average": -0.29,
+                    "eligible_matches": 5
                   },
                   "goals": {
-                    "total": -2.0,
-                    "average": -0.5,
-                    "eligible_matches": 4
+                    "total": -1.5,
+                    "average": -0.3,
+                    "eligible_matches": 5
                   },
                   "xg_goals": {
-                    "total": -2.07,
-                    "average": -0.5175
+                    "total": -1.475,
+                    "average": -0.295
                   }
                 }
               }
