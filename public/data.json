@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "6105499",
-    "generated_at": "2026-10-04T18:50:13Z"
+    "version": "e6cfa84",
+    "generated_at": "2026-10-05T14:36:33Z"
   },
   "leagues": [
     {
@@ -8915,23 +8915,6 @@
           "kickoff_time": "01:00"
         },
         {
-          "home_team": "S\u00e3o Paulo",
-          "away_team": "Santos",
-          "date": "2026-10-02",
-          "home_goals": 1,
-          "away_goals": 2,
-          "home_xg": 1.84,
-          "away_xg": 0.64,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-10-02T23:00:00Z"
-        },
-        {
           "home_team": "Atl\u00e9tico Mineiro",
           "away_team": "Bragantino",
           "date": "2026-10-03",
@@ -8947,6 +8930,23 @@
           "combined_expected_goals": 2.0,
           "status": "FINISHED",
           "kickoff_at": "2026-10-03T21:30:00Z"
+        },
+        {
+          "home_team": "S\u00e3o Paulo",
+          "away_team": "Santos",
+          "date": "2026-10-02",
+          "home_goals": 1,
+          "away_goals": 2,
+          "home_xg": 1.84,
+          "away_xg": 0.64,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-02T23:00:00Z"
         }
       ]
     },
@@ -12227,12 +12227,12 @@
           "home_team": "Jong Ajax",
           "away_team": "VVV-Venlo",
           "date": "2026-10-09",
-          "combined_expected_xg": 3.19,
-          "home_expected_xg": 1.48,
-          "away_expected_xg": 1.71,
+          "combined_expected_xg": 3.11,
+          "home_expected_xg": 1.37,
+          "away_expected_xg": 1.74,
           "home_expected_goals": 0.88,
-          "away_expected_goals": 2.38,
-          "combined_expected_goals": 3.25,
+          "away_expected_goals": 2.25,
+          "combined_expected_goals": 3.12,
           "home_last_4_matches": [
             {
               "opponent": "Roda JC Kerkrade",
@@ -12265,6 +12265,13 @@
           ],
           "away_last_4_matches": [
             {
+              "opponent": "Roda JC Kerkrade",
+              "date": "2026-10-04",
+              "venue": "home",
+              "xg_for": 1.14,
+              "xg_against": 0.57
+            },
+            {
               "opponent": "FC Volendam",
               "date": "2026-09-26",
               "venue": "away",
@@ -12284,13 +12291,6 @@
               "venue": "home",
               "xg_for": 2.24,
               "xg_against": 1.32
-            },
-            {
-              "opponent": "FC Emmen",
-              "date": "2026-08-30",
-              "venue": "home",
-              "xg_for": 0.9,
-              "xg_against": 1.42
             }
           ],
           "kickoff_time": "19:00"
@@ -12299,13 +12299,20 @@
           "home_team": "Roda JC Kerkrade",
           "away_team": "Jong PSV",
           "date": "2026-10-09",
-          "combined_expected_xg": 2.45,
-          "home_expected_xg": 1.27,
+          "combined_expected_xg": 2.38,
+          "home_expected_xg": 1.2,
           "away_expected_xg": 1.18,
-          "home_expected_goals": 1.5,
-          "away_expected_goals": 0.88,
+          "home_expected_goals": 1.38,
+          "away_expected_goals": 1.0,
           "combined_expected_goals": 2.38,
           "home_last_4_matches": [
+            {
+              "opponent": "VVV-Venlo",
+              "date": "2026-10-04",
+              "venue": "away",
+              "xg_for": 0.57,
+              "xg_against": 1.14
+            },
             {
               "opponent": "RKC Waalwijk",
               "date": "2026-09-26",
@@ -12326,13 +12333,6 @@
               "venue": "home",
               "xg_for": 0.84,
               "xg_against": 0.86
-            },
-            {
-              "opponent": "MVV Maastricht",
-              "date": "2026-09-06",
-              "venue": "away",
-              "xg_for": 1.11,
-              "xg_against": 1.16
             }
           ],
           "away_last_4_matches": [
@@ -12587,13 +12587,20 @@
           "home_team": "VVV-Venlo",
           "away_team": "Jong AZ",
           "date": "2026-10-16",
-          "combined_expected_xg": 3.45,
-          "home_expected_xg": 1.83,
-          "away_expected_xg": 1.62,
-          "home_expected_goals": 2.12,
+          "combined_expected_xg": 3.37,
+          "home_expected_xg": 1.86,
+          "away_expected_xg": 1.51,
+          "home_expected_goals": 2.0,
           "away_expected_goals": 1.75,
-          "combined_expected_goals": 3.88,
+          "combined_expected_goals": 3.75,
           "home_last_4_matches": [
+            {
+              "opponent": "Roda JC Kerkrade",
+              "date": "2026-10-04",
+              "venue": "home",
+              "xg_for": 1.14,
+              "xg_against": 0.57
+            },
             {
               "opponent": "FC Volendam",
               "date": "2026-09-26",
@@ -12614,13 +12621,6 @@
               "venue": "home",
               "xg_for": 2.24,
               "xg_against": 1.32
-            },
-            {
-              "opponent": "FC Emmen",
-              "date": "2026-08-30",
-              "venue": "home",
-              "xg_for": 0.9,
-              "xg_against": 1.42
             }
           ],
           "away_last_4_matches": [
@@ -12989,6 +12989,23 @@
           "combined_expected_goals": 3.75,
           "status": "FINISHED",
           "kickoff_at": "2026-10-03T14:30:00Z"
+        },
+        {
+          "home_team": "VVV-Venlo",
+          "away_team": "Roda JC Kerkrade",
+          "date": "2026-10-04",
+          "home_goals": 2,
+          "away_goals": 0,
+          "home_xg": 1.14,
+          "away_xg": 0.57,
+          "home_expected_xg": 1.46,
+          "away_expected_xg": 1.07,
+          "combined_expected_xg": 2.53,
+          "home_expected_goals": 1.5,
+          "away_expected_goals": 1.12,
+          "combined_expected_goals": 2.62,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-04T12:30:00Z"
         }
       ]
     },
@@ -17344,23 +17361,6 @@
             }
           ],
           "kickoff_time": "00:00"
-        },
-        {
-          "home_team": "New York RB",
-          "away_team": "St. Louis City",
-          "date": "2026-09-30",
-          "home_goals": 0,
-          "away_goals": 3,
-          "home_xg": 1.1,
-          "away_xg": 1.66,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-09-30T23:30:00Z"
         },
         {
           "home_team": "Seattle Sounders",
