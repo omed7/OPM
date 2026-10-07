@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "9272fb9",
-    "generated_at": "2026-10-07T13:17:56Z"
+    "version": "60294a2",
+    "generated_at": "2026-10-07T20:39:00Z"
   },
   "leagues": [
     {
@@ -13941,13 +13941,20 @@
           "home_team": "Chicago Fire",
           "away_team": "New York City",
           "date": "2026-10-10",
-          "combined_expected_xg": 2.84,
-          "home_expected_xg": 1.38,
-          "away_expected_xg": 1.46,
-          "home_expected_goals": 1.0,
+          "combined_expected_xg": 3.06,
+          "home_expected_xg": 1.62,
+          "away_expected_xg": 1.43,
+          "home_expected_goals": 1.25,
           "away_expected_goals": 1.38,
-          "combined_expected_goals": 2.38,
+          "combined_expected_goals": 2.62,
           "home_last_4_matches": [
+            {
+              "opponent": "Vancouver Whitecaps",
+              "date": "2026-10-07",
+              "venue": "home",
+              "xg_for": 2.97,
+              "xg_against": 1.35
+            },
             {
               "opponent": "Charlotte",
               "date": "2026-09-26",
@@ -13968,13 +13975,6 @@
               "venue": "home",
               "xg_for": 2.17,
               "xg_against": 1.05
-            },
-            {
-              "opponent": "Inter Miami",
-              "date": "2026-09-10",
-              "venue": "home",
-              "xg_for": 1.0,
-              "xg_against": 1.59
             }
           ],
           "away_last_4_matches": [
@@ -14805,12 +14805,12 @@
           "home_team": "Los Angeles FC",
           "away_team": "Vancouver Whitecaps",
           "date": "2026-10-11",
-          "combined_expected_xg": 3.29,
-          "home_expected_xg": 1.49,
-          "away_expected_xg": 1.79,
-          "home_expected_goals": 1.25,
-          "away_expected_goals": 1.75,
-          "combined_expected_goals": 3.0,
+          "combined_expected_xg": 3.35,
+          "home_expected_xg": 1.79,
+          "away_expected_xg": 1.56,
+          "home_expected_goals": 1.62,
+          "away_expected_goals": 1.5,
+          "combined_expected_goals": 3.12,
           "home_last_4_matches": [
             {
               "opponent": "Dallas",
@@ -14843,6 +14843,13 @@
           ],
           "away_last_4_matches": [
             {
+              "opponent": "Chicago Fire",
+              "date": "2026-10-07",
+              "venue": "away",
+              "xg_for": 1.35,
+              "xg_against": 2.97
+            },
+            {
               "opponent": "DC United",
               "date": "2026-09-27",
               "venue": "home",
@@ -14862,13 +14869,6 @@
               "venue": "home",
               "xg_for": 2.76,
               "xg_against": 0.73
-            },
-            {
-              "opponent": "Sporting KC",
-              "date": "2026-08-30",
-              "venue": "away",
-              "xg_for": 3.2,
-              "xg_against": 0.59
             }
           ],
           "kickoff_time": "03:30"
@@ -15381,13 +15381,20 @@
           "home_team": "Chicago Fire",
           "away_team": "Philadelphia Union",
           "date": "2026-10-15",
-          "combined_expected_xg": 3.43,
-          "home_expected_xg": 1.27,
-          "away_expected_xg": 2.16,
-          "home_expected_goals": 1.0,
+          "combined_expected_xg": 3.65,
+          "home_expected_xg": 1.52,
+          "away_expected_xg": 2.13,
+          "home_expected_goals": 1.25,
           "away_expected_goals": 3.0,
-          "combined_expected_goals": 4.0,
+          "combined_expected_goals": 4.25,
           "home_last_4_matches": [
+            {
+              "opponent": "Vancouver Whitecaps",
+              "date": "2026-10-07",
+              "venue": "home",
+              "xg_for": 2.97,
+              "xg_against": 1.35
+            },
             {
               "opponent": "Charlotte",
               "date": "2026-09-26",
@@ -15408,13 +15415,6 @@
               "venue": "home",
               "xg_for": 2.17,
               "xg_against": 1.05
-            },
-            {
-              "opponent": "Inter Miami",
-              "date": "2026-09-10",
-              "venue": "home",
-              "xg_for": 1.0,
-              "xg_against": 1.59
             }
           ],
           "away_last_4_matches": [
@@ -15597,12 +15597,12 @@
           "home_team": "St. Louis City",
           "away_team": "Vancouver Whitecaps",
           "date": "2026-10-15",
-          "combined_expected_xg": 3.61,
-          "home_expected_xg": 1.68,
-          "away_expected_xg": 1.93,
-          "home_expected_goals": 2.12,
-          "away_expected_goals": 1.88,
-          "combined_expected_goals": 4.0,
+          "combined_expected_xg": 3.68,
+          "home_expected_xg": 1.98,
+          "away_expected_xg": 1.7,
+          "home_expected_goals": 2.5,
+          "away_expected_goals": 1.62,
+          "combined_expected_goals": 4.12,
           "home_last_4_matches": [
             {
               "opponent": "New York RB",
@@ -15635,6 +15635,13 @@
           ],
           "away_last_4_matches": [
             {
+              "opponent": "Chicago Fire",
+              "date": "2026-10-07",
+              "venue": "away",
+              "xg_for": 1.35,
+              "xg_against": 2.97
+            },
+            {
               "opponent": "DC United",
               "date": "2026-09-27",
               "venue": "home",
@@ -15654,13 +15661,6 @@
               "venue": "home",
               "xg_for": 2.76,
               "xg_against": 0.73
-            },
-            {
-              "opponent": "Sporting KC",
-              "date": "2026-08-30",
-              "venue": "away",
-              "xg_for": 3.2,
-              "xg_against": 0.59
             }
           ],
           "kickoff_time": "01:30"
@@ -16168,6 +16168,23 @@
             }
           ],
           "kickoff_time": "21:30"
+        },
+        {
+          "home_team": "Chicago Fire",
+          "away_team": "Vancouver Whitecaps",
+          "date": "2026-10-07",
+          "home_goals": 3,
+          "away_goals": 1,
+          "home_xg": 2.97,
+          "away_xg": 1.35,
+          "home_expected_xg": 1.46,
+          "away_expected_xg": 2.13,
+          "combined_expected_xg": 3.58,
+          "home_expected_goals": 1.0,
+          "away_expected_goals": 2.0,
+          "combined_expected_goals": 3.0,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-07T00:30:00Z"
         }
       ]
     }
