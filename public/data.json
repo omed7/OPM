@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "d89aa05",
-    "generated_at": "2026-10-09T20:12:12Z"
+    "version": "810cc50",
+    "generated_at": "2026-10-10T12:29:32Z"
   },
   "leagues": [
     {
@@ -809,78 +809,6 @@
       "metric": "xg",
       "fixtures": [
         {
-          "home_team": "Malaga",
-          "away_team": "Espanyol",
-          "date": "2026-10-09",
-          "combined_expected_xg": 2.68,
-          "home_expected_xg": 0.98,
-          "away_expected_xg": 1.7,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "home_last_4_matches": [
-            {
-              "opponent": "Getafe",
-              "date": "2026-09-20",
-              "venue": "away",
-              "xg_for": 0.660498,
-              "xg_against": 1.18796
-            },
-            {
-              "opponent": "Villarreal",
-              "date": "2026-09-17",
-              "venue": "home",
-              "xg_for": 0.361392,
-              "xg_against": 4.2474
-            },
-            {
-              "opponent": "Celta Vigo",
-              "date": "2026-09-13",
-              "venue": "away",
-              "xg_for": 0.548065,
-              "xg_against": 1.48145
-            },
-            {
-              "opponent": "Levante",
-              "date": "2026-09-06",
-              "venue": "home",
-              "xg_for": 1.72661,
-              "xg_against": 1.19172
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Elche",
-              "date": "2026-09-18",
-              "venue": "home",
-              "xg_for": 1.07744,
-              "xg_against": 1.25113
-            },
-            {
-              "opponent": "Rayo Vallecano",
-              "date": "2026-09-15",
-              "venue": "away",
-              "xg_for": 1.1573,
-              "xg_against": 1.8328
-            },
-            {
-              "opponent": "Osasuna",
-              "date": "2026-09-12",
-              "venue": "away",
-              "xg_for": 1.40951,
-              "xg_against": 1.10365
-            },
-            {
-              "opponent": "Sevilla",
-              "date": "2026-09-06",
-              "venue": "home",
-              "xg_for": 1.81745,
-              "xg_against": 0.372572
-            }
-          ],
-          "kickoff_time": "19:00"
-        },
-        {
           "home_team": "Rayo Vallecano",
           "away_team": "Athletic Club",
           "date": "2026-10-10",
@@ -1599,6 +1527,94 @@
             }
           ],
           "kickoff_time": "19:00"
+        },
+        {
+          "home_team": "Espanyol",
+          "away_team": "Atletico Madrid",
+          "date": "2026-10-17",
+          "combined_expected_xg": 2.92,
+          "home_expected_xg": 1.13,
+          "away_expected_xg": 1.78,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "home_last_4_matches": [
+            {
+              "opponent": "Malaga",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.37967,
+              "xg_against": 0.685224
+            },
+            {
+              "opponent": "Elche",
+              "date": "2026-09-18",
+              "venue": "home",
+              "xg_for": 1.07744,
+              "xg_against": 1.25113
+            },
+            {
+              "opponent": "Rayo Vallecano",
+              "date": "2026-09-15",
+              "venue": "away",
+              "xg_for": 1.1573,
+              "xg_against": 1.8328
+            },
+            {
+              "opponent": "Sevilla",
+              "date": "2026-09-06",
+              "venue": "home",
+              "xg_for": 1.81745,
+              "xg_against": 0.372572
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Real Madrid",
+              "date": "2026-09-20",
+              "venue": "home",
+              "xg_for": 2.40619,
+              "xg_against": 0.420774
+            },
+            {
+              "opponent": "Osasuna",
+              "date": "2026-09-16",
+              "venue": "home",
+              "xg_for": 5.14269,
+              "xg_against": 0.717926
+            },
+            {
+              "opponent": "Real Sociedad",
+              "date": "2026-09-13",
+              "venue": "away",
+              "xg_for": 1.83411,
+              "xg_against": 0.607518
+            },
+            {
+              "opponent": "Athletic Club",
+              "date": "2026-09-05",
+              "venue": "away",
+              "xg_for": 0.752183,
+              "xg_against": 1.87212
+            }
+          ],
+          "kickoff_time": "12:00"
+        },
+        {
+          "home_team": "Malaga",
+          "away_team": "Espanyol",
+          "date": "2026-10-09",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 0.685224,
+          "away_xg": 1.37967,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
         }
       ]
     },
@@ -2407,78 +2423,6 @@
       "metric": "xg",
       "fixtures": [
         {
-          "home_team": "Borussia Dortmund",
-          "away_team": "Werder Bremen",
-          "date": "2026-10-09",
-          "combined_expected_xg": 3.06,
-          "home_expected_xg": 1.86,
-          "away_expected_xg": 1.19,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "home_last_4_matches": [
-            {
-              "opponent": "VfB Stuttgart",
-              "date": "2026-09-19",
-              "venue": "away",
-              "xg_for": 2.11223,
-              "xg_against": 0.666049
-            },
-            {
-              "opponent": "Paderborn",
-              "date": "2026-09-12",
-              "venue": "home",
-              "xg_for": 3.14526,
-              "xg_against": 0.311097
-            },
-            {
-              "opponent": "Hoffenheim",
-              "date": "2026-09-05",
-              "venue": "away",
-              "xg_for": 2.02481,
-              "xg_against": 2.16627
-            },
-            {
-              "opponent": "Hamburger SV",
-              "date": "2026-08-29",
-              "venue": "home",
-              "xg_for": 1.31287,
-              "xg_against": 1.10643
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Augsburg",
-              "date": "2026-09-19",
-              "venue": "home",
-              "xg_for": 2.30122,
-              "xg_against": 0.742238
-            },
-            {
-              "opponent": "FC Cologne",
-              "date": "2026-09-12",
-              "venue": "away",
-              "xg_for": 1.18178,
-              "xg_against": 1.61333
-            },
-            {
-              "opponent": "RasenBallsport Leipzig",
-              "date": "2026-09-05",
-              "venue": "home",
-              "xg_for": 0.854137,
-              "xg_against": 1.58161
-            },
-            {
-              "opponent": "Freiburg",
-              "date": "2026-08-30",
-              "venue": "away",
-              "xg_for": 0.948636,
-              "xg_against": 2.38503
-            }
-          ],
-          "kickoff_time": "18:30"
-        },
-        {
           "home_team": "Mainz 05",
           "away_team": "Bayer Leverkusen",
           "date": "2026-10-10",
@@ -3125,6 +3069,382 @@
             }
           ],
           "kickoff_time": "18:30"
+        },
+        {
+          "home_team": "Hamburger SV",
+          "away_team": "VfB Stuttgart",
+          "date": "2026-10-17",
+          "combined_expected_xg": 4.16,
+          "home_expected_xg": 1.99,
+          "away_expected_xg": 2.17,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "home_last_4_matches": [
+            {
+              "opponent": "FC Cologne",
+              "date": "2026-09-19",
+              "venue": "home",
+              "xg_for": 2.07655,
+              "xg_against": 2.15949
+            },
+            {
+              "opponent": "RasenBallsport Leipzig",
+              "date": "2026-09-13",
+              "venue": "away",
+              "xg_for": 0.508374,
+              "xg_against": 2.4682
+            },
+            {
+              "opponent": "Mainz 05",
+              "date": "2026-09-06",
+              "venue": "home",
+              "xg_for": 0.257239,
+              "xg_against": 3.27983
+            },
+            {
+              "opponent": "Borussia Dortmund",
+              "date": "2026-08-29",
+              "venue": "away",
+              "xg_for": 1.10643,
+              "xg_against": 1.31287
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Borussia Dortmund",
+              "date": "2026-09-19",
+              "venue": "home",
+              "xg_for": 0.666049,
+              "xg_against": 2.11223
+            },
+            {
+              "opponent": "Hoffenheim",
+              "date": "2026-09-12",
+              "venue": "away",
+              "xg_for": 2.66977,
+              "xg_against": 2.95745
+            },
+            {
+              "opponent": "FC Cologne",
+              "date": "2026-09-04",
+              "venue": "home",
+              "xg_for": 3.5224,
+              "xg_against": 2.85818
+            },
+            {
+              "opponent": "Bayern Munich",
+              "date": "2026-08-28",
+              "venue": "away",
+              "xg_for": 1.24951,
+              "xg_against": 4.07897
+            }
+          ],
+          "kickoff_time": "13:30"
+        },
+        {
+          "home_team": "Schalke 04",
+          "away_team": "Mainz 05",
+          "date": "2026-10-17",
+          "combined_expected_xg": 4.2,
+          "home_expected_xg": 1.6,
+          "away_expected_xg": 2.61,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "home_last_4_matches": [
+            {
+              "opponent": "Elversberg",
+              "date": "2026-09-20",
+              "venue": "home",
+              "xg_for": 1.26962,
+              "xg_against": 0.795372
+            },
+            {
+              "opponent": "Union Berlin",
+              "date": "2026-09-11",
+              "venue": "away",
+              "xg_for": 3.21809,
+              "xg_against": 1.91756
+            },
+            {
+              "opponent": "Bayern Munich",
+              "date": "2026-09-05",
+              "venue": "home",
+              "xg_for": 0.25073,
+              "xg_against": 2.0536
+            },
+            {
+              "opponent": "Augsburg",
+              "date": "2026-08-30",
+              "venue": "away",
+              "xg_for": 1.83691,
+              "xg_against": 5.53649
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Borussia M.Gladbach",
+              "date": "2026-09-19",
+              "venue": "away",
+              "xg_for": 3.46968,
+              "xg_against": 3.0902
+            },
+            {
+              "opponent": "Eintracht Frankfurt",
+              "date": "2026-09-12",
+              "venue": "home",
+              "xg_for": 2.24195,
+              "xg_against": 2.15926
+            },
+            {
+              "opponent": "Hamburger SV",
+              "date": "2026-09-06",
+              "venue": "away",
+              "xg_for": 3.27983,
+              "xg_against": 0.257239
+            },
+            {
+              "opponent": "Paderborn",
+              "date": "2026-08-29",
+              "venue": "home",
+              "xg_for": 1.54945,
+              "xg_against": 0.691131
+            }
+          ],
+          "kickoff_time": "13:30"
+        },
+        {
+          "home_team": "Union Berlin",
+          "away_team": "Borussia Dortmund",
+          "date": "2026-10-17",
+          "combined_expected_xg": 3.96,
+          "home_expected_xg": 1.11,
+          "away_expected_xg": 2.84,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "home_last_4_matches": [
+            {
+              "opponent": "Bayern Munich",
+              "date": "2026-09-18",
+              "venue": "away",
+              "xg_for": 0.471553,
+              "xg_against": 4.1308
+            },
+            {
+              "opponent": "Schalke 04",
+              "date": "2026-09-11",
+              "venue": "home",
+              "xg_for": 1.91756,
+              "xg_against": 3.21809
+            },
+            {
+              "opponent": "Bayer Leverkusen",
+              "date": "2026-09-05",
+              "venue": "away",
+              "xg_for": 0.249852,
+              "xg_against": 3.39215
+            },
+            {
+              "opponent": "Eintracht Frankfurt",
+              "date": "2026-08-29",
+              "venue": "home",
+              "xg_for": 2.28332,
+              "xg_against": 2.1189
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Werder Bremen",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 2.61721,
+              "xg_against": 0.849269
+            },
+            {
+              "opponent": "VfB Stuttgart",
+              "date": "2026-09-19",
+              "venue": "away",
+              "xg_for": 2.11223,
+              "xg_against": 0.666049
+            },
+            {
+              "opponent": "Paderborn",
+              "date": "2026-09-12",
+              "venue": "home",
+              "xg_for": 3.14526,
+              "xg_against": 0.311097
+            },
+            {
+              "opponent": "Hoffenheim",
+              "date": "2026-09-05",
+              "venue": "away",
+              "xg_for": 2.02481,
+              "xg_against": 2.16627
+            }
+          ],
+          "kickoff_time": "13:30"
+        },
+        {
+          "home_team": "Werder Bremen",
+          "away_team": "Paderborn",
+          "date": "2026-10-17",
+          "combined_expected_xg": 2.79,
+          "home_expected_xg": 1.59,
+          "away_expected_xg": 1.2,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "home_last_4_matches": [
+            {
+              "opponent": "Borussia Dortmund",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 0.849269,
+              "xg_against": 2.61721
+            },
+            {
+              "opponent": "Augsburg",
+              "date": "2026-09-19",
+              "venue": "home",
+              "xg_for": 2.30122,
+              "xg_against": 0.742238
+            },
+            {
+              "opponent": "FC Cologne",
+              "date": "2026-09-12",
+              "venue": "away",
+              "xg_for": 1.18178,
+              "xg_against": 1.61333
+            },
+            {
+              "opponent": "RasenBallsport Leipzig",
+              "date": "2026-09-05",
+              "venue": "home",
+              "xg_for": 0.854137,
+              "xg_against": 1.58161
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Hoffenheim",
+              "date": "2026-09-20",
+              "venue": "home",
+              "xg_for": 1.34065,
+              "xg_against": 1.67256
+            },
+            {
+              "opponent": "Borussia Dortmund",
+              "date": "2026-09-12",
+              "venue": "away",
+              "xg_for": 0.311097,
+              "xg_against": 3.14526
+            },
+            {
+              "opponent": "Freiburg",
+              "date": "2026-09-05",
+              "venue": "home",
+              "xg_for": 0.733133,
+              "xg_against": 1.1716
+            },
+            {
+              "opponent": "Mainz 05",
+              "date": "2026-08-29",
+              "venue": "away",
+              "xg_for": 0.691131,
+              "xg_against": 1.54945
+            }
+          ],
+          "kickoff_time": "13:30"
+        },
+        {
+          "home_team": "Elversberg",
+          "away_team": "Augsburg",
+          "date": "2026-10-17",
+          "combined_expected_xg": 4.15,
+          "home_expected_xg": 1.85,
+          "away_expected_xg": 2.3,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "home_last_4_matches": [
+            {
+              "opponent": "Schalke 04",
+              "date": "2026-09-20",
+              "venue": "away",
+              "xg_for": 0.795372,
+              "xg_against": 1.26962
+            },
+            {
+              "opponent": "Bayern Munich",
+              "date": "2026-09-13",
+              "venue": "home",
+              "xg_for": 1.02972,
+              "xg_against": 3.06035
+            },
+            {
+              "opponent": "Borussia M.Gladbach",
+              "date": "2026-09-05",
+              "venue": "away",
+              "xg_for": 3.03199,
+              "xg_against": 2.88776
+            },
+            {
+              "opponent": "Bayer Leverkusen",
+              "date": "2026-08-29",
+              "venue": "home",
+              "xg_for": 1.40032,
+              "xg_against": 2.61527
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Werder Bremen",
+              "date": "2026-09-19",
+              "venue": "away",
+              "xg_for": 0.742238,
+              "xg_against": 2.30122
+            },
+            {
+              "opponent": "Bayer Leverkusen",
+              "date": "2026-09-12",
+              "venue": "home",
+              "xg_for": 0.842513,
+              "xg_against": 1.88606
+            },
+            {
+              "opponent": "Eintracht Frankfurt",
+              "date": "2026-09-06",
+              "venue": "away",
+              "xg_for": 1.44545,
+              "xg_against": 2.51037
+            },
+            {
+              "opponent": "Schalke 04",
+              "date": "2026-08-30",
+              "venue": "home",
+              "xg_for": 5.53649,
+              "xg_against": 1.83691
+            }
+          ],
+          "kickoff_time": "13:30"
+        },
+        {
+          "home_team": "Borussia Dortmund",
+          "away_team": "Werder Bremen",
+          "date": "2026-10-09",
+          "home_goals": 2,
+          "away_goals": 2,
+          "home_xg": 2.61721,
+          "away_xg": 0.849269,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
         }
       ]
     },
@@ -3133,78 +3453,6 @@
       "name": "Ligue 1",
       "metric": "xg",
       "fixtures": [
-        {
-          "home_team": "Lens",
-          "away_team": "Lyon",
-          "date": "2026-10-09",
-          "combined_expected_xg": 3.55,
-          "home_expected_xg": 1.79,
-          "away_expected_xg": 1.76,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "home_last_4_matches": [
-            {
-              "opponent": "Monaco",
-              "date": "2026-09-18",
-              "venue": "away",
-              "xg_for": 1.46144,
-              "xg_against": 1.53599
-            },
-            {
-              "opponent": "Le Mans",
-              "date": "2026-09-13",
-              "venue": "away",
-              "xg_for": 1.87551,
-              "xg_against": 2.15559
-            },
-            {
-              "opponent": "Lorient",
-              "date": "2026-09-05",
-              "venue": "home",
-              "xg_for": 1.10048,
-              "xg_against": 1.03397
-            },
-            {
-              "opponent": "Auxerre",
-              "date": "2026-08-22",
-              "venue": "home",
-              "xg_for": 5.11771,
-              "xg_against": 1.70602
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Rennes",
-              "date": "2026-09-19",
-              "venue": "home",
-              "xg_for": 3.60496,
-              "xg_against": 1.15783
-            },
-            {
-              "opponent": "Paris FC",
-              "date": "2026-09-12",
-              "venue": "away",
-              "xg_for": 0.402849,
-              "xg_against": 0.576571
-            },
-            {
-              "opponent": "Auxerre",
-              "date": "2026-09-04",
-              "venue": "home",
-              "xg_for": 2.88188,
-              "xg_against": 0.907856
-            },
-            {
-              "opponent": "Toulouse",
-              "date": "2026-08-22",
-              "venue": "away",
-              "xg_for": 0.757819,
-              "xg_against": 2.15622
-            }
-          ],
-          "kickoff_time": "18:45"
-        },
         {
           "home_team": "Lille",
           "away_team": "Le Havre",
@@ -3852,6 +4100,94 @@
             }
           ],
           "kickoff_time": "18:45"
+        },
+        {
+          "home_team": "Strasbourg",
+          "away_team": "Paris Saint Germain",
+          "date": "2026-10-17",
+          "combined_expected_xg": 3.42,
+          "home_expected_xg": 1.36,
+          "away_expected_xg": 2.05,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "home_last_4_matches": [
+            {
+              "opponent": "Paris FC",
+              "date": "2026-09-19",
+              "venue": "away",
+              "xg_for": 0.230224,
+              "xg_against": 0.907233
+            },
+            {
+              "opponent": "Monaco",
+              "date": "2026-09-12",
+              "venue": "home",
+              "xg_for": 0.674791,
+              "xg_against": 0.766591
+            },
+            {
+              "opponent": "Troyes",
+              "date": "2026-09-06",
+              "venue": "away",
+              "xg_for": 3.51582,
+              "xg_against": 2.64731
+            },
+            {
+              "opponent": "Lens",
+              "date": "2026-08-29",
+              "venue": "home",
+              "xg_for": 1.85921,
+              "xg_against": 2.95021
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Marseille",
+              "date": "2026-09-20",
+              "venue": "away",
+              "xg_for": 4.67277,
+              "xg_against": 1.86575
+            },
+            {
+              "opponent": "Brest",
+              "date": "2026-09-13",
+              "venue": "away",
+              "xg_for": 1.33411,
+              "xg_against": 1.24238
+            },
+            {
+              "opponent": "Monaco",
+              "date": "2026-09-04",
+              "venue": "home",
+              "xg_for": 2.52357,
+              "xg_against": 0.601454
+            },
+            {
+              "opponent": "Rennes",
+              "date": "2026-08-23",
+              "venue": "home",
+              "xg_for": 0.63016,
+              "xg_against": 0.910543
+            }
+          ],
+          "kickoff_time": "15:15"
+        },
+        {
+          "home_team": "Lens",
+          "away_team": "Lyon",
+          "date": "2026-10-09",
+          "home_goals": 2,
+          "away_goals": 1,
+          "home_xg": 1.40616,
+          "away_xg": 1.031,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
         }
       ]
     },
@@ -6107,6 +6443,23 @@
           "kickoff_time": "23:30"
         },
         {
+          "home_team": "Athletico PR",
+          "away_team": "Atl\u00e9tico Mineiro",
+          "date": "2026-10-08",
+          "home_goals": 2,
+          "away_goals": 2,
+          "home_xg": 2.25,
+          "away_xg": 1.26,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-08T23:00:00Z"
+        },
+        {
           "home_team": "Botafogo",
           "away_team": "Vasco da Gama",
           "date": "2026-10-07",
@@ -6158,57 +6511,6 @@
           "kickoff_at": "2026-10-08T00:30:00Z"
         },
         {
-          "home_team": "Internacional",
-          "away_team": "Corinthians",
-          "date": "2026-10-07",
-          "home_goals": 2,
-          "away_goals": 1,
-          "home_xg": 1.63,
-          "away_xg": 1.66,
-          "home_expected_xg": 1.18,
-          "away_expected_xg": 0.93,
-          "combined_expected_xg": 2.11,
-          "home_expected_goals": 1.38,
-          "away_expected_goals": 1.12,
-          "combined_expected_goals": 2.5,
-          "status": "FINISHED",
-          "kickoff_at": "2026-10-07T22:30:00Z"
-        },
-        {
-          "home_team": "Remo",
-          "away_team": "Gr\u00eamio",
-          "date": "2026-10-07",
-          "home_goals": 1,
-          "away_goals": 1,
-          "home_xg": 1.75,
-          "away_xg": 1.75,
-          "home_expected_xg": 1.31,
-          "away_expected_xg": 1.23,
-          "combined_expected_xg": 2.54,
-          "home_expected_goals": 1.0,
-          "away_expected_goals": 1.0,
-          "combined_expected_goals": 2.0,
-          "status": "FINISHED",
-          "kickoff_at": "2026-10-07T22:30:00Z"
-        },
-        {
-          "home_team": "Vit\u00f3ria",
-          "away_team": "Chapecoense",
-          "date": "2026-10-07",
-          "home_goals": 4,
-          "away_goals": 0,
-          "home_xg": 2.28,
-          "away_xg": 0.46,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-10-07T23:00:00Z"
-        },
-        {
           "home_team": "Fluminense",
           "away_team": "Coritiba",
           "date": "2026-10-09",
@@ -6224,6 +6526,23 @@
           "combined_expected_goals": 3.5,
           "status": "FINISHED",
           "kickoff_at": "2026-10-09T00:30:00Z"
+        },
+        {
+          "home_team": "Internacional",
+          "away_team": "Corinthians",
+          "date": "2026-10-07",
+          "home_goals": 2,
+          "away_goals": 1,
+          "home_xg": 1.63,
+          "away_xg": 1.66,
+          "home_expected_xg": 1.18,
+          "away_expected_xg": 0.93,
+          "combined_expected_xg": 2.11,
+          "home_expected_goals": 1.38,
+          "away_expected_goals": 1.12,
+          "combined_expected_goals": 2.5,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-07T22:30:00Z"
         },
         {
           "home_team": "Palmeiras",
@@ -6243,21 +6562,21 @@
           "kickoff_at": "2026-10-09T00:30:00Z"
         },
         {
-          "home_team": "Athletico PR",
-          "away_team": "Atl\u00e9tico Mineiro",
-          "date": "2026-10-08",
-          "home_goals": 2,
-          "away_goals": 2,
-          "home_xg": 2.25,
-          "away_xg": 1.26,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
+          "home_team": "Remo",
+          "away_team": "Gr\u00eamio",
+          "date": "2026-10-07",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 1.75,
+          "away_xg": 1.75,
+          "home_expected_xg": 1.31,
+          "away_expected_xg": 1.23,
+          "combined_expected_xg": 2.54,
+          "home_expected_goals": 1.0,
+          "away_expected_goals": 1.0,
+          "combined_expected_goals": 2.0,
           "status": "FINISHED",
-          "kickoff_at": "2026-10-08T23:00:00Z"
+          "kickoff_at": "2026-10-07T22:30:00Z"
         },
         {
           "home_team": "Santos",
@@ -6275,6 +6594,23 @@
           "combined_expected_goals": 2.5,
           "status": "FINISHED",
           "kickoff_at": "2026-10-08T22:30:00Z"
+        },
+        {
+          "home_team": "Vit\u00f3ria",
+          "away_team": "Chapecoense",
+          "date": "2026-10-07",
+          "home_goals": 4,
+          "away_goals": 0,
+          "home_xg": 2.28,
+          "away_xg": 0.46,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-07T23:00:00Z"
         }
       ]
     },
@@ -6791,12 +7127,12 @@
           "home_team": "Lyngby Boldklub",
           "away_team": "Nordsj\u00e6lland",
           "date": "2026-10-18",
-          "combined_expected_xg": 3.44,
-          "home_expected_xg": 1.8,
-          "away_expected_xg": 1.63,
-          "home_expected_goals": 1.38,
-          "away_expected_goals": 1.88,
-          "combined_expected_goals": 3.25,
+          "combined_expected_xg": 3.31,
+          "home_expected_xg": 1.66,
+          "away_expected_xg": 1.65,
+          "home_expected_goals": 1.25,
+          "away_expected_goals": 1.5,
+          "combined_expected_goals": 2.75,
           "home_last_4_matches": [
             {
               "opponent": "Silkeborg IF",
@@ -6829,6 +7165,13 @@
           ],
           "away_last_4_matches": [
             {
+              "opponent": "Odense BK",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 2.44,
+              "xg_against": 0.45
+            },
+            {
               "opponent": "Viborg FF",
               "date": "2026-09-20",
               "venue": "away",
@@ -6848,13 +7191,6 @@
               "venue": "away",
               "xg_for": 1.98,
               "xg_against": 1.84
-            },
-            {
-              "opponent": "Br\u00f8ndby IF",
-              "date": "2026-08-30",
-              "venue": "home",
-              "xg_for": 2.31,
-              "xg_against": 1.58
             }
           ],
           "kickoff_time": "13:00"
@@ -6863,13 +7199,20 @@
           "home_team": "Odense BK",
           "away_team": "Br\u00f8ndby IF",
           "date": "2026-10-18",
-          "combined_expected_xg": 3.19,
-          "home_expected_xg": 1.78,
-          "away_expected_xg": 1.41,
-          "home_expected_goals": 1.88,
-          "away_expected_goals": 1.38,
-          "combined_expected_goals": 3.25,
+          "combined_expected_xg": 3.08,
+          "home_expected_xg": 1.58,
+          "away_expected_xg": 1.51,
+          "home_expected_goals": 1.75,
+          "away_expected_goals": 1.25,
+          "combined_expected_goals": 3.0,
           "home_last_4_matches": [
+            {
+              "opponent": "Nordsj\u00e6lland",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 0.45,
+              "xg_against": 2.44
+            },
             {
               "opponent": "FC Midtjylland",
               "date": "2026-09-19",
@@ -6890,13 +7233,6 @@
               "venue": "home",
               "xg_for": 1.57,
               "xg_against": 2.46
-            },
-            {
-              "opponent": "Lyngby Boldklub",
-              "date": "2026-08-30",
-              "venue": "away",
-              "xg_for": 2.09,
-              "xg_against": 1.64
             }
           ],
           "away_last_4_matches": [
@@ -7002,6 +7338,23 @@
             }
           ],
           "kickoff_time": "17:00"
+        },
+        {
+          "home_team": "Nordsj\u00e6lland",
+          "away_team": "Odense BK",
+          "date": "2026-10-09",
+          "home_goals": 0,
+          "away_goals": 0,
+          "home_xg": 2.44,
+          "away_xg": 0.45,
+          "home_expected_xg": 1.82,
+          "away_expected_xg": 1.84,
+          "combined_expected_xg": 3.66,
+          "home_expected_goals": 2.0,
+          "away_expected_goals": 1.38,
+          "combined_expected_goals": 3.38,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T17:00:00Z"
         }
       ]
     },
@@ -7010,222 +7363,6 @@
       "name": "2. Bundesliga",
       "metric": "xg",
       "fixtures": [
-        {
-          "home_team": "Magdeburg",
-          "away_team": "Hannover 96",
-          "date": "2026-10-10",
-          "combined_expected_xg": 3.03,
-          "home_expected_xg": 1.49,
-          "away_expected_xg": 1.54,
-          "home_expected_goals": 1.5,
-          "away_expected_goals": 1.12,
-          "combined_expected_goals": 2.62,
-          "home_last_4_matches": [
-            {
-              "opponent": "SpVgg Greuther F\u00fcrth",
-              "date": "2026-09-18",
-              "venue": "away",
-              "xg_for": 0.76,
-              "xg_against": 0.89
-            },
-            {
-              "opponent": "Kaiserslautern",
-              "date": "2026-09-12",
-              "venue": "home",
-              "xg_for": 1.55,
-              "xg_against": 1.06
-            },
-            {
-              "opponent": "Hertha BSC",
-              "date": "2026-09-06",
-              "venue": "away",
-              "xg_for": 1.01,
-              "xg_against": 1.27
-            },
-            {
-              "opponent": "Holstein Kiel",
-              "date": "2026-08-30",
-              "venue": "home",
-              "xg_for": 0.8,
-              "xg_against": 1.62
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "VfL Bochum 1848",
-              "date": "2026-09-20",
-              "venue": "home",
-              "xg_for": 1.38,
-              "xg_against": 2.19
-            },
-            {
-              "opponent": "N\u00fcrnberg",
-              "date": "2026-09-11",
-              "venue": "away",
-              "xg_for": 1.35,
-              "xg_against": 2.46
-            },
-            {
-              "opponent": "Karlsruher SC",
-              "date": "2026-09-04",
-              "venue": "home",
-              "xg_for": 1.87,
-              "xg_against": 2.37
-            },
-            {
-              "opponent": "Darmstadt 98",
-              "date": "2026-08-30",
-              "venue": "away",
-              "xg_for": 2.9,
-              "xg_against": 0.78
-            }
-          ],
-          "kickoff_time": "12:00"
-        },
-        {
-          "home_team": "Darmstadt 98",
-          "away_team": "Energie Cottbus",
-          "date": "2026-10-10",
-          "combined_expected_xg": 3.65,
-          "home_expected_xg": 1.53,
-          "away_expected_xg": 2.12,
-          "home_expected_goals": 1.5,
-          "away_expected_goals": 2.62,
-          "combined_expected_goals": 4.12,
-          "home_last_4_matches": [
-            {
-              "opponent": "VfL Wolfsburg",
-              "date": "2026-09-18",
-              "venue": "away",
-              "xg_for": 1.04,
-              "xg_against": 1.68
-            },
-            {
-              "opponent": "DSC Arminia Bielefeld",
-              "date": "2026-09-11",
-              "venue": "home",
-              "xg_for": 1.75,
-              "xg_against": 1.39
-            },
-            {
-              "opponent": "Kaiserslautern",
-              "date": "2026-09-05",
-              "venue": "away",
-              "xg_for": 1.1,
-              "xg_against": 2.76
-            },
-            {
-              "opponent": "Hannover 96",
-              "date": "2026-08-30",
-              "venue": "home",
-              "xg_for": 0.78,
-              "xg_against": 2.9
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "St. Pauli",
-              "date": "2026-09-20",
-              "venue": "home",
-              "xg_for": 0.94,
-              "xg_against": 0.81
-            },
-            {
-              "opponent": "Karlsruher SC",
-              "date": "2026-09-13",
-              "venue": "away",
-              "xg_for": 2.18,
-              "xg_against": 1.82
-            },
-            {
-              "opponent": "VfL Wolfsburg",
-              "date": "2026-09-05",
-              "venue": "away",
-              "xg_for": 2.58,
-              "xg_against": 2.76
-            },
-            {
-              "opponent": "SpVgg Greuther F\u00fcrth",
-              "date": "2026-08-29",
-              "venue": "home",
-              "xg_for": 2.49,
-              "xg_against": 2.18
-            }
-          ],
-          "kickoff_time": "12:00"
-        },
-        {
-          "home_team": "Osnabr\u00fcck",
-          "away_team": "Dynamo Dresden",
-          "date": "2026-10-10",
-          "combined_expected_xg": 3.84,
-          "home_expected_xg": 1.86,
-          "away_expected_xg": 1.99,
-          "home_expected_goals": 2.12,
-          "away_expected_goals": 1.5,
-          "combined_expected_goals": 3.62,
-          "home_last_4_matches": [
-            {
-              "opponent": "Holstein Kiel",
-              "date": "2026-09-19",
-              "venue": "away",
-              "xg_for": 1.39,
-              "xg_against": 2.35
-            },
-            {
-              "opponent": "Hertha BSC",
-              "date": "2026-09-13",
-              "venue": "home",
-              "xg_for": 1.8,
-              "xg_against": 3.02
-            },
-            {
-              "opponent": "Eintracht Braunschweig",
-              "date": "2026-09-06",
-              "venue": "home",
-              "xg_for": 2.45,
-              "xg_against": 2.14
-            },
-            {
-              "opponent": "VfL Bochum 1848",
-              "date": "2026-08-28",
-              "venue": "away",
-              "xg_for": 0.4,
-              "xg_against": 1.93
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Hertha BSC",
-              "date": "2026-09-19",
-              "venue": "home",
-              "xg_for": 1.03,
-              "xg_against": 2.56
-            },
-            {
-              "opponent": "Eintracht Braunschweig",
-              "date": "2026-09-12",
-              "venue": "away",
-              "xg_for": 1.27,
-              "xg_against": 1.75
-            },
-            {
-              "opponent": "VfL Bochum 1848",
-              "date": "2026-09-05",
-              "venue": "home",
-              "xg_for": 2.41,
-              "xg_against": 1.3
-            },
-            {
-              "opponent": "FC Heidenheim",
-              "date": "2026-08-29",
-              "venue": "away",
-              "xg_for": 1.73,
-              "xg_against": 3.22
-            }
-          ],
-          "kickoff_time": "12:00"
-        },
         {
           "home_team": "N\u00fcrnberg",
           "away_team": "VfL Wolfsburg",
@@ -7954,148 +8091,76 @@
       "metric": "xg",
       "fixtures": [
         {
-          "home_team": "Puebla",
-          "away_team": "Le\u00f3n",
-          "date": "2026-10-10",
-          "combined_expected_xg": 2.38,
-          "home_expected_xg": 0.97,
-          "away_expected_xg": 1.41,
-          "home_expected_goals": 0.75,
+          "home_team": "Quer\u00e9taro",
+          "away_team": "Atlante",
+          "date": "2026-10-11",
+          "combined_expected_xg": 2.88,
+          "home_expected_xg": 1.28,
+          "away_expected_xg": 1.59,
+          "home_expected_goals": 1.5,
           "away_expected_goals": 1.12,
-          "combined_expected_goals": 1.88,
+          "combined_expected_goals": 2.62,
           "home_last_4_matches": [
             {
-              "opponent": "Tigres UANL",
-              "date": "2026-09-27",
+              "opponent": "Guadalajara",
+              "date": "2026-09-26",
               "venue": "away",
-              "xg_for": 0.53,
-              "xg_against": 1.99
+              "xg_for": 1.53,
+              "xg_against": 1.42
             },
             {
-              "opponent": "Atlante",
-              "date": "2026-09-19",
+              "opponent": "Le\u00f3n",
+              "date": "2026-09-21",
               "venue": "home",
-              "xg_for": 0.57,
-              "xg_against": 1.17
+              "xg_for": 1.67,
+              "xg_against": 1.78
+            },
+            {
+              "opponent": "Tijuana",
+              "date": "2026-09-12",
+              "venue": "away",
+              "xg_for": 0.83,
+              "xg_against": 2.44
             },
             {
               "opponent": "Toluca",
-              "date": "2026-09-16",
+              "date": "2026-08-22",
               "venue": "home",
-              "xg_for": 0.57,
-              "xg_against": 1.31
-            },
-            {
-              "opponent": "Necaxa",
-              "date": "2026-09-12",
-              "venue": "away",
-              "xg_for": 0.34,
-              "xg_against": 0.32
+              "xg_for": 1.81,
+              "xg_against": 1.56
             }
           ],
           "away_last_4_matches": [
-            {
-              "opponent": "Ju\u00e1rez",
-              "date": "2026-09-28",
-              "venue": "home",
-              "xg_for": 0.92,
-              "xg_against": 1.39
-            },
-            {
-              "opponent": "Quer\u00e9taro",
-              "date": "2026-09-21",
-              "venue": "away",
-              "xg_for": 1.78,
-              "xg_against": 1.67
-            },
-            {
-              "opponent": "Atl\u00e9tico San Luis",
-              "date": "2026-09-15",
-              "venue": "home",
-              "xg_for": 2.46,
-              "xg_against": 1.43
-            },
-            {
-              "opponent": "Pumas UNAM",
-              "date": "2026-09-11",
-              "venue": "away",
-              "xg_for": 1.32,
-              "xg_against": 1.28
-            }
-          ],
-          "kickoff_time": "02:00"
-        },
-        {
-          "home_team": "Tigres UANL",
-          "away_team": "Toluca",
-          "date": "2026-10-10",
-          "combined_expected_xg": 3.11,
-          "home_expected_xg": 1.29,
-          "away_expected_xg": 1.81,
-          "home_expected_goals": 1.25,
-          "away_expected_goals": 1.75,
-          "combined_expected_goals": 3.0,
-          "home_last_4_matches": [
-            {
-              "opponent": "Puebla",
-              "date": "2026-09-27",
-              "venue": "home",
-              "xg_for": 1.99,
-              "xg_against": 0.53
-            },
-            {
-              "opponent": "Ju\u00e1rez",
-              "date": "2026-09-19",
-              "venue": "away",
-              "xg_for": 1.66,
-              "xg_against": 1.84
-            },
             {
               "opponent": "Monterrey",
-              "date": "2026-09-13",
-              "venue": "away",
-              "xg_for": 0.02,
-              "xg_against": 0.64
-            },
-            {
-              "opponent": "Necaxa",
-              "date": "2026-09-06",
-              "venue": "home",
-              "xg_for": 2.0,
-              "xg_against": 2.9
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Cruz Azul",
               "date": "2026-09-26",
-              "venue": "away",
-              "xg_for": 2.4,
-              "xg_against": 1.45
-            },
-            {
-              "opponent": "Santos Laguna",
-              "date": "2026-09-21",
               "venue": "home",
-              "xg_for": 2.78,
-              "xg_against": 1.95
+              "xg_for": 1.22,
+              "xg_against": 1.41
             },
             {
               "opponent": "Puebla",
-              "date": "2026-09-16",
+              "date": "2026-09-19",
               "venue": "away",
-              "xg_for": 1.31,
+              "xg_for": 1.17,
               "xg_against": 0.57
             },
             {
-              "opponent": "Atlas",
+              "opponent": "Pachuca",
               "date": "2026-09-12",
               "venue": "home",
-              "xg_for": 2.1,
-              "xg_against": 0.71
+              "xg_for": 1.78,
+              "xg_against": 1.31
+            },
+            {
+              "opponent": "Atlas",
+              "date": "2026-09-06",
+              "venue": "away",
+              "xg_for": 1.39,
+              "xg_against": 1.13
             }
           ],
-          "kickoff_time": "04:00"
+          "kickoff_time": "00:00"
         },
         {
           "home_team": "Ju\u00e1rez",
@@ -8165,78 +8230,6 @@
               "venue": "away",
               "xg_for": 0.48,
               "xg_against": 1.91
-            }
-          ],
-          "kickoff_time": "00:00"
-        },
-        {
-          "home_team": "Quer\u00e9taro",
-          "away_team": "Atlante",
-          "date": "2026-10-11",
-          "combined_expected_xg": 2.88,
-          "home_expected_xg": 1.28,
-          "away_expected_xg": 1.59,
-          "home_expected_goals": 1.5,
-          "away_expected_goals": 1.12,
-          "combined_expected_goals": 2.62,
-          "home_last_4_matches": [
-            {
-              "opponent": "Guadalajara",
-              "date": "2026-09-26",
-              "venue": "away",
-              "xg_for": 1.53,
-              "xg_against": 1.42
-            },
-            {
-              "opponent": "Le\u00f3n",
-              "date": "2026-09-21",
-              "venue": "home",
-              "xg_for": 1.67,
-              "xg_against": 1.78
-            },
-            {
-              "opponent": "Tijuana",
-              "date": "2026-09-12",
-              "venue": "away",
-              "xg_for": 0.83,
-              "xg_against": 2.44
-            },
-            {
-              "opponent": "Toluca",
-              "date": "2026-08-22",
-              "venue": "home",
-              "xg_for": 1.81,
-              "xg_against": 1.56
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Monterrey",
-              "date": "2026-09-26",
-              "venue": "home",
-              "xg_for": 1.22,
-              "xg_against": 1.41
-            },
-            {
-              "opponent": "Puebla",
-              "date": "2026-09-19",
-              "venue": "away",
-              "xg_for": 1.17,
-              "xg_against": 0.57
-            },
-            {
-              "opponent": "Pachuca",
-              "date": "2026-09-12",
-              "venue": "home",
-              "xg_for": 1.78,
-              "xg_against": 1.31
-            },
-            {
-              "opponent": "Atlas",
-              "date": "2026-09-06",
-              "venue": "away",
-              "xg_for": 1.39,
-              "xg_against": 1.13
             }
           ],
           "kickoff_time": "00:00"
@@ -8674,6 +8667,78 @@
           "kickoff_time": "02:00"
         },
         {
+          "home_team": "Tijuana",
+          "away_team": "Puebla",
+          "date": "2026-10-17",
+          "combined_expected_xg": 2.72,
+          "home_expected_xg": 1.46,
+          "away_expected_xg": 1.26,
+          "home_expected_goals": 1.12,
+          "away_expected_goals": 1.5,
+          "combined_expected_goals": 2.62,
+          "home_last_4_matches": [
+            {
+              "opponent": "Atlas",
+              "date": "2026-09-26",
+              "venue": "home",
+              "xg_for": 1.91,
+              "xg_against": 2.64
+            },
+            {
+              "opponent": "Pachuca",
+              "date": "2026-09-21",
+              "venue": "away",
+              "xg_for": 2.05,
+              "xg_against": 2.72
+            },
+            {
+              "opponent": "Quer\u00e9taro",
+              "date": "2026-09-12",
+              "venue": "home",
+              "xg_for": 2.44,
+              "xg_against": 0.83
+            },
+            {
+              "opponent": "Guadalajara",
+              "date": "2026-08-22",
+              "venue": "away",
+              "xg_for": 0.48,
+              "xg_against": 1.91
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Tigres UANL",
+              "date": "2026-09-27",
+              "venue": "away",
+              "xg_for": 0.53,
+              "xg_against": 1.99
+            },
+            {
+              "opponent": "Atlante",
+              "date": "2026-09-19",
+              "venue": "home",
+              "xg_for": 0.57,
+              "xg_against": 1.17
+            },
+            {
+              "opponent": "Toluca",
+              "date": "2026-09-16",
+              "venue": "home",
+              "xg_for": 0.57,
+              "xg_against": 1.31
+            },
+            {
+              "opponent": "Necaxa",
+              "date": "2026-09-12",
+              "venue": "away",
+              "xg_for": 0.34,
+              "xg_against": 0.32
+            }
+          ],
+          "kickoff_time": "04:00"
+        },
+        {
           "home_team": "Atlante",
           "away_team": "Pumas UNAM",
           "date": "2026-10-17",
@@ -8746,73 +8811,361 @@
           "kickoff_time": "04:00"
         },
         {
-          "home_team": "Tijuana",
-          "away_team": "Puebla",
-          "date": "2026-10-17",
-          "combined_expected_xg": 2.72,
-          "home_expected_xg": 1.46,
-          "away_expected_xg": 1.26,
-          "home_expected_goals": 1.12,
-          "away_expected_goals": 1.5,
-          "combined_expected_goals": 2.62,
+          "home_team": "Santos Laguna",
+          "away_team": "Quer\u00e9taro",
+          "date": "2026-10-18",
+          "combined_expected_xg": 3.3,
+          "home_expected_xg": 1.66,
+          "away_expected_xg": 1.64,
+          "home_expected_goals": 1.0,
+          "away_expected_goals": 1.12,
+          "combined_expected_goals": 2.12,
           "home_last_4_matches": [
             {
-              "opponent": "Atlas",
-              "date": "2026-09-26",
+              "opponent": "Pachuca",
+              "date": "2026-09-27",
               "venue": "home",
-              "xg_for": 1.91,
-              "xg_against": 2.64
+              "xg_for": 2.09,
+              "xg_against": 0.77
             },
             {
-              "opponent": "Pachuca",
+              "opponent": "Toluca",
               "date": "2026-09-21",
               "venue": "away",
-              "xg_for": 2.05,
-              "xg_against": 2.72
+              "xg_for": 1.95,
+              "xg_against": 2.78
             },
             {
-              "opponent": "Quer\u00e9taro",
-              "date": "2026-09-12",
+              "opponent": "Ju\u00e1rez",
+              "date": "2026-09-14",
               "venue": "home",
-              "xg_for": 2.44,
-              "xg_against": 0.83
+              "xg_for": 1.34,
+              "xg_against": 1.48
             },
             {
-              "opponent": "Guadalajara",
-              "date": "2026-08-22",
+              "opponent": "Cruz Azul",
+              "date": "2026-09-06",
               "venue": "away",
-              "xg_for": 0.48,
-              "xg_against": 1.91
+              "xg_for": 0.69,
+              "xg_against": 2.23
             }
           ],
           "away_last_4_matches": [
             {
-              "opponent": "Tigres UANL",
-              "date": "2026-09-27",
+              "opponent": "Guadalajara",
+              "date": "2026-09-26",
               "venue": "away",
-              "xg_for": 0.53,
-              "xg_against": 1.99
+              "xg_for": 1.53,
+              "xg_against": 1.42
             },
             {
-              "opponent": "Atlante",
-              "date": "2026-09-19",
+              "opponent": "Le\u00f3n",
+              "date": "2026-09-21",
               "venue": "home",
-              "xg_for": 0.57,
-              "xg_against": 1.17
+              "xg_for": 1.67,
+              "xg_against": 1.78
+            },
+            {
+              "opponent": "Tijuana",
+              "date": "2026-09-12",
+              "venue": "away",
+              "xg_for": 0.83,
+              "xg_against": 2.44
             },
             {
               "opponent": "Toluca",
-              "date": "2026-09-16",
+              "date": "2026-08-22",
               "venue": "home",
-              "xg_for": 0.57,
-              "xg_against": 1.31
+              "xg_for": 1.81,
+              "xg_against": 1.56
+            }
+          ],
+          "kickoff_time": "00:00"
+        },
+        {
+          "home_team": "Guadalajara",
+          "away_team": "Tigres UANL",
+          "date": "2026-10-18",
+          "combined_expected_xg": 2.29,
+          "home_expected_xg": 1.18,
+          "away_expected_xg": 1.11,
+          "home_expected_goals": 1.12,
+          "away_expected_goals": 0.75,
+          "combined_expected_goals": 1.88,
+          "home_last_4_matches": [
+            {
+              "opponent": "Quer\u00e9taro",
+              "date": "2026-09-26",
+              "venue": "home",
+              "xg_for": 1.42,
+              "xg_against": 1.53
+            },
+            {
+              "opponent": "Am\u00e9rica",
+              "date": "2026-09-20",
+              "venue": "away",
+              "xg_for": 0.72,
+              "xg_against": 1.09
+            },
+            {
+              "opponent": "Pumas UNAM",
+              "date": "2026-09-14",
+              "venue": "home",
+              "xg_for": 0.65,
+              "xg_against": 0.45
+            },
+            {
+              "opponent": "Atl\u00e9tico San Luis",
+              "date": "2026-09-05",
+              "venue": "away",
+              "xg_for": 0.74,
+              "xg_against": 0.11
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Puebla",
+              "date": "2026-09-27",
+              "venue": "home",
+              "xg_for": 1.99,
+              "xg_against": 0.53
+            },
+            {
+              "opponent": "Ju\u00e1rez",
+              "date": "2026-09-19",
+              "venue": "away",
+              "xg_for": 1.66,
+              "xg_against": 1.84
+            },
+            {
+              "opponent": "Monterrey",
+              "date": "2026-09-13",
+              "venue": "away",
+              "xg_for": 0.02,
+              "xg_against": 0.64
             },
             {
               "opponent": "Necaxa",
-              "date": "2026-09-12",
+              "date": "2026-09-06",
+              "venue": "home",
+              "xg_for": 2.0,
+              "xg_against": 2.9
+            }
+          ],
+          "kickoff_time": "00:07"
+        },
+        {
+          "home_team": "Toluca",
+          "away_team": "Atl\u00e9tico San Luis",
+          "date": "2026-10-18",
+          "combined_expected_xg": 2.97,
+          "home_expected_xg": 1.74,
+          "away_expected_xg": 1.23,
+          "home_expected_goals": 2.25,
+          "away_expected_goals": 1.75,
+          "combined_expected_goals": 4.0,
+          "home_last_4_matches": [
+            {
+              "opponent": "Cruz Azul",
+              "date": "2026-09-26",
               "venue": "away",
-              "xg_for": 0.34,
-              "xg_against": 0.32
+              "xg_for": 2.4,
+              "xg_against": 1.45
+            },
+            {
+              "opponent": "Santos Laguna",
+              "date": "2026-09-21",
+              "venue": "home",
+              "xg_for": 2.78,
+              "xg_against": 1.95
+            },
+            {
+              "opponent": "Puebla",
+              "date": "2026-09-16",
+              "venue": "away",
+              "xg_for": 1.31,
+              "xg_against": 0.57
+            },
+            {
+              "opponent": "Atlas",
+              "date": "2026-09-12",
+              "venue": "home",
+              "xg_for": 2.1,
+              "xg_against": 0.71
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Pumas UNAM",
+              "date": "2026-09-27",
+              "venue": "away",
+              "xg_for": 2.22,
+              "xg_against": 1.64
+            },
+            {
+              "opponent": "Necaxa",
+              "date": "2026-09-19",
+              "venue": "home",
+              "xg_for": 1.39,
+              "xg_against": 0.49
+            },
+            {
+              "opponent": "Le\u00f3n",
+              "date": "2026-09-15",
+              "venue": "away",
+              "xg_for": 1.43,
+              "xg_against": 2.46
+            },
+            {
+              "opponent": "Guadalajara",
+              "date": "2026-09-05",
+              "venue": "home",
+              "xg_for": 0.11,
+              "xg_against": 0.74
+            }
+          ],
+          "kickoff_time": "02:00"
+        },
+        {
+          "home_team": "Le\u00f3n",
+          "away_team": "Am\u00e9rica",
+          "date": "2026-10-18",
+          "combined_expected_xg": 3.4,
+          "home_expected_xg": 1.65,
+          "away_expected_xg": 1.75,
+          "home_expected_goals": 1.75,
+          "away_expected_goals": 2.0,
+          "combined_expected_goals": 3.75,
+          "home_last_4_matches": [
+            {
+              "opponent": "Ju\u00e1rez",
+              "date": "2026-09-28",
+              "venue": "home",
+              "xg_for": 0.92,
+              "xg_against": 1.39
+            },
+            {
+              "opponent": "Quer\u00e9taro",
+              "date": "2026-09-21",
+              "venue": "away",
+              "xg_for": 1.78,
+              "xg_against": 1.67
+            },
+            {
+              "opponent": "Atl\u00e9tico San Luis",
+              "date": "2026-09-15",
+              "venue": "home",
+              "xg_for": 2.46,
+              "xg_against": 1.43
+            },
+            {
+              "opponent": "Pumas UNAM",
+              "date": "2026-09-11",
+              "venue": "away",
+              "xg_for": 1.32,
+              "xg_against": 1.28
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Necaxa",
+              "date": "2026-09-28",
+              "venue": "away",
+              "xg_for": 3.94,
+              "xg_against": 2.83
+            },
+            {
+              "opponent": "Guadalajara",
+              "date": "2026-09-20",
+              "venue": "home",
+              "xg_for": 1.09,
+              "xg_against": 0.72
+            },
+            {
+              "opponent": "Cruz Azul",
+              "date": "2026-09-13",
+              "venue": "away",
+              "xg_for": 2.05,
+              "xg_against": 2.04
+            },
+            {
+              "opponent": "Puebla",
+              "date": "2026-08-30",
+              "venue": "home",
+              "xg_for": 1.18,
+              "xg_against": 1.1
+            }
+          ],
+          "kickoff_time": "02:00"
+        },
+        {
+          "home_team": "Cruz Azul",
+          "away_team": "Ju\u00e1rez",
+          "date": "2026-10-18",
+          "combined_expected_xg": 2.81,
+          "home_expected_xg": 1.41,
+          "away_expected_xg": 1.4,
+          "home_expected_goals": 1.88,
+          "away_expected_goals": 1.5,
+          "combined_expected_goals": 3.38,
+          "home_last_4_matches": [
+            {
+              "opponent": "Toluca",
+              "date": "2026-09-26",
+              "venue": "home",
+              "xg_for": 1.45,
+              "xg_against": 2.4
+            },
+            {
+              "opponent": "Monterrey",
+              "date": "2026-09-20",
+              "venue": "away",
+              "xg_for": 1.16,
+              "xg_against": 0.85
+            },
+            {
+              "opponent": "Am\u00e9rica",
+              "date": "2026-09-13",
+              "venue": "home",
+              "xg_for": 2.04,
+              "xg_against": 2.05
+            },
+            {
+              "opponent": "Necaxa",
+              "date": "2026-08-29",
+              "venue": "away",
+              "xg_for": 1.53,
+              "xg_against": 0.45
+            }
+          ],
+          "away_last_4_matches": [
+            {
+              "opponent": "Le\u00f3n",
+              "date": "2026-09-28",
+              "venue": "away",
+              "xg_for": 1.39,
+              "xg_against": 0.92
+            },
+            {
+              "opponent": "Tigres UANL",
+              "date": "2026-09-19",
+              "venue": "home",
+              "xg_for": 1.84,
+              "xg_against": 1.66
+            },
+            {
+              "opponent": "Santos Laguna",
+              "date": "2026-09-14",
+              "venue": "away",
+              "xg_for": 1.48,
+              "xg_against": 1.34
+            },
+            {
+              "opponent": "Pachuca",
+              "date": "2026-09-05",
+              "venue": "home",
+              "xg_for": 0.73,
+              "xg_against": 1.21
             }
           ],
           "kickoff_time": "04:00"
@@ -9699,13 +10052,20 @@
           "home_team": "VVV-Venlo",
           "away_team": "Jong AZ",
           "date": "2026-10-16",
-          "combined_expected_xg": 3.37,
-          "home_expected_xg": 1.86,
-          "away_expected_xg": 1.51,
+          "combined_expected_xg": 3.17,
+          "home_expected_xg": 1.87,
+          "away_expected_xg": 1.3,
           "home_expected_goals": 2.0,
-          "away_expected_goals": 1.75,
-          "combined_expected_goals": 3.75,
+          "away_expected_goals": 1.38,
+          "combined_expected_goals": 3.38,
           "home_last_4_matches": [
+            {
+              "opponent": "Jong Ajax",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 2.04,
+              "xg_against": 1.27
+            },
             {
               "opponent": "Roda JC Kerkrade",
               "date": "2026-10-04",
@@ -9721,13 +10081,6 @@
               "xg_against": 1.14
             },
             {
-              "opponent": "Jong FC Utrecht",
-              "date": "2026-09-18",
-              "venue": "away",
-              "xg_for": 1.64,
-              "xg_against": 1.7
-            },
-            {
               "opponent": "TOP Oss",
               "date": "2026-09-11",
               "venue": "home",
@@ -9736,6 +10089,13 @@
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "FC Den Bosch",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 0.83,
+              "xg_against": 1.05
+            },
             {
               "opponent": "FC Volendam",
               "date": "2026-09-18",
@@ -9756,13 +10116,6 @@
               "venue": "away",
               "xg_for": 1.29,
               "xg_against": 2.7
-            },
-            {
-              "opponent": "Jong FC Utrecht",
-              "date": "2026-08-31",
-              "venue": "home",
-              "xg_for": 2.13,
-              "xg_against": 1.35
             }
           ],
           "kickoff_time": "19:00"
@@ -9771,13 +10124,20 @@
           "home_team": "FC Eindhoven",
           "away_team": "Vitesse",
           "date": "2026-10-16",
-          "combined_expected_xg": 2.75,
-          "home_expected_xg": 1.21,
-          "away_expected_xg": 1.53,
-          "home_expected_goals": 1.62,
-          "away_expected_goals": 1.5,
-          "combined_expected_goals": 3.12,
+          "combined_expected_xg": 3.05,
+          "home_expected_xg": 1.25,
+          "away_expected_xg": 1.8,
+          "home_expected_goals": 1.75,
+          "away_expected_goals": 1.88,
+          "combined_expected_goals": 3.62,
           "home_last_4_matches": [
+            {
+              "opponent": "Almere City",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 0.38,
+              "xg_against": 2.74
+            },
             {
               "opponent": "De Graafschap",
               "date": "2026-10-03",
@@ -9798,16 +10158,16 @@
               "venue": "home",
               "xg_for": 1.16,
               "xg_against": 1.26
-            },
-            {
-              "opponent": "Jong FC Utrecht",
-              "date": "2026-09-07",
-              "venue": "away",
-              "xg_for": 1.06,
-              "xg_against": 1.06
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "FC Volendam",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.34,
+              "xg_against": 1.79
+            },
             {
               "opponent": "NAC Breda",
               "date": "2026-10-03",
@@ -9828,13 +10188,6 @@
               "venue": "home",
               "xg_for": 3.15,
               "xg_against": 0.91
-            },
-            {
-              "opponent": "Roda JC Kerkrade",
-              "date": "2026-09-12",
-              "venue": "away",
-              "xg_for": 0.86,
-              "xg_against": 0.84
             }
           ],
           "kickoff_time": "19:00"
@@ -9843,13 +10196,20 @@
           "home_team": "Helmond Sport",
           "away_team": "NAC Breda",
           "date": "2026-10-16",
-          "combined_expected_xg": 3.16,
-          "home_expected_xg": 1.28,
-          "away_expected_xg": 1.88,
-          "home_expected_goals": 1.75,
+          "combined_expected_xg": 2.92,
+          "home_expected_xg": 1.18,
+          "away_expected_xg": 1.74,
+          "home_expected_goals": 1.38,
           "away_expected_goals": 2.12,
-          "combined_expected_goals": 3.88,
+          "combined_expected_goals": 3.5,
           "home_last_4_matches": [
+            {
+              "opponent": "TOP Oss",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.53,
+              "xg_against": 2.31
+            },
             {
               "opponent": "Heracles Almelo",
               "date": "2026-10-02",
@@ -9865,13 +10225,6 @@
               "xg_against": 1.4
             },
             {
-              "opponent": "FC Den Bosch",
-              "date": "2026-09-18",
-              "venue": "away",
-              "xg_for": 1.8,
-              "xg_against": 1.77
-            },
-            {
               "opponent": "Jong PSV",
               "date": "2026-09-11",
               "venue": "home",
@@ -9880,6 +10233,13 @@
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "MVV Maastricht",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 0.99,
+              "xg_against": 0.35
+            },
             {
               "opponent": "Vitesse",
               "date": "2026-10-03",
@@ -9900,13 +10260,6 @@
               "venue": "away",
               "xg_for": 2.38,
               "xg_against": 0.96
-            },
-            {
-              "opponent": "Jong FC Utrecht",
-              "date": "2026-09-11",
-              "venue": "home",
-              "xg_for": 2.6,
-              "xg_against": 0.9
             }
           ],
           "kickoff_time": "19:00"
@@ -9915,13 +10268,20 @@
           "home_team": "FC Den Bosch",
           "away_team": "TOP Oss",
           "date": "2026-10-16",
-          "combined_expected_xg": 3.11,
-          "home_expected_xg": 1.44,
-          "away_expected_xg": 1.67,
-          "home_expected_goals": 1.0,
-          "away_expected_goals": 1.62,
+          "combined_expected_xg": 2.94,
+          "home_expected_xg": 1.48,
+          "away_expected_xg": 1.46,
+          "home_expected_goals": 1.25,
+          "away_expected_goals": 1.38,
           "combined_expected_goals": 2.62,
           "home_last_4_matches": [
+            {
+              "opponent": "Jong AZ",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.05,
+              "xg_against": 0.83
+            },
             {
               "opponent": "FC Dordrecht",
               "date": "2026-10-03",
@@ -9942,16 +10302,16 @@
               "venue": "home",
               "xg_for": 1.77,
               "xg_against": 1.8
-            },
-            {
-              "opponent": "FC Volendam",
-              "date": "2026-09-13",
-              "venue": "away",
-              "xg_for": 1.03,
-              "xg_against": 3.08
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "Helmond Sport",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 2.31,
+              "xg_against": 1.53
+            },
             {
               "opponent": "MVV Maastricht",
               "date": "2026-10-03",
@@ -9967,13 +10327,6 @@
               "xg_against": 1.5
             },
             {
-              "opponent": "FC Dordrecht",
-              "date": "2026-09-18",
-              "venue": "home",
-              "xg_for": 1.74,
-              "xg_against": 1.21
-            },
-            {
               "opponent": "VVV-Venlo",
               "date": "2026-09-11",
               "venue": "away",
@@ -9987,13 +10340,20 @@
           "home_team": "FC Emmen",
           "away_team": "Almere City",
           "date": "2026-10-17",
-          "combined_expected_xg": 3.03,
-          "home_expected_xg": 1.72,
-          "away_expected_xg": 1.31,
-          "home_expected_goals": 0.88,
-          "away_expected_goals": 1.75,
-          "combined_expected_goals": 2.62,
+          "combined_expected_xg": 2.79,
+          "home_expected_xg": 1.25,
+          "away_expected_xg": 1.53,
+          "home_expected_goals": 1.12,
+          "away_expected_goals": 1.62,
+          "combined_expected_goals": 2.75,
           "home_last_4_matches": [
+            {
+              "opponent": "FC Dordrecht",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 0.73,
+              "xg_against": 0.52
+            },
             {
               "opponent": "RKC Waalwijk",
               "date": "2026-10-03",
@@ -10009,13 +10369,6 @@
               "xg_against": 1.01
             },
             {
-              "opponent": "FC Eindhoven",
-              "date": "2026-09-18",
-              "venue": "away",
-              "xg_for": 1.26,
-              "xg_against": 1.16
-            },
-            {
               "opponent": "De Graafschap",
               "date": "2026-09-11",
               "venue": "home",
@@ -10024,6 +10377,13 @@
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "FC Eindhoven",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 2.74,
+              "xg_against": 0.38
+            },
             {
               "opponent": "FC Volendam",
               "date": "2026-10-03",
@@ -10039,13 +10399,6 @@
               "xg_against": 0.78
             },
             {
-              "opponent": "Heracles Almelo",
-              "date": "2026-09-18",
-              "venue": "home",
-              "xg_for": 0.29,
-              "xg_against": 3.57
-            },
-            {
               "opponent": "MVV Maastricht",
               "date": "2026-09-11",
               "venue": "away",
@@ -10059,13 +10412,20 @@
           "home_team": "RKC Waalwijk",
           "away_team": "FC Volendam",
           "date": "2026-10-18",
-          "combined_expected_xg": 3.14,
-          "home_expected_xg": 1.79,
-          "away_expected_xg": 1.36,
-          "home_expected_goals": 2.0,
-          "away_expected_goals": 1.25,
-          "combined_expected_goals": 3.25,
+          "combined_expected_xg": 2.95,
+          "home_expected_xg": 1.68,
+          "away_expected_xg": 1.27,
+          "home_expected_goals": 1.75,
+          "away_expected_goals": 1.62,
+          "combined_expected_goals": 3.38,
           "home_last_4_matches": [
+            {
+              "opponent": "Heracles Almelo",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 0.73,
+              "xg_against": 2.39
+            },
             {
               "opponent": "FC Emmen",
               "date": "2026-10-03",
@@ -10086,16 +10446,16 @@
               "venue": "home",
               "xg_for": 2.16,
               "xg_against": 0.63
-            },
-            {
-              "opponent": "Jong Ajax",
-              "date": "2026-09-11",
-              "venue": "away",
-              "xg_for": 1.85,
-              "xg_against": 1.84
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "Vitesse",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 1.79,
+              "xg_against": 1.34
+            },
             {
               "opponent": "Almere City",
               "date": "2026-10-03",
@@ -10116,13 +10476,6 @@
               "venue": "away",
               "xg_for": 1.15,
               "xg_against": 2.76
-            },
-            {
-              "opponent": "FC Den Bosch",
-              "date": "2026-09-13",
-              "venue": "home",
-              "xg_for": 3.08,
-              "xg_against": 1.03
             }
           ],
           "kickoff_time": "11:15"
@@ -10131,13 +10484,20 @@
           "home_team": "MVV Maastricht",
           "away_team": "Heracles Almelo",
           "date": "2026-10-18",
-          "combined_expected_xg": 3.24,
-          "home_expected_xg": 1.01,
-          "away_expected_xg": 2.23,
-          "home_expected_goals": 1.12,
-          "away_expected_goals": 2.62,
-          "combined_expected_goals": 3.75,
+          "combined_expected_xg": 2.95,
+          "home_expected_xg": 0.91,
+          "away_expected_xg": 2.04,
+          "home_expected_goals": 0.75,
+          "away_expected_goals": 2.0,
+          "combined_expected_goals": 2.75,
           "home_last_4_matches": [
+            {
+              "opponent": "NAC Breda",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 0.35,
+              "xg_against": 0.99
+            },
             {
               "opponent": "TOP Oss",
               "date": "2026-10-03",
@@ -10153,13 +10513,6 @@
               "xg_against": 1.35
             },
             {
-              "opponent": "RKC Waalwijk",
-              "date": "2026-09-18",
-              "venue": "away",
-              "xg_for": 0.63,
-              "xg_against": 2.16
-            },
-            {
               "opponent": "Almere City",
               "date": "2026-09-11",
               "venue": "home",
@@ -10168,6 +10521,13 @@
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "RKC Waalwijk",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 2.39,
+              "xg_against": 0.73
+            },
             {
               "opponent": "Helmond Sport",
               "date": "2026-10-02",
@@ -10188,13 +10548,6 @@
               "venue": "away",
               "xg_for": 3.57,
               "xg_against": 0.29
-            },
-            {
-              "opponent": "Jong AZ",
-              "date": "2026-09-11",
-              "venue": "home",
-              "xg_for": 2.7,
-              "xg_against": 1.29
             }
           ],
           "kickoff_time": "15:45"
@@ -10203,13 +10556,20 @@
           "home_team": "Jong FC Utrecht",
           "away_team": "Roda JC Kerkrade",
           "date": "2026-10-19",
-          "combined_expected_xg": 2.6,
-          "home_expected_xg": 1.27,
-          "away_expected_xg": 1.33,
-          "home_expected_goals": 1.62,
+          "combined_expected_xg": 2.78,
+          "home_expected_xg": 1.39,
+          "away_expected_xg": 1.39,
+          "home_expected_goals": 1.75,
           "away_expected_goals": 1.38,
-          "combined_expected_goals": 3.0,
+          "combined_expected_goals": 3.12,
           "home_last_4_matches": [
+            {
+              "opponent": "De Graafschap",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.94,
+              "xg_against": 1.26
+            },
             {
               "opponent": "VVV-Venlo",
               "date": "2026-09-18",
@@ -10230,16 +10590,16 @@
               "venue": "away",
               "xg_for": 0.9,
               "xg_against": 2.6
-            },
-            {
-              "opponent": "Jong AZ",
-              "date": "2026-08-31",
-              "venue": "away",
-              "xg_for": 1.35,
-              "xg_against": 2.13
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "Jong PSV",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 2.15,
+              "xg_against": 1.23
+            },
             {
               "opponent": "VVV-Venlo",
               "date": "2026-10-04",
@@ -10260,13 +10620,6 @@
               "venue": "away",
               "xg_for": 0.64,
               "xg_against": 1.46
-            },
-            {
-              "opponent": "Vitesse",
-              "date": "2026-09-12",
-              "venue": "home",
-              "xg_for": 0.84,
-              "xg_against": 0.86
             }
           ],
           "kickoff_time": "19:00"
@@ -10275,13 +10628,20 @@
           "home_team": "Jong PSV",
           "away_team": "FC Dordrecht",
           "date": "2026-10-19",
-          "combined_expected_xg": 3.02,
-          "home_expected_xg": 1.64,
-          "away_expected_xg": 1.39,
-          "home_expected_goals": 2.25,
-          "away_expected_goals": 1.88,
-          "combined_expected_goals": 4.12,
+          "combined_expected_xg": 2.92,
+          "home_expected_xg": 1.5,
+          "away_expected_xg": 1.41,
+          "home_expected_goals": 1.88,
+          "away_expected_goals": 1.25,
+          "combined_expected_goals": 3.12,
           "home_last_4_matches": [
+            {
+              "opponent": "Roda JC Kerkrade",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.23,
+              "xg_against": 2.15
+            },
             {
               "opponent": "Vitesse",
               "date": "2026-09-19",
@@ -10297,13 +10657,6 @@
               "xg_against": 1.2
             },
             {
-              "opponent": "Helmond Sport",
-              "date": "2026-09-11",
-              "venue": "away",
-              "xg_for": 0.56,
-              "xg_against": 1.42
-            },
-            {
               "opponent": "FC Den Bosch",
               "date": "2026-09-07",
               "venue": "home",
@@ -10312,6 +10665,13 @@
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "FC Emmen",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 0.52,
+              "xg_against": 0.73
+            },
             {
               "opponent": "FC Den Bosch",
               "date": "2026-10-03",
@@ -10332,13 +10692,6 @@
               "venue": "away",
               "xg_for": 1.21,
               "xg_against": 1.74
-            },
-            {
-              "opponent": "Jong AZ",
-              "date": "2026-09-05",
-              "venue": "home",
-              "xg_for": 1.05,
-              "xg_against": 2.47
             }
           ],
           "kickoff_time": "19:00"
@@ -10347,13 +10700,20 @@
           "home_team": "Jong Ajax",
           "away_team": "De Graafschap",
           "date": "2026-10-19",
-          "combined_expected_xg": 3.25,
-          "home_expected_xg": 1.77,
-          "away_expected_xg": 1.48,
-          "home_expected_goals": 0.88,
-          "away_expected_goals": 1.75,
-          "combined_expected_goals": 2.62,
+          "combined_expected_xg": 3.18,
+          "home_expected_xg": 1.64,
+          "away_expected_xg": 1.54,
+          "home_expected_goals": 0.75,
+          "away_expected_goals": 2.0,
+          "combined_expected_goals": 2.75,
           "home_last_4_matches": [
+            {
+              "opponent": "VVV-Venlo",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 1.27,
+              "xg_against": 2.04
+            },
             {
               "opponent": "Roda JC Kerkrade",
               "date": "2026-09-18",
@@ -10369,13 +10729,6 @@
               "xg_against": 1.66
             },
             {
-              "opponent": "RKC Waalwijk",
-              "date": "2026-09-11",
-              "venue": "home",
-              "xg_for": 1.84,
-              "xg_against": 1.85
-            },
-            {
               "opponent": "Almere City",
               "date": "2026-09-04",
               "venue": "away",
@@ -10384,6 +10737,13 @@
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "Jong FC Utrecht",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 1.26,
+              "xg_against": 1.94
+            },
             {
               "opponent": "FC Eindhoven",
               "date": "2026-10-03",
@@ -10399,13 +10759,6 @@
               "xg_against": 0.97
             },
             {
-              "opponent": "NAC Breda",
-              "date": "2026-09-20",
-              "venue": "home",
-              "xg_for": 0.96,
-              "xg_against": 2.38
-            },
-            {
               "opponent": "FC Emmen",
               "date": "2026-09-11",
               "venue": "away",
@@ -10419,13 +10772,20 @@
           "home_team": "NAC Breda",
           "away_team": "Heracles Almelo",
           "date": "2026-10-23",
-          "combined_expected_xg": 3.49,
-          "home_expected_xg": 1.67,
-          "away_expected_xg": 1.82,
-          "home_expected_goals": 1.88,
-          "away_expected_goals": 1.88,
-          "combined_expected_goals": 3.75,
+          "combined_expected_xg": 3.12,
+          "home_expected_xg": 1.4,
+          "away_expected_xg": 1.71,
+          "home_expected_goals": 1.5,
+          "away_expected_goals": 1.5,
+          "combined_expected_goals": 3.0,
           "home_last_4_matches": [
+            {
+              "opponent": "MVV Maastricht",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 0.99,
+              "xg_against": 0.35
+            },
             {
               "opponent": "Vitesse",
               "date": "2026-10-03",
@@ -10446,16 +10806,16 @@
               "venue": "away",
               "xg_for": 2.38,
               "xg_against": 0.96
-            },
-            {
-              "opponent": "Jong FC Utrecht",
-              "date": "2026-09-11",
-              "venue": "home",
-              "xg_for": 2.6,
-              "xg_against": 0.9
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "RKC Waalwijk",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 2.39,
+              "xg_against": 0.73
+            },
             {
               "opponent": "Helmond Sport",
               "date": "2026-10-02",
@@ -10476,13 +10836,6 @@
               "venue": "away",
               "xg_for": 3.57,
               "xg_against": 0.29
-            },
-            {
-              "opponent": "Jong AZ",
-              "date": "2026-09-11",
-              "venue": "home",
-              "xg_for": 2.7,
-              "xg_against": 1.29
             }
           ],
           "kickoff_time": "19:00"
@@ -10491,13 +10844,20 @@
           "home_team": "Vitesse",
           "away_team": "FC Emmen",
           "date": "2026-10-23",
-          "combined_expected_xg": 2.95,
-          "home_expected_xg": 1.31,
-          "away_expected_xg": 1.64,
-          "home_expected_goals": 1.38,
-          "away_expected_goals": 1.25,
+          "combined_expected_xg": 2.98,
+          "home_expected_xg": 1.29,
+          "away_expected_xg": 1.7,
+          "home_expected_goals": 1.0,
+          "away_expected_goals": 1.62,
           "combined_expected_goals": 2.62,
           "home_last_4_matches": [
+            {
+              "opponent": "FC Volendam",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.34,
+              "xg_against": 1.79
+            },
             {
               "opponent": "NAC Breda",
               "date": "2026-10-03",
@@ -10518,16 +10878,16 @@
               "venue": "home",
               "xg_for": 3.15,
               "xg_against": 0.91
-            },
-            {
-              "opponent": "Roda JC Kerkrade",
-              "date": "2026-09-12",
-              "venue": "away",
-              "xg_for": 0.86,
-              "xg_against": 0.84
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "FC Dordrecht",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 0.73,
+              "xg_against": 0.52
+            },
             {
               "opponent": "RKC Waalwijk",
               "date": "2026-10-03",
@@ -10543,13 +10903,6 @@
               "xg_against": 1.01
             },
             {
-              "opponent": "FC Eindhoven",
-              "date": "2026-09-18",
-              "venue": "away",
-              "xg_for": 1.26,
-              "xg_against": 1.16
-            },
-            {
               "opponent": "De Graafschap",
               "date": "2026-09-11",
               "venue": "home",
@@ -10563,13 +10916,20 @@
           "home_team": "FC Eindhoven",
           "away_team": "Jong PSV",
           "date": "2026-10-23",
-          "combined_expected_xg": 2.77,
-          "home_expected_xg": 1.4,
-          "away_expected_xg": 1.37,
-          "home_expected_goals": 1.88,
-          "away_expected_goals": 1.62,
-          "combined_expected_goals": 3.5,
+          "combined_expected_xg": 3.07,
+          "home_expected_xg": 1.41,
+          "away_expected_xg": 1.67,
+          "home_expected_goals": 1.62,
+          "away_expected_goals": 2.0,
+          "combined_expected_goals": 3.62,
           "home_last_4_matches": [
+            {
+              "opponent": "Almere City",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 0.38,
+              "xg_against": 2.74
+            },
             {
               "opponent": "De Graafschap",
               "date": "2026-10-03",
@@ -10590,16 +10950,16 @@
               "venue": "home",
               "xg_for": 1.16,
               "xg_against": 1.26
-            },
-            {
-              "opponent": "Jong FC Utrecht",
-              "date": "2026-09-07",
-              "venue": "away",
-              "xg_for": 1.06,
-              "xg_against": 1.06
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "Roda JC Kerkrade",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.23,
+              "xg_against": 2.15
+            },
             {
               "opponent": "Vitesse",
               "date": "2026-09-19",
@@ -10615,13 +10975,6 @@
               "xg_against": 1.2
             },
             {
-              "opponent": "Helmond Sport",
-              "date": "2026-09-11",
-              "venue": "away",
-              "xg_for": 0.56,
-              "xg_against": 1.42
-            },
-            {
               "opponent": "FC Den Bosch",
               "date": "2026-09-07",
               "venue": "home",
@@ -10635,13 +10988,20 @@
           "home_team": "TOP Oss",
           "away_team": "Jong Ajax",
           "date": "2026-10-23",
-          "combined_expected_xg": 3.05,
-          "home_expected_xg": 1.53,
-          "away_expected_xg": 1.52,
-          "home_expected_goals": 2.0,
-          "away_expected_goals": 0.88,
-          "combined_expected_goals": 2.88,
+          "combined_expected_xg": 3.11,
+          "home_expected_xg": 1.63,
+          "away_expected_xg": 1.48,
+          "home_expected_goals": 2.12,
+          "away_expected_goals": 1.0,
+          "combined_expected_goals": 3.12,
           "home_last_4_matches": [
+            {
+              "opponent": "Helmond Sport",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 2.31,
+              "xg_against": 1.53
+            },
             {
               "opponent": "MVV Maastricht",
               "date": "2026-10-03",
@@ -10657,13 +11017,6 @@
               "xg_against": 1.5
             },
             {
-              "opponent": "FC Dordrecht",
-              "date": "2026-09-18",
-              "venue": "home",
-              "xg_for": 1.74,
-              "xg_against": 1.21
-            },
-            {
               "opponent": "VVV-Venlo",
               "date": "2026-09-11",
               "venue": "away",
@@ -10672,6 +11025,13 @@
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "VVV-Venlo",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 1.27,
+              "xg_against": 2.04
+            },
             {
               "opponent": "Roda JC Kerkrade",
               "date": "2026-09-18",
@@ -10687,13 +11047,6 @@
               "xg_against": 1.66
             },
             {
-              "opponent": "RKC Waalwijk",
-              "date": "2026-09-11",
-              "venue": "home",
-              "xg_for": 1.84,
-              "xg_against": 1.85
-            },
-            {
               "opponent": "Almere City",
               "date": "2026-09-04",
               "venue": "away",
@@ -10707,13 +11060,20 @@
           "home_team": "Jong AZ",
           "away_team": "Helmond Sport",
           "date": "2026-10-23",
-          "combined_expected_xg": 3.44,
-          "home_expected_xg": 1.67,
-          "away_expected_xg": 1.76,
-          "home_expected_goals": 2.0,
+          "combined_expected_xg": 3.27,
+          "home_expected_xg": 1.58,
+          "away_expected_xg": 1.69,
+          "home_expected_goals": 1.88,
           "away_expected_goals": 1.5,
-          "combined_expected_goals": 3.5,
+          "combined_expected_goals": 3.38,
           "home_last_4_matches": [
+            {
+              "opponent": "FC Den Bosch",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 0.83,
+              "xg_against": 1.05
+            },
             {
               "opponent": "FC Volendam",
               "date": "2026-09-18",
@@ -10734,16 +11094,16 @@
               "venue": "away",
               "xg_for": 1.29,
               "xg_against": 2.7
-            },
-            {
-              "opponent": "Jong FC Utrecht",
-              "date": "2026-08-31",
-              "venue": "home",
-              "xg_for": 2.13,
-              "xg_against": 1.35
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "TOP Oss",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.53,
+              "xg_against": 2.31
+            },
             {
               "opponent": "Heracles Almelo",
               "date": "2026-10-02",
@@ -10759,13 +11119,6 @@
               "xg_against": 1.4
             },
             {
-              "opponent": "FC Den Bosch",
-              "date": "2026-09-18",
-              "venue": "away",
-              "xg_for": 1.8,
-              "xg_against": 1.77
-            },
-            {
               "opponent": "Jong PSV",
               "date": "2026-09-11",
               "venue": "home",
@@ -10779,13 +11132,20 @@
           "home_team": "FC Volendam",
           "away_team": "Jong FC Utrecht",
           "date": "2026-10-23",
-          "combined_expected_xg": 3.56,
-          "home_expected_xg": 1.85,
-          "away_expected_xg": 1.71,
+          "combined_expected_xg": 3.4,
+          "home_expected_xg": 1.58,
+          "away_expected_xg": 1.83,
           "home_expected_goals": 1.75,
           "away_expected_goals": 2.25,
           "combined_expected_goals": 4.0,
           "home_last_4_matches": [
+            {
+              "opponent": "Vitesse",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 1.79,
+              "xg_against": 1.34
+            },
             {
               "opponent": "Almere City",
               "date": "2026-10-03",
@@ -10806,16 +11166,16 @@
               "venue": "away",
               "xg_for": 1.15,
               "xg_against": 2.76
-            },
-            {
-              "opponent": "FC Den Bosch",
-              "date": "2026-09-13",
-              "venue": "home",
-              "xg_for": 3.08,
-              "xg_against": 1.03
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "De Graafschap",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.94,
+              "xg_against": 1.26
+            },
             {
               "opponent": "VVV-Venlo",
               "date": "2026-09-18",
@@ -10836,13 +11196,6 @@
               "venue": "away",
               "xg_for": 0.9,
               "xg_against": 2.6
-            },
-            {
-              "opponent": "Jong AZ",
-              "date": "2026-08-31",
-              "venue": "away",
-              "xg_for": 1.35,
-              "xg_against": 2.13
             }
           ],
           "kickoff_time": "19:00"
@@ -10851,13 +11204,20 @@
           "home_team": "Almere City",
           "away_team": "Roda JC Kerkrade",
           "date": "2026-10-23",
-          "combined_expected_xg": 2.43,
-          "home_expected_xg": 1.33,
-          "away_expected_xg": 1.09,
-          "home_expected_goals": 1.25,
+          "combined_expected_xg": 2.55,
+          "home_expected_xg": 1.69,
+          "away_expected_xg": 0.86,
+          "home_expected_goals": 1.62,
           "away_expected_goals": 0.75,
-          "combined_expected_goals": 2.0,
+          "combined_expected_goals": 2.38,
           "home_last_4_matches": [
+            {
+              "opponent": "FC Eindhoven",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 2.74,
+              "xg_against": 0.38
+            },
             {
               "opponent": "FC Volendam",
               "date": "2026-10-03",
@@ -10873,13 +11233,6 @@
               "xg_against": 0.78
             },
             {
-              "opponent": "Heracles Almelo",
-              "date": "2026-09-18",
-              "venue": "home",
-              "xg_for": 0.29,
-              "xg_against": 3.57
-            },
-            {
               "opponent": "MVV Maastricht",
               "date": "2026-09-11",
               "venue": "away",
@@ -10888,6 +11241,13 @@
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "Jong PSV",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 2.15,
+              "xg_against": 1.23
+            },
             {
               "opponent": "VVV-Venlo",
               "date": "2026-10-04",
@@ -10908,13 +11268,6 @@
               "venue": "away",
               "xg_for": 0.64,
               "xg_against": 1.46
-            },
-            {
-              "opponent": "Vitesse",
-              "date": "2026-09-12",
-              "venue": "home",
-              "xg_for": 0.84,
-              "xg_against": 0.86
             }
           ],
           "kickoff_time": "19:00"
@@ -10923,13 +11276,20 @@
           "home_team": "De Graafschap",
           "away_team": "RKC Waalwijk",
           "date": "2026-10-23",
-          "combined_expected_xg": 2.96,
-          "home_expected_xg": 1.2,
-          "away_expected_xg": 1.76,
-          "home_expected_goals": 1.25,
-          "away_expected_goals": 1.75,
-          "combined_expected_goals": 3.0,
+          "combined_expected_xg": 2.87,
+          "home_expected_xg": 1.31,
+          "away_expected_xg": 1.56,
+          "home_expected_goals": 1.75,
+          "away_expected_goals": 1.38,
+          "combined_expected_goals": 3.12,
           "home_last_4_matches": [
+            {
+              "opponent": "Jong FC Utrecht",
+              "date": "2026-10-09",
+              "venue": "home",
+              "xg_for": 1.26,
+              "xg_against": 1.94
+            },
             {
               "opponent": "FC Eindhoven",
               "date": "2026-10-03",
@@ -10945,13 +11305,6 @@
               "xg_against": 0.97
             },
             {
-              "opponent": "NAC Breda",
-              "date": "2026-09-20",
-              "venue": "home",
-              "xg_for": 0.96,
-              "xg_against": 2.38
-            },
-            {
               "opponent": "FC Emmen",
               "date": "2026-09-11",
               "venue": "away",
@@ -10960,6 +11313,13 @@
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "Heracles Almelo",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 0.73,
+              "xg_against": 2.39
+            },
             {
               "opponent": "FC Emmen",
               "date": "2026-10-03",
@@ -10980,13 +11340,6 @@
               "venue": "home",
               "xg_for": 2.16,
               "xg_against": 0.63
-            },
-            {
-              "opponent": "Jong Ajax",
-              "date": "2026-09-11",
-              "venue": "away",
-              "xg_for": 1.85,
-              "xg_against": 1.84
             }
           ],
           "kickoff_time": "19:00"
@@ -10995,13 +11348,20 @@
           "home_team": "FC Den Bosch",
           "away_team": "MVV Maastricht",
           "date": "2026-10-23",
-          "combined_expected_xg": 2.99,
-          "home_expected_xg": 1.57,
-          "away_expected_xg": 1.42,
-          "home_expected_goals": 2.12,
-          "away_expected_goals": 1.12,
-          "combined_expected_goals": 3.25,
+          "combined_expected_xg": 2.53,
+          "home_expected_xg": 1.42,
+          "away_expected_xg": 1.1,
+          "home_expected_goals": 1.62,
+          "away_expected_goals": 0.75,
+          "combined_expected_goals": 2.38,
           "home_last_4_matches": [
+            {
+              "opponent": "Jong AZ",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.05,
+              "xg_against": 0.83
+            },
             {
               "opponent": "FC Dordrecht",
               "date": "2026-10-03",
@@ -11022,16 +11382,16 @@
               "venue": "home",
               "xg_for": 1.77,
               "xg_against": 1.8
-            },
-            {
-              "opponent": "FC Volendam",
-              "date": "2026-09-13",
-              "venue": "away",
-              "xg_for": 1.03,
-              "xg_against": 3.08
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "NAC Breda",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 0.35,
+              "xg_against": 0.99
+            },
             {
               "opponent": "TOP Oss",
               "date": "2026-10-03",
@@ -11047,13 +11407,6 @@
               "xg_against": 1.35
             },
             {
-              "opponent": "RKC Waalwijk",
-              "date": "2026-09-18",
-              "venue": "away",
-              "xg_for": 0.63,
-              "xg_against": 2.16
-            },
-            {
               "opponent": "Almere City",
               "date": "2026-09-11",
               "venue": "home",
@@ -11062,6 +11415,176 @@
             }
           ],
           "kickoff_time": "19:00"
+        },
+        {
+          "home_team": "Heracles Almelo",
+          "away_team": "RKC Waalwijk",
+          "date": "2026-10-09",
+          "home_goals": 3,
+          "away_goals": 0,
+          "home_xg": 2.39,
+          "away_xg": 0.73,
+          "home_expected_xg": 1.9,
+          "away_expected_xg": 1.32,
+          "combined_expected_xg": 3.22,
+          "home_expected_goals": 1.38,
+          "away_expected_goals": 1.75,
+          "combined_expected_goals": 3.12,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T18:00:00Z"
+        },
+        {
+          "home_team": "NAC Breda",
+          "away_team": "MVV Maastricht",
+          "date": "2026-10-09",
+          "home_goals": 1,
+          "away_goals": 0,
+          "home_xg": 0.99,
+          "away_xg": 0.35,
+          "home_expected_xg": 1.99,
+          "away_expected_xg": 0.92,
+          "combined_expected_xg": 2.91,
+          "home_expected_goals": 3.0,
+          "away_expected_goals": 1.5,
+          "combined_expected_goals": 4.5,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T18:00:00Z"
+        },
+        {
+          "home_team": "TOP Oss",
+          "away_team": "Helmond Sport",
+          "date": "2026-10-09",
+          "home_goals": 3,
+          "away_goals": 1,
+          "home_xg": 2.31,
+          "away_xg": 1.53,
+          "home_expected_xg": 1.47,
+          "away_expected_xg": 1.56,
+          "combined_expected_xg": 3.03,
+          "home_expected_goals": 1.88,
+          "away_expected_goals": 1.38,
+          "combined_expected_goals": 3.25,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T18:00:00Z"
+        },
+        {
+          "home_team": "Jong AZ",
+          "away_team": "FC Den Bosch",
+          "date": "2026-10-09",
+          "home_goals": 0,
+          "away_goals": 1,
+          "home_xg": 0.83,
+          "away_xg": 1.05,
+          "home_expected_xg": 1.88,
+          "away_expected_xg": 1.64,
+          "combined_expected_xg": 3.52,
+          "home_expected_goals": 1.75,
+          "away_expected_goals": 1.12,
+          "combined_expected_goals": 2.88,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T18:00:00Z"
+        },
+        {
+          "home_team": "FC Volendam",
+          "away_team": "Vitesse",
+          "date": "2026-10-09",
+          "home_goals": 2,
+          "away_goals": 0,
+          "home_xg": 1.79,
+          "away_xg": 1.34,
+          "home_expected_xg": 1.53,
+          "away_expected_xg": 1.78,
+          "combined_expected_xg": 3.31,
+          "home_expected_goals": 1.5,
+          "away_expected_goals": 1.5,
+          "combined_expected_goals": 3.0,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T18:00:00Z"
+        },
+        {
+          "home_team": "Jong Ajax",
+          "away_team": "VVV-Venlo",
+          "date": "2026-10-09",
+          "home_goals": 0,
+          "away_goals": 3,
+          "home_xg": 1.27,
+          "away_xg": 2.04,
+          "home_expected_xg": 1.37,
+          "away_expected_xg": 1.74,
+          "combined_expected_xg": 3.11,
+          "home_expected_goals": 0.88,
+          "away_expected_goals": 2.25,
+          "combined_expected_goals": 3.12,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T18:00:00Z"
+        },
+        {
+          "home_team": "Roda JC Kerkrade",
+          "away_team": "Jong PSV",
+          "date": "2026-10-09",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 2.15,
+          "away_xg": 1.23,
+          "home_expected_xg": 1.2,
+          "away_expected_xg": 1.18,
+          "combined_expected_xg": 2.38,
+          "home_expected_goals": 1.38,
+          "away_expected_goals": 1.0,
+          "combined_expected_goals": 2.38,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T18:00:00Z"
+        },
+        {
+          "home_team": "FC Dordrecht",
+          "away_team": "FC Emmen",
+          "date": "2026-10-09",
+          "home_goals": 0,
+          "away_goals": 3,
+          "home_xg": 0.52,
+          "away_xg": 0.73,
+          "home_expected_xg": 1.03,
+          "away_expected_xg": 1.96,
+          "combined_expected_xg": 2.99,
+          "home_expected_goals": 1.62,
+          "away_expected_goals": 2.0,
+          "combined_expected_goals": 3.62,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T18:00:00Z"
+        },
+        {
+          "home_team": "Almere City",
+          "away_team": "FC Eindhoven",
+          "date": "2026-10-09",
+          "home_goals": 3,
+          "away_goals": 0,
+          "home_xg": 2.74,
+          "away_xg": 0.38,
+          "home_expected_xg": 1.53,
+          "away_expected_xg": 1.29,
+          "combined_expected_xg": 2.82,
+          "home_expected_goals": 1.88,
+          "away_expected_goals": 1.25,
+          "combined_expected_goals": 3.12,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T18:00:00Z"
+        },
+        {
+          "home_team": "De Graafschap",
+          "away_team": "Jong FC Utrecht",
+          "date": "2026-10-09",
+          "home_goals": 2,
+          "away_goals": 1,
+          "home_xg": 1.26,
+          "away_xg": 1.94,
+          "home_expected_xg": 1.69,
+          "away_expected_xg": 1.69,
+          "combined_expected_xg": 3.38,
+          "home_expected_goals": 1.75,
+          "away_expected_goals": 2.0,
+          "combined_expected_goals": 3.75,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T18:00:00Z"
         }
       ]
     },
@@ -11722,13 +12245,20 @@
           "home_team": "Viking",
           "away_team": "Fredrikstad",
           "date": "2026-10-17",
-          "combined_expected_xg": 3.33,
-          "home_expected_xg": 2.04,
-          "away_expected_xg": 1.29,
-          "home_expected_goals": 2.12,
-          "away_expected_goals": 1.25,
-          "combined_expected_goals": 3.38,
+          "combined_expected_xg": 3.84,
+          "home_expected_xg": 2.25,
+          "away_expected_xg": 1.59,
+          "home_expected_goals": 2.38,
+          "away_expected_goals": 1.12,
+          "combined_expected_goals": 3.5,
           "home_last_4_matches": [
+            {
+              "opponent": "Brann",
+              "date": "2026-10-09",
+              "venue": "away",
+              "xg_for": 1.7,
+              "xg_against": 2.84
+            },
             {
               "opponent": "Lillestr\u00f8m",
               "date": "2026-09-20",
@@ -11749,13 +12279,6 @@
               "venue": "away",
               "xg_for": 2.57,
               "xg_against": 0.77
-            },
-            {
-              "opponent": "Rosenborg",
-              "date": "2026-08-14",
-              "venue": "away",
-              "xg_for": 0.06,
-              "xg_against": 0.37
             }
           ],
           "away_last_4_matches": [
@@ -11789,6 +12312,23 @@
             }
           ],
           "kickoff_time": "17:00"
+        },
+        {
+          "home_team": "Brann",
+          "away_team": "Viking",
+          "date": "2026-10-09",
+          "home_goals": 0,
+          "away_goals": 2,
+          "home_xg": 2.84,
+          "away_xg": 1.7,
+          "home_expected_xg": 0.87,
+          "away_expected_xg": 2.03,
+          "combined_expected_xg": 2.91,
+          "home_expected_goals": 0.62,
+          "away_expected_goals": 2.12,
+          "combined_expected_goals": 2.75,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T17:00:00Z"
         }
       ]
     },
@@ -12300,6 +12840,40 @@
             }
           ],
           "kickoff_time": "20:15"
+        },
+        {
+          "home_team": "Sporting Braga",
+          "away_team": "Sporting CP",
+          "date": "2026-10-09",
+          "home_goals": 1,
+          "away_goals": 3,
+          "home_xg": 1.37,
+          "away_xg": 1.04,
+          "home_expected_xg": 0.69,
+          "away_expected_xg": 1.16,
+          "combined_expected_xg": 1.84,
+          "home_expected_goals": 0.5,
+          "away_expected_goals": 1.38,
+          "combined_expected_goals": 1.88,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T19:15:00Z"
+        },
+        {
+          "home_team": "Moreirense",
+          "away_team": "Gil Vicente",
+          "date": "2026-10-09",
+          "home_goals": 0,
+          "away_goals": 1,
+          "home_xg": 1.16,
+          "away_xg": 1.67,
+          "home_expected_xg": 1.03,
+          "away_expected_xg": 1.68,
+          "combined_expected_xg": 2.71,
+          "home_expected_goals": 1.25,
+          "away_expected_goals": 1.25,
+          "combined_expected_goals": 2.5,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-09T17:45:00Z"
         }
       ]
     },
@@ -13389,22 +13963,6 @@
           "kickoff_time": "19:00"
         },
         {
-          "home_team": "Al Nassr",
-          "away_team": "Al Diraiyah FC",
-          "date": "2026-10-09",
-          "home_goals": 2,
-          "away_goals": 0,
-          "home_xg": 1.48,
-          "away_xg": 0.84,
-          "home_expected_xg": 1.31,
-          "away_expected_xg": 1.05,
-          "combined_expected_xg": 2.37,
-          "home_expected_goals": 1.12,
-          "away_expected_goals": 1.25,
-          "combined_expected_goals": 2.38,
-          "status": "FINISHED"
-        },
-        {
           "home_team": "Al Fateh",
           "away_team": "Al Ahli",
           "date": "2026-10-09",
@@ -13437,6 +13995,22 @@
           "combined_expected_goals": 3.0,
           "status": "FINISHED",
           "kickoff_at": "2026-10-09T13:50:00Z"
+        },
+        {
+          "home_team": "Al Nassr",
+          "away_team": "Al Diraiyah FC",
+          "date": "2026-10-09",
+          "home_goals": 2,
+          "away_goals": 0,
+          "home_xg": 1.48,
+          "away_xg": 0.84,
+          "home_expected_xg": 1.31,
+          "away_expected_xg": 1.05,
+          "combined_expected_xg": 2.37,
+          "home_expected_goals": 1.12,
+          "away_expected_goals": 1.25,
+          "combined_expected_goals": 2.38,
+          "status": "FINISHED"
         }
       ]
     },
