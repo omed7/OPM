@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "f2e58c0",
-    "generated_at": "2026-10-28T12:45:28Z"
+    "version": "e7006e9",
+    "generated_at": "2026-10-28T20:17:03Z"
   },
   "leagues": [
     {
@@ -1032,222 +1032,6 @@
       "metric": "xg",
       "fixtures": [
         {
-          "home_team": "AC Milan",
-          "away_team": "Bologna",
-          "date": "2026-10-28",
-          "combined_expected_xg": 3.34,
-          "home_expected_xg": 2.03,
-          "away_expected_xg": 1.31,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "home_last_4_matches": [
-            {
-              "opponent": "Udinese",
-              "date": "2026-10-25",
-              "venue": "away",
-              "xg_for": 3.25498,
-              "xg_against": 0.787324
-            },
-            {
-              "opponent": "Atalanta",
-              "date": "2026-10-18",
-              "venue": "home",
-              "xg_for": 2.61604,
-              "xg_against": 1.91891
-            },
-            {
-              "opponent": "Sassuolo",
-              "date": "2026-10-11",
-              "venue": "away",
-              "xg_for": 1.86874,
-              "xg_against": 1.33739
-            },
-            {
-              "opponent": "Lecce",
-              "date": "2026-09-20",
-              "venue": "home",
-              "xg_for": 2.47529,
-              "xg_against": 0.217933
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Cagliari",
-              "date": "2026-10-24",
-              "venue": "away",
-              "xg_for": 1.78092,
-              "xg_against": 0.240178
-            },
-            {
-              "opponent": "Inter",
-              "date": "2026-10-17",
-              "venue": "home",
-              "xg_for": 1.76523,
-              "xg_against": 3.59562
-            },
-            {
-              "opponent": "Lecce",
-              "date": "2026-10-11",
-              "venue": "away",
-              "xg_for": 1.99801,
-              "xg_against": 1.213
-            },
-            {
-              "opponent": "Torino",
-              "date": "2026-09-19",
-              "venue": "home",
-              "xg_for": 0.699269,
-              "xg_against": 0.958071
-            }
-          ],
-          "kickoff_time": "17:30"
-        },
-        {
-          "home_team": "Parma Calcio 1913",
-          "away_team": "Udinese",
-          "date": "2026-10-28",
-          "combined_expected_xg": 3.4,
-          "home_expected_xg": 2.15,
-          "away_expected_xg": 1.25,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "home_last_4_matches": [
-            {
-              "opponent": "Lazio",
-              "date": "2026-10-24",
-              "venue": "away",
-              "xg_for": 0.953123,
-              "xg_against": 1.66752
-            },
-            {
-              "opponent": "Torino",
-              "date": "2026-10-19",
-              "venue": "home",
-              "xg_for": 1.26901,
-              "xg_against": 1.3298
-            },
-            {
-              "opponent": "Inter",
-              "date": "2026-10-10",
-              "venue": "away",
-              "xg_for": 0.405711,
-              "xg_against": 2.90025
-            },
-            {
-              "opponent": "Genoa",
-              "date": "2026-09-20",
-              "venue": "home",
-              "xg_for": 0.860604,
-              "xg_against": 0.86391
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "AC Milan",
-              "date": "2026-10-25",
-              "venue": "home",
-              "xg_for": 0.787324,
-              "xg_against": 3.25498
-            },
-            {
-              "opponent": "Lecce",
-              "date": "2026-10-18",
-              "venue": "home",
-              "xg_for": 0.59344,
-              "xg_against": 4.36159
-            },
-            {
-              "opponent": "Torino",
-              "date": "2026-10-12",
-              "venue": "away",
-              "xg_for": 0.57404,
-              "xg_against": 2.38092
-            },
-            {
-              "opponent": "Inter",
-              "date": "2026-09-14",
-              "venue": "away",
-              "xg_for": 1.29442,
-              "xg_against": 3.68526
-            }
-          ],
-          "kickoff_time": "17:30"
-        },
-        {
-          "home_team": "Venezia",
-          "away_team": "Inter",
-          "date": "2026-10-28",
-          "combined_expected_xg": 3.94,
-          "home_expected_xg": 1.46,
-          "away_expected_xg": 2.48,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "home_last_4_matches": [
-            {
-              "opponent": "Genoa",
-              "date": "2026-10-25",
-              "venue": "away",
-              "xg_for": 1.66201,
-              "xg_against": 0.782062
-            },
-            {
-              "opponent": "Napoli",
-              "date": "2026-10-17",
-              "venue": "home",
-              "xg_for": 0.683408,
-              "xg_against": 2.55507
-            },
-            {
-              "opponent": "Atalanta",
-              "date": "2026-10-12",
-              "venue": "away",
-              "xg_for": 2.68886,
-              "xg_against": 2.92429
-            },
-            {
-              "opponent": "Lazio",
-              "date": "2026-09-19",
-              "venue": "home",
-              "xg_for": 1.84911,
-              "xg_against": 1.7718
-            }
-          ],
-          "away_last_4_matches": [
-            {
-              "opponent": "Fiorentina",
-              "date": "2026-10-25",
-              "venue": "home",
-              "xg_for": 2.74862,
-              "xg_against": 0.283219
-            },
-            {
-              "opponent": "Bologna",
-              "date": "2026-10-17",
-              "venue": "away",
-              "xg_for": 3.59562,
-              "xg_against": 1.76523
-            },
-            {
-              "opponent": "Parma Calcio 1913",
-              "date": "2026-10-10",
-              "venue": "home",
-              "xg_for": 2.90025,
-              "xg_against": 0.405711
-            },
-            {
-              "opponent": "Roma",
-              "date": "2026-09-19",
-              "venue": "away",
-              "xg_for": 2.58716,
-              "xg_against": 2.31246
-            }
-          ],
-          "kickoff_time": "17:30"
-        },
-        {
           "home_team": "Genoa",
           "away_team": "Juventus",
           "date": "2026-10-28",
@@ -1539,13 +1323,20 @@
           "home_team": "Bologna",
           "away_team": "Monza",
           "date": "2026-10-31",
-          "combined_expected_xg": 3.26,
+          "combined_expected_xg": 3.35,
           "home_expected_xg": 1.86,
-          "away_expected_xg": 1.4,
+          "away_expected_xg": 1.49,
           "home_expected_goals": null,
           "away_expected_goals": null,
           "combined_expected_goals": null,
           "home_last_4_matches": [
+            {
+              "opponent": "AC Milan",
+              "date": "2026-10-28",
+              "venue": "away",
+              "xg_for": 1.98783,
+              "xg_against": 1.94687
+            },
             {
               "opponent": "Cagliari",
               "date": "2026-10-24",
@@ -1559,13 +1350,6 @@
               "venue": "home",
               "xg_for": 1.76523,
               "xg_against": 3.59562
-            },
-            {
-              "opponent": "Lecce",
-              "date": "2026-10-11",
-              "venue": "away",
-              "xg_for": 1.99801,
-              "xg_against": 1.213
             },
             {
               "opponent": "Torino",
@@ -1611,13 +1395,20 @@
           "home_team": "Udinese",
           "away_team": "Roma",
           "date": "2026-10-31",
-          "combined_expected_xg": 4.14,
-          "home_expected_xg": 1.38,
-          "away_expected_xg": 2.76,
+          "combined_expected_xg": 3.86,
+          "home_expected_xg": 1.42,
+          "away_expected_xg": 2.43,
           "home_expected_goals": null,
           "away_expected_goals": null,
           "combined_expected_goals": null,
           "home_last_4_matches": [
+            {
+              "opponent": "Parma Calcio 1913",
+              "date": "2026-10-28",
+              "venue": "away",
+              "xg_for": 1.62069,
+              "xg_against": 1.1002
+            },
             {
               "opponent": "AC Milan",
               "date": "2026-10-25",
@@ -1638,13 +1429,6 @@
               "venue": "away",
               "xg_for": 0.57404,
               "xg_against": 2.38092
-            },
-            {
-              "opponent": "Inter",
-              "date": "2026-09-14",
-              "venue": "away",
-              "xg_for": 1.29442,
-              "xg_against": 3.68526
             }
           ],
           "away_last_4_matches": [
@@ -1683,13 +1467,20 @@
           "home_team": "AC Milan",
           "away_team": "Inter",
           "date": "2026-10-31",
-          "combined_expected_xg": 3.88,
-          "home_expected_xg": 1.87,
-          "away_expected_xg": 2.01,
+          "combined_expected_xg": 3.89,
+          "home_expected_xg": 1.7,
+          "away_expected_xg": 2.19,
           "home_expected_goals": null,
           "away_expected_goals": null,
           "combined_expected_goals": null,
           "home_last_4_matches": [
+            {
+              "opponent": "Bologna",
+              "date": "2026-10-28",
+              "venue": "home",
+              "xg_for": 1.94687,
+              "xg_against": 1.98783
+            },
             {
               "opponent": "Udinese",
               "date": "2026-10-25",
@@ -1710,16 +1501,16 @@
               "venue": "away",
               "xg_for": 1.86874,
               "xg_against": 1.33739
-            },
-            {
-              "opponent": "Lecce",
-              "date": "2026-09-20",
-              "venue": "home",
-              "xg_for": 2.47529,
-              "xg_against": 0.217933
             }
           ],
           "away_last_4_matches": [
+            {
+              "opponent": "Venezia",
+              "date": "2026-10-28",
+              "venue": "away",
+              "xg_for": 2.24568,
+              "xg_against": 1.48725
+            },
             {
               "opponent": "Fiorentina",
               "date": "2026-10-25",
@@ -1740,13 +1531,6 @@
               "venue": "home",
               "xg_for": 2.90025,
               "xg_against": 0.405711
-            },
-            {
-              "opponent": "Roma",
-              "date": "2026-09-19",
-              "venue": "away",
-              "xg_for": 2.58716,
-              "xg_against": 2.31246
             }
           ],
           "kickoff_time": "19:45"
@@ -1755,9 +1539,9 @@
           "home_team": "Atalanta",
           "away_team": "Parma Calcio 1913",
           "date": "2026-11-01",
-          "combined_expected_xg": 3.58,
-          "home_expected_xg": 2.05,
-          "away_expected_xg": 1.53,
+          "combined_expected_xg": 3.7,
+          "home_expected_xg": 2.15,
+          "away_expected_xg": 1.56,
           "home_expected_goals": null,
           "away_expected_goals": null,
           "combined_expected_goals": null,
@@ -1793,6 +1577,13 @@
           ],
           "away_last_4_matches": [
             {
+              "opponent": "Udinese",
+              "date": "2026-10-28",
+              "venue": "home",
+              "xg_for": 1.1002,
+              "xg_against": 1.62069
+            },
+            {
               "opponent": "Lazio",
               "date": "2026-10-24",
               "venue": "away",
@@ -1812,13 +1603,6 @@
               "venue": "away",
               "xg_for": 0.405711,
               "xg_against": 2.90025
-            },
-            {
-              "opponent": "Genoa",
-              "date": "2026-09-20",
-              "venue": "home",
-              "xg_for": 0.860604,
-              "xg_against": 0.86391
             }
           ],
           "kickoff_time": "14:00"
@@ -1827,9 +1611,9 @@
           "home_team": "Como",
           "away_team": "Venezia",
           "date": "2026-11-01",
-          "combined_expected_xg": 3.69,
-          "home_expected_xg": 2.13,
-          "away_expected_xg": 1.56,
+          "combined_expected_xg": 3.71,
+          "home_expected_xg": 2.19,
+          "away_expected_xg": 1.52,
           "home_expected_goals": null,
           "away_expected_goals": null,
           "combined_expected_goals": null,
@@ -1865,6 +1649,13 @@
           ],
           "away_last_4_matches": [
             {
+              "opponent": "Inter",
+              "date": "2026-10-28",
+              "venue": "home",
+              "xg_for": 1.48725,
+              "xg_against": 2.24568
+            },
+            {
               "opponent": "Genoa",
               "date": "2026-10-25",
               "venue": "away",
@@ -1884,13 +1675,6 @@
               "venue": "away",
               "xg_for": 2.68886,
               "xg_against": 2.92429
-            },
-            {
-              "opponent": "Lazio",
-              "date": "2026-09-19",
-              "venue": "home",
-              "xg_for": 1.84911,
-              "xg_against": 1.7718
             }
           ],
           "kickoff_time": "14:00"
@@ -2384,13 +2168,13 @@
           "status": "FINISHED"
         },
         {
-          "home_team": "Udinese",
-          "away_team": "AC Milan",
-          "date": "2026-10-25",
-          "home_goals": 0,
+          "home_team": "Roma",
+          "away_team": "Cagliari",
+          "date": "2026-10-27",
+          "home_goals": 4,
           "away_goals": 2,
-          "home_xg": 0.787324,
-          "away_xg": 3.25498,
+          "home_xg": 3.85275,
+          "away_xg": 2.47889,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -2416,13 +2200,13 @@
           "status": "FINISHED"
         },
         {
-          "home_team": "Roma",
-          "away_team": "Cagliari",
+          "home_team": "Torino",
+          "away_team": "Como",
           "date": "2026-10-27",
-          "home_goals": 4,
-          "away_goals": 2,
-          "home_xg": 3.85275,
-          "away_xg": 2.47889,
+          "home_goals": 1,
+          "away_goals": 3,
+          "home_xg": 1.45119,
+          "away_xg": 2.70766,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -2432,13 +2216,61 @@
           "status": "FINISHED"
         },
         {
-          "home_team": "Torino",
-          "away_team": "Como",
-          "date": "2026-10-27",
-          "home_goals": 1,
-          "away_goals": 3,
-          "home_xg": 1.45119,
-          "away_xg": 2.70766,
+          "home_team": "Udinese",
+          "away_team": "AC Milan",
+          "date": "2026-10-25",
+          "home_goals": 0,
+          "away_goals": 2,
+          "home_xg": 0.787324,
+          "away_xg": 3.25498,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "AC Milan",
+          "away_team": "Bologna",
+          "date": "2026-10-28",
+          "home_goals": 2,
+          "away_goals": 4,
+          "home_xg": 1.94687,
+          "away_xg": 1.98783,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Parma Calcio 1913",
+          "away_team": "Udinese",
+          "date": "2026-10-28",
+          "home_goals": 0,
+          "away_goals": 0,
+          "home_xg": 1.1002,
+          "away_xg": 1.62069,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Venezia",
+          "away_team": "Inter",
+          "date": "2026-10-28",
+          "home_goals": 0,
+          "away_goals": 2,
+          "home_xg": 1.48725,
+          "away_xg": 2.24568,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -4272,6 +4104,40 @@
           "kickoff_at": "2026-10-24T22:30:00Z"
         },
         {
+          "home_team": "Coritiba",
+          "away_team": "Gr\u00eamio",
+          "date": "2026-10-26",
+          "home_goals": 0,
+          "away_goals": 1,
+          "home_xg": 1.07,
+          "away_xg": 1.81,
+          "home_expected_xg": 1.28,
+          "away_expected_xg": 1.47,
+          "combined_expected_xg": 2.75,
+          "home_expected_goals": 1.5,
+          "away_expected_goals": 1.88,
+          "combined_expected_goals": 3.38,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-26T22:30:00Z"
+        },
+        {
+          "home_team": "Flamengo",
+          "away_team": "Atl\u00e9tico Mineiro",
+          "date": "2026-10-26",
+          "home_goals": 3,
+          "away_goals": 2,
+          "home_xg": 3.09,
+          "away_xg": 0.99,
+          "home_expected_xg": 1.49,
+          "away_expected_xg": 1.14,
+          "combined_expected_xg": 2.63,
+          "home_expected_goals": 1.38,
+          "away_expected_goals": 1.0,
+          "combined_expected_goals": 2.38,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-26T23:00:00Z"
+        },
+        {
           "home_team": "Internacional",
           "away_team": "Botafogo",
           "date": "2026-10-24",
@@ -4372,40 +4238,6 @@
           "combined_expected_goals": 3.75,
           "status": "FINISHED",
           "kickoff_at": "2026-10-24T19:30:00Z"
-        },
-        {
-          "home_team": "Flamengo",
-          "away_team": "Atl\u00e9tico Mineiro",
-          "date": "2026-10-26",
-          "home_goals": 3,
-          "away_goals": 2,
-          "home_xg": 3.09,
-          "away_xg": 0.99,
-          "home_expected_xg": 1.49,
-          "away_expected_xg": 1.14,
-          "combined_expected_xg": 2.63,
-          "home_expected_goals": 1.38,
-          "away_expected_goals": 1.0,
-          "combined_expected_goals": 2.38,
-          "status": "FINISHED",
-          "kickoff_at": "2026-10-26T23:00:00Z"
-        },
-        {
-          "home_team": "Coritiba",
-          "away_team": "Gr\u00eamio",
-          "date": "2026-10-26",
-          "home_goals": 0,
-          "away_goals": 1,
-          "home_xg": 1.07,
-          "away_xg": 1.81,
-          "home_expected_xg": 1.28,
-          "away_expected_xg": 1.47,
-          "combined_expected_xg": 2.75,
-          "home_expected_goals": 1.5,
-          "away_expected_goals": 1.88,
-          "combined_expected_goals": 3.38,
-          "status": "FINISHED",
-          "kickoff_at": "2026-10-26T22:30:00Z"
         }
       ]
     },
@@ -5245,6 +5077,23 @@
       "metric": "xg",
       "fixtures": [
         {
+          "home_team": "Abha",
+          "away_team": "Al Faisaly",
+          "date": "2026-10-27",
+          "home_goals": 0,
+          "away_goals": 1,
+          "home_xg": 1.47,
+          "away_xg": 1.22,
+          "home_expected_xg": 1.25,
+          "away_expected_xg": 1.19,
+          "combined_expected_xg": 2.44,
+          "home_expected_goals": 1.12,
+          "away_expected_goals": 1.5,
+          "combined_expected_goals": 2.62,
+          "status": "FINISHED",
+          "kickoff_at": "2026-10-27T12:40:00Z"
+        },
+        {
           "home_team": "Al Kholood",
           "away_team": "Al Ettifaq",
           "date": "2026-10-24",
@@ -5294,23 +5143,6 @@
           "combined_expected_goals": 2.0,
           "status": "FINISHED",
           "kickoff_at": "2026-10-24T14:00:00Z"
-        },
-        {
-          "home_team": "Abha",
-          "away_team": "Al Faisaly",
-          "date": "2026-10-27",
-          "home_goals": 0,
-          "away_goals": 1,
-          "home_xg": 1.47,
-          "away_xg": 1.22,
-          "home_expected_xg": 1.25,
-          "away_expected_xg": 1.19,
-          "combined_expected_xg": 2.44,
-          "home_expected_goals": 1.12,
-          "away_expected_goals": 1.5,
-          "combined_expected_goals": 2.62,
-          "status": "FINISHED",
-          "kickoff_at": "2026-10-27T12:40:00Z"
         }
       ]
     },
