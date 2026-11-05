@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "e36fb17",
-    "generated_at": "2026-11-05T14:29:10Z"
+    "version": "23bdbda",
+    "generated_at": "2026-11-05T21:23:22Z"
   },
   "leagues": [
     {
@@ -312,6 +312,23 @@
           "kickoff_at": "2026-11-01T12:30:00Z"
         },
         {
+          "home_team": "KV Kortrijk",
+          "away_team": "Mechelen",
+          "date": "2026-11-04",
+          "home_goals": 1,
+          "away_goals": 3,
+          "home_xg": 0.87,
+          "away_xg": 1.36,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-04T19:30:00Z"
+        },
+        {
           "home_team": "Lommel SK",
           "away_team": "Gent",
           "date": "2026-11-01",
@@ -361,23 +378,6 @@
           "combined_expected_goals": 3.0,
           "status": "FINISHED",
           "kickoff_at": "2026-11-01T18:15:00Z"
-        },
-        {
-          "home_team": "KV Kortrijk",
-          "away_team": "Mechelen",
-          "date": "2026-11-04",
-          "home_goals": 1,
-          "away_goals": 3,
-          "home_xg": 0.87,
-          "away_xg": 1.36,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-04T19:30:00Z"
         }
       ]
     },
@@ -386,6 +386,23 @@
       "name": "Serie A Brazil",
       "metric": "xg",
       "fixtures": [
+        {
+          "home_team": "Athletico PR",
+          "away_team": "Vasco da Gama",
+          "date": "2026-11-04",
+          "home_goals": 1,
+          "away_goals": 3,
+          "home_xg": 0.28,
+          "away_xg": 0.36,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-04T22:30:00Z"
+        },
         {
           "home_team": "Bragantino",
           "away_team": "Santos",
@@ -419,23 +436,6 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-03T22:30:00Z"
-        },
-        {
-          "home_team": "Athletico PR",
-          "away_team": "Vasco da Gama",
-          "date": "2026-11-04",
-          "home_goals": 1,
-          "away_goals": 3,
-          "home_xg": 0.28,
-          "away_xg": 0.36,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-04T22:30:00Z"
         },
         {
           "home_team": "Flamengo",
