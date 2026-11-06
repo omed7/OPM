@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "2356967",
-    "generated_at": "2026-11-06T14:05:57Z"
+    "version": "bb35bac",
+    "generated_at": "2026-11-06T20:44:53Z"
   },
   "leagues": [
     {
@@ -79,6 +79,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-04T22:30:00Z"
+        },
+        {
+          "home_team": "Botafogo",
+          "away_team": "Atl\u00e9tico Mineiro",
+          "date": "2026-11-05",
+          "home_goals": 1,
+          "away_goals": 0,
+          "home_xg": 1.45,
+          "away_xg": 0.53,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-05T00:30:00Z"
         },
         {
           "home_team": "Bragantino",
@@ -180,23 +197,6 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-05T00:30:00Z"
-        },
-        {
-          "home_team": "Botafogo",
-          "away_team": "Atl\u00e9tico Mineiro",
-          "date": "2026-11-05",
-          "home_goals": 1,
-          "away_goals": 0,
-          "home_xg": 1.45,
-          "away_xg": 0.53,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-05T00:30:00Z"
         }
       ]
     },
@@ -221,6 +221,22 @@
           "combined_expected_goals": 2.88,
           "status": "FINISHED",
           "kickoff_at": "2026-11-02T18:00:00Z"
+        },
+        {
+          "home_team": "Silkeborg IF",
+          "away_team": "Lyngby Boldklub",
+          "date": "2026-11-06",
+          "home_goals": 0,
+          "away_goals": 0,
+          "home_xg": 0.04,
+          "away_xg": 0.07,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
         }
       ]
     },
