@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "f673990",
-    "generated_at": "2026-11-09T23:44:03Z"
+    "version": "d404ecf",
+    "generated_at": "2026-11-10T14:43:51Z"
   },
   "leagues": [
     {
@@ -308,23 +308,6 @@
       "metric": "xg",
       "fixtures": [
         {
-          "home_team": "Botafogo",
-          "away_team": "Atl\u00e9tico Mineiro",
-          "date": "2026-11-05",
-          "home_goals": 1,
-          "away_goals": 0,
-          "home_xg": 1.45,
-          "away_xg": 0.53,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-05T00:30:00Z"
-        },
-        {
           "home_team": "Cruzeiro",
           "away_team": "Bahia",
           "date": "2026-11-06",
@@ -340,40 +323,6 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-06T00:30:00Z"
-        },
-        {
-          "home_team": "Palmeiras",
-          "away_team": "Remo",
-          "date": "2026-11-05",
-          "home_goals": 6,
-          "away_goals": 1,
-          "home_xg": 4.4,
-          "away_xg": 0.37,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-05T22:30:00Z"
-        },
-        {
-          "home_team": "S\u00e3o Paulo",
-          "away_team": "Corinthians",
-          "date": "2026-11-05",
-          "home_goals": 0,
-          "away_goals": 0,
-          "home_xg": 1.25,
-          "away_xg": 1.06,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-05T00:30:00Z"
         },
         {
           "home_team": "Vit\u00f3ria",
@@ -1265,6 +1214,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-08T16:00:00Z"
+        },
+        {
+          "home_team": "Kristiansund",
+          "away_team": "V\u00e5lerenga",
+          "date": "2026-11-09",
+          "home_goals": 1,
+          "away_goals": 0,
+          "home_xg": 2.01,
+          "away_xg": 1.39,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-09T18:00:00Z"
         }
       ]
     },
