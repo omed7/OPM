@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "d404ecf",
-    "generated_at": "2026-11-10T14:43:51Z"
+    "version": "378276f",
+    "generated_at": "2026-11-10T21:14:57Z"
   },
   "leagues": [
     {
@@ -1131,6 +1131,23 @@
           "kickoff_at": "2026-11-08T16:00:00Z"
         },
         {
+          "home_team": "Kristiansund",
+          "away_team": "V\u00e5lerenga",
+          "date": "2026-11-09",
+          "home_goals": 1,
+          "away_goals": 0,
+          "home_xg": 2.01,
+          "away_xg": 1.39,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-09T18:00:00Z"
+        },
+        {
           "home_team": "Lillestr\u00f8m",
           "away_team": "Aalesund",
           "date": "2026-11-08",
@@ -1214,23 +1231,6 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-08T16:00:00Z"
-        },
-        {
-          "home_team": "Kristiansund",
-          "away_team": "V\u00e5lerenga",
-          "date": "2026-11-09",
-          "home_goals": 1,
-          "away_goals": 0,
-          "home_xg": 2.01,
-          "away_xg": 1.39,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-09T18:00:00Z"
         }
       ]
     },
