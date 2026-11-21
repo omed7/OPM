@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "7b959d7",
-    "generated_at": "2026-11-21T14:31:55Z"
+    "version": "bd34511",
+    "generated_at": "2026-11-21T20:50:16Z"
   },
   "leagues": [
     {
@@ -248,13 +248,13 @@
       "metric": "xg",
       "fixtures": [
         {
-          "home_team": "DSC Arminia Bielefeld",
-          "away_team": "Magdeburg",
+          "home_team": "Darmstadt 98",
+          "away_team": "FC Heidenheim",
           "date": "2026-11-20",
-          "home_goals": 1,
-          "away_goals": 2,
-          "home_xg": 2.27,
-          "away_xg": 0.86,
+          "home_goals": 3,
+          "away_goals": 1,
+          "home_xg": 1.62,
+          "away_xg": 1.73,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -265,13 +265,13 @@
           "kickoff_at": "2026-11-20T17:30:00Z"
         },
         {
-          "home_team": "Darmstadt 98",
-          "away_team": "FC Heidenheim",
+          "home_team": "DSC Arminia Bielefeld",
+          "away_team": "Magdeburg",
           "date": "2026-11-20",
-          "home_goals": 3,
-          "away_goals": 1,
-          "home_xg": 1.62,
-          "away_xg": 1.73,
+          "home_goals": 1,
+          "away_goals": 2,
+          "home_xg": 2.27,
+          "away_xg": 0.86,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -288,23 +288,6 @@
       "name": "Liga MX",
       "metric": "xg",
       "fixtures": [
-        {
-          "home_team": "Tijuana",
-          "away_team": "Atlante",
-          "date": "2026-11-21",
-          "home_goals": 1,
-          "away_goals": 0,
-          "home_xg": 2.3,
-          "away_xg": 0.47,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-21T03:10:00Z"
-        },
         {
           "home_team": "Ju\u00e1rez",
           "away_team": "Atlas",
@@ -338,6 +321,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-21T01:00:00Z"
+        },
+        {
+          "home_team": "Tijuana",
+          "away_team": "Atlante",
+          "date": "2026-11-21",
+          "home_goals": 1,
+          "away_goals": 0,
+          "home_xg": 2.3,
+          "away_xg": 0.47,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T03:10:00Z"
         }
       ]
     },
@@ -550,18 +550,34 @@
       ]
     },
     {
-      "id": "mls",
-      "name": "Major League Soccer",
+      "id": "premiership",
+      "name": "Premiership",
       "metric": "xg",
       "fixtures": [
         {
-          "home_team": "Seattle Sounders",
-          "away_team": "Real Salt Lake",
-          "date": "2026-11-20",
+          "home_team": "Motherwell",
+          "away_team": "Rangers",
+          "date": "2026-11-21",
           "home_goals": 1,
           "away_goals": 1,
-          "home_xg": 2.95,
-          "away_xg": 1.03,
+          "home_xg": 0.09,
+          "away_xg": 1.48,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "Dundee",
+          "away_team": "Hearts",
+          "date": "2026-11-21",
+          "home_goals": 0,
+          "away_goals": 8,
+          "home_xg": 0.23,
+          "away_xg": 3.34,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -569,8 +585,83 @@
           "away_expected_goals": null,
           "combined_expected_goals": null,
           "status": "FINISHED",
-          "kickoff_at": "2026-11-20T03:00:00Z"
+          "kickoff_at": "2026-11-21T17:45:00Z"
         },
+        {
+          "home_team": "Celtic",
+          "away_team": "St. Mirren",
+          "date": "2026-11-21",
+          "home_goals": 4,
+          "away_goals": 1,
+          "home_xg": 2.17,
+          "away_xg": 2.27,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T15:00:00Z"
+        },
+        {
+          "home_team": "Kilmarnock",
+          "away_team": "Aberdeen",
+          "date": "2026-11-21",
+          "home_goals": 2,
+          "away_goals": 4,
+          "home_xg": 1.93,
+          "away_xg": 1.59,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T15:00:00Z"
+        },
+        {
+          "home_team": "Hibernian",
+          "away_team": "Dundee United",
+          "date": "2026-11-21",
+          "home_goals": 0,
+          "away_goals": 4,
+          "home_xg": 1.63,
+          "away_xg": 1.79,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T15:00:00Z"
+        },
+        {
+          "home_team": "Falkirk",
+          "away_team": "St. Johnstone",
+          "date": "2026-11-21",
+          "home_goals": 2,
+          "away_goals": 1,
+          "home_xg": 3.17,
+          "away_xg": 1.89,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T15:00:00Z"
+        }
+      ]
+    },
+    {
+      "id": "mls",
+      "name": "Major League Soccer",
+      "metric": "xg",
+      "fixtures": [
         {
           "home_team": "Orlando City",
           "away_team": "Cincinnati",
@@ -587,6 +678,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-20T00:30:00Z"
+        },
+        {
+          "home_team": "Seattle Sounders",
+          "away_team": "Real Salt Lake",
+          "date": "2026-11-20",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 2.95,
+          "away_xg": 1.03,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-20T03:00:00Z"
         }
       ]
     }
