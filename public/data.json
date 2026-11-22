@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "af7fb98",
-    "generated_at": "2026-11-22T14:26:53Z"
+    "version": "9ff1ed1",
+    "generated_at": "2026-11-22T20:58:24Z"
   },
   "leagues": [
     {
@@ -57,6 +57,22 @@
           "kickoff_at": "2026-11-21T18:30:00Z"
         },
         {
+          "home_team": "LASK Linz",
+          "away_team": "Hartberg",
+          "date": "2026-11-21",
+          "home_goals": 2,
+          "away_goals": 1,
+          "home_xg": 1.93,
+          "away_xg": 0.59,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
           "home_team": "WSG Tirol",
           "away_team": "Austria Lustenau",
           "date": "2026-11-21",
@@ -72,22 +88,6 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-21T16:00:00Z"
-        },
-        {
-          "home_team": "LASK Linz",
-          "away_team": "Hartberg",
-          "date": "2026-11-21",
-          "home_goals": 2,
-          "away_goals": 1,
-          "home_xg": 1.93,
-          "away_xg": 0.59,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED"
         }
       ]
     },
@@ -114,13 +114,13 @@
           "kickoff_at": "2026-11-20T19:45:00Z"
         },
         {
-          "home_team": "Zulte-Waregem",
-          "away_team": "Antwerp",
+          "home_team": "Genk",
+          "away_team": "La Louvi\u00e8re",
           "date": "2026-11-21",
-          "home_goals": 2,
-          "away_goals": 2,
-          "home_xg": 3.63,
-          "away_xg": 0.96,
+          "home_goals": 3,
+          "away_goals": 0,
+          "home_xg": 2.31,
+          "away_xg": 0.55,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -128,7 +128,7 @@
           "away_expected_goals": null,
           "combined_expected_goals": null,
           "status": "FINISHED",
-          "kickoff_at": "2026-11-21T19:45:00Z"
+          "kickoff_at": "2026-11-21T17:15:00Z"
         },
         {
           "home_team": "Mechelen",
@@ -148,23 +148,6 @@
           "kickoff_at": "2026-11-21T19:45:00Z"
         },
         {
-          "home_team": "Genk",
-          "away_team": "La Louvi\u00e8re",
-          "date": "2026-11-21",
-          "home_goals": 3,
-          "away_goals": 0,
-          "home_xg": 2.31,
-          "away_xg": 0.55,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-21T17:15:00Z"
-        },
-        {
           "home_team": "Sporting Charleroi",
           "away_team": "Sint-Truiden",
           "date": "2026-11-21",
@@ -180,6 +163,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-21T15:00:00Z"
+        },
+        {
+          "home_team": "Zulte-Waregem",
+          "away_team": "Antwerp",
+          "date": "2026-11-21",
+          "home_goals": 2,
+          "away_goals": 2,
+          "home_xg": 3.63,
+          "away_xg": 0.96,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T19:45:00Z"
         }
       ]
     },
@@ -188,6 +188,22 @@
       "name": "Serie A Brazil",
       "metric": "xg",
       "fixtures": [
+        {
+          "home_team": "Bahia",
+          "away_team": "Coritiba",
+          "date": "2026-11-21",
+          "home_goals": 0,
+          "away_goals": 0,
+          "home_xg": 0.24,
+          "away_xg": 0.53,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
         {
           "home_team": "Corinthians",
           "away_team": "Botafogo",
@@ -274,6 +290,23 @@
           "kickoff_at": "2026-11-19T00:30:00Z"
         },
         {
+          "home_team": "Palmeiras",
+          "away_team": "Flamengo",
+          "date": "2026-11-21",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 0.65,
+          "away_xg": 1.4,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T19:30:00Z"
+        },
+        {
           "home_team": "Remo",
           "away_team": "Chapecoense",
           "date": "2026-11-18",
@@ -340,39 +373,6 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-19T22:30:00Z"
-        },
-        {
-          "home_team": "Bahia",
-          "away_team": "Coritiba",
-          "date": "2026-11-21",
-          "home_goals": 0,
-          "away_goals": 0,
-          "home_xg": 0.24,
-          "away_xg": 0.53,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED"
-        },
-        {
-          "home_team": "Palmeiras",
-          "away_team": "Flamengo",
-          "date": "2026-11-21",
-          "home_goals": 1,
-          "away_goals": 1,
-          "home_xg": 0.65,
-          "away_xg": 1.4,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-21T19:30:00Z"
         }
       ]
     },
@@ -440,23 +440,6 @@
           "kickoff_at": "2026-11-20T17:30:00Z"
         },
         {
-          "home_team": "St. Pauli",
-          "away_team": "VfL Bochum 1848",
-          "date": "2026-11-21",
-          "home_goals": 2,
-          "away_goals": 0,
-          "home_xg": 2.16,
-          "away_xg": 1.02,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-21T19:30:00Z"
-        },
-        {
           "home_team": "Hannover 96",
           "away_team": "SpVgg Greuther F\u00fcrth",
           "date": "2026-11-21",
@@ -489,6 +472,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-21T12:00:00Z"
+        },
+        {
+          "home_team": "St. Pauli",
+          "away_team": "VfL Bochum 1848",
+          "date": "2026-11-21",
+          "home_goals": 2,
+          "away_goals": 0,
+          "home_xg": 2.16,
+          "away_xg": 1.02,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T19:30:00Z"
         },
         {
           "home_team": "VfL Wolfsburg",
@@ -532,6 +532,23 @@
           "kickoff_at": "2026-11-21T03:00:00Z"
         },
         {
+          "home_team": "Pachuca",
+          "away_team": "Toluca",
+          "date": "2026-11-21",
+          "home_goals": 2,
+          "away_goals": 0,
+          "home_xg": 2.37,
+          "away_xg": 0.83,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T22:50:00Z"
+        },
+        {
           "home_team": "Puebla",
           "away_team": "Atl\u00e9tico San Luis",
           "date": "2026-11-21",
@@ -547,40 +564,6 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-21T01:00:00Z"
-        },
-        {
-          "home_team": "Tijuana",
-          "away_team": "Atlante",
-          "date": "2026-11-21",
-          "home_goals": 1,
-          "away_goals": 0,
-          "home_xg": 2.3,
-          "away_xg": 0.47,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-21T03:10:00Z"
-        },
-        {
-          "home_team": "Tigres UANL",
-          "away_team": "Am\u00e9rica",
-          "date": "2026-11-22",
-          "home_goals": 1,
-          "away_goals": 0,
-          "home_xg": 0.72,
-          "away_xg": 0.51,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-22T03:00:00Z"
         },
         {
           "home_team": "Pumas UNAM",
@@ -617,13 +600,13 @@
           "kickoff_at": "2026-11-21T23:00:00Z"
         },
         {
-          "home_team": "Pachuca",
-          "away_team": "Toluca",
-          "date": "2026-11-21",
-          "home_goals": 2,
+          "home_team": "Tigres UANL",
+          "away_team": "Am\u00e9rica",
+          "date": "2026-11-22",
+          "home_goals": 1,
           "away_goals": 0,
-          "home_xg": 2.37,
-          "away_xg": 0.83,
+          "home_xg": 0.72,
+          "away_xg": 0.51,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -631,7 +614,24 @@
           "away_expected_goals": null,
           "combined_expected_goals": null,
           "status": "FINISHED",
-          "kickoff_at": "2026-11-21T22:50:00Z"
+          "kickoff_at": "2026-11-22T03:00:00Z"
+        },
+        {
+          "home_team": "Tijuana",
+          "away_team": "Atlante",
+          "date": "2026-11-21",
+          "home_goals": 1,
+          "away_goals": 0,
+          "home_xg": 2.3,
+          "away_xg": 0.47,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T03:10:00Z"
         }
       ]
     },
@@ -640,23 +640,6 @@
       "name": "Eredivisie",
       "metric": "xg",
       "fixtures": [
-        {
-          "home_team": "Telstar",
-          "away_team": "PEC Zwolle",
-          "date": "2026-11-21",
-          "home_goals": 1,
-          "away_goals": 3,
-          "home_xg": 2.21,
-          "away_xg": 0.87,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-21T20:00:00Z"
-        },
         {
           "home_team": "FC Groningen",
           "away_team": "SC Heerenveen",
@@ -675,13 +658,13 @@
           "kickoff_at": "2026-11-21T20:00:00Z"
         },
         {
-          "home_team": "Feyenoord",
-          "away_team": "Excelsior",
+          "home_team": "FC Utrecht",
+          "away_team": "SC Cambuur",
           "date": "2026-11-21",
           "home_goals": 2,
           "away_goals": 3,
           "home_xg": 1.68,
-          "away_xg": 1.68,
+          "away_xg": 1.77,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -692,13 +675,13 @@
           "kickoff_at": "2026-11-21T17:45:00Z"
         },
         {
-          "home_team": "FC Utrecht",
-          "away_team": "SC Cambuur",
+          "home_team": "Feyenoord",
+          "away_team": "Excelsior",
           "date": "2026-11-21",
           "home_goals": 2,
           "away_goals": 3,
           "home_xg": 1.68,
-          "away_xg": 1.77,
+          "away_xg": 1.68,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -724,6 +707,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-21T15:30:00Z"
+        },
+        {
+          "home_team": "Telstar",
+          "away_team": "PEC Zwolle",
+          "date": "2026-11-21",
+          "home_goals": 1,
+          "away_goals": 3,
+          "home_xg": 2.21,
+          "away_xg": 0.87,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T20:00:00Z"
         }
       ]
     },
@@ -782,6 +782,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-20T19:00:00Z"
+        },
+        {
+          "home_team": "FC Eindhoven",
+          "away_team": "RKC Waalwijk",
+          "date": "2026-11-21",
+          "home_goals": 3,
+          "away_goals": 2,
+          "home_xg": 1.44,
+          "away_xg": 1.91,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T15:30:00Z"
         },
         {
           "home_team": "FC Volendam",
@@ -884,23 +901,6 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-20T19:00:00Z"
-        },
-        {
-          "home_team": "FC Eindhoven",
-          "away_team": "RKC Waalwijk",
-          "date": "2026-11-21",
-          "home_goals": 3,
-          "away_goals": 2,
-          "home_xg": 1.44,
-          "away_xg": 1.91,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-21T15:30:00Z"
         }
       ]
     },
@@ -909,40 +909,6 @@
       "name": "Eliteserien",
       "metric": "xg",
       "fixtures": [
-        {
-          "home_team": "Molde",
-          "away_team": "Bod\u00f8 / Glimt",
-          "date": "2026-11-20",
-          "home_goals": 2,
-          "away_goals": 4,
-          "home_xg": 1.33,
-          "away_xg": 2.18,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-20T18:00:00Z"
-        },
-        {
-          "home_team": "V\u00e5lerenga",
-          "away_team": "Start",
-          "date": "2026-11-21",
-          "home_goals": 1,
-          "away_goals": 2,
-          "home_xg": 2.41,
-          "away_xg": 1.37,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-21T17:00:00Z"
-        },
         {
           "home_team": "HamKam",
           "away_team": "Fredrikstad",
@@ -961,6 +927,23 @@
           "kickoff_at": "2026-11-21T15:00:00Z"
         },
         {
+          "home_team": "Molde",
+          "away_team": "Bod\u00f8 / Glimt",
+          "date": "2026-11-20",
+          "home_goals": 2,
+          "away_goals": 4,
+          "home_xg": 1.33,
+          "away_xg": 2.18,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-20T18:00:00Z"
+        },
+        {
           "home_team": "Troms\u00f8",
           "away_team": "Viking",
           "date": "2026-11-21",
@@ -976,6 +959,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-21T13:00:00Z"
+        },
+        {
+          "home_team": "V\u00e5lerenga",
+          "away_team": "Start",
+          "date": "2026-11-21",
+          "home_goals": 1,
+          "away_goals": 2,
+          "home_xg": 2.41,
+          "away_xg": 1.37,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T17:00:00Z"
         }
       ]
     },
@@ -1098,16 +1098,17 @@
           "away_team": "Rangers",
           "date": "2026-11-21",
           "home_goals": 1,
-          "away_goals": 1,
-          "home_xg": 0.09,
-          "away_xg": 1.48,
+          "away_goals": 2,
+          "home_xg": 0.45,
+          "away_xg": 2.66,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
           "home_expected_goals": null,
           "away_expected_goals": null,
           "combined_expected_goals": null,
-          "status": "FINISHED"
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T20:00:00Z"
         }
       ]
     },
@@ -1117,30 +1118,13 @@
       "metric": "xg",
       "fixtures": [
         {
-          "home_team": "Kocaelispor",
-          "away_team": "Fenerbah\u00e7e",
+          "home_team": "Amed SK",
+          "away_team": "Rizespor",
           "date": "2026-11-21",
-          "home_goals": 2,
+          "home_goals": 0,
           "away_goals": 2,
-          "home_xg": 1.57,
-          "away_xg": 0.84,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-21T16:00:00Z"
-        },
-        {
-          "home_team": "Galatasaray",
-          "away_team": "Samsunspor",
-          "date": "2026-11-21",
-          "home_goals": 2,
-          "away_goals": 1,
-          "home_xg": 1.37,
-          "away_xg": 1.24,
+          "home_xg": 0.65,
+          "away_xg": 1.66,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -1151,13 +1135,13 @@
           "kickoff_at": "2026-11-21T13:00:00Z"
         },
         {
-          "home_team": "Amed SK",
-          "away_team": "Rizespor",
+          "home_team": "Galatasaray",
+          "away_team": "Samsunspor",
           "date": "2026-11-21",
-          "home_goals": 0,
-          "away_goals": 2,
-          "home_xg": 0.65,
-          "away_xg": 1.66,
+          "home_goals": 2,
+          "away_goals": 1,
+          "home_xg": 1.37,
+          "away_xg": 1.24,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
@@ -1183,6 +1167,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-21T10:30:00Z"
+        },
+        {
+          "home_team": "Kocaelispor",
+          "away_team": "Fenerbah\u00e7e",
+          "date": "2026-11-21",
+          "home_goals": 2,
+          "away_goals": 2,
+          "home_xg": 1.57,
+          "away_xg": 0.84,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T16:00:00Z"
         }
       ]
     },
@@ -1191,6 +1192,56 @@
       "name": "Major League Soccer",
       "metric": "xg",
       "fixtures": [
+        {
+          "home_team": "Dallas",
+          "away_team": "Portland Timbers",
+          "date": "2026-11-21",
+          "home_goals": 3,
+          "away_goals": 0,
+          "home_xg": 2.44,
+          "away_xg": 1.63,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T21:00:00Z"
+        },
+        {
+          "home_team": "Inter Miami",
+          "away_team": "Columbus Crew",
+          "date": "2026-11-21",
+          "home_goals": 0,
+          "away_goals": 1,
+          "home_xg": 0.75,
+          "away_xg": 1.04,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED"
+        },
+        {
+          "home_team": "New England",
+          "away_team": "Philadelphia Union",
+          "date": "2026-11-21",
+          "home_goals": 2,
+          "away_goals": 0,
+          "home_xg": 0.89,
+          "away_xg": 1.2,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-21T19:00:00Z"
+        },
         {
           "home_team": "Orlando City",
           "away_team": "Cincinnati",
@@ -1224,56 +1275,6 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-20T03:00:00Z"
-        },
-        {
-          "home_team": "Inter Miami",
-          "away_team": "Columbus Crew",
-          "date": "2026-11-21",
-          "home_goals": 0,
-          "away_goals": 1,
-          "home_xg": 0.75,
-          "away_xg": 1.04,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED"
-        },
-        {
-          "home_team": "Dallas",
-          "away_team": "Portland Timbers",
-          "date": "2026-11-21",
-          "home_goals": 3,
-          "away_goals": 0,
-          "home_xg": 2.44,
-          "away_xg": 1.63,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-21T21:00:00Z"
-        },
-        {
-          "home_team": "New England",
-          "away_team": "Philadelphia Union",
-          "date": "2026-11-21",
-          "home_goals": 2,
-          "away_goals": 0,
-          "home_xg": 0.89,
-          "away_xg": 1.2,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-21T19:00:00Z"
         }
       ]
     }
