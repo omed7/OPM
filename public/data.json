@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "a8e8ece",
-    "generated_at": "2026-11-25T17:02:54Z"
+    "version": "e0dfa38",
+    "generated_at": "2026-11-25T23:31:03Z"
   },
   "leagues": [
     {
@@ -379,17 +379,18 @@
           "home_team": "Chapecoense",
           "away_team": "Palmeiras",
           "date": "2026-11-24",
-          "home_goals": 2,
+          "home_goals": 3,
           "away_goals": 0,
-          "home_xg": 0.3,
-          "away_xg": 0.65,
+          "home_xg": 1.33,
+          "away_xg": 1.38,
           "home_expected_xg": null,
           "away_expected_xg": null,
           "combined_expected_xg": null,
           "home_expected_goals": null,
           "away_expected_goals": null,
           "combined_expected_goals": null,
-          "status": "FINISHED"
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-24T21:00:00Z"
         },
         {
           "home_team": "Fluminense",
@@ -1593,23 +1594,6 @@
           "kickoff_at": "2026-11-21T19:00:00Z"
         },
         {
-          "home_team": "Vancouver Whitecaps",
-          "away_team": "Real Salt Lake",
-          "date": "2026-11-23",
-          "home_goals": 2,
-          "away_goals": 0,
-          "home_xg": 2.08,
-          "away_xg": 1.14,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-23T01:30:00Z"
-        },
-        {
           "home_team": "St. Louis City",
           "away_team": "Los Angeles FC",
           "date": "2026-11-24",
@@ -1625,6 +1609,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-24T01:15:00Z"
+        },
+        {
+          "home_team": "Vancouver Whitecaps",
+          "away_team": "Real Salt Lake",
+          "date": "2026-11-23",
+          "home_goals": 2,
+          "away_goals": 0,
+          "home_xg": 2.08,
+          "away_xg": 1.14,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-23T01:30:00Z"
         }
       ]
     }
