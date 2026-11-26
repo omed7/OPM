@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "a0797e5",
-    "generated_at": "2026-11-26T16:44:22Z"
+    "version": "5b3b453",
+    "generated_at": "2026-11-26T23:33:02Z"
   },
   "leagues": [
     {
@@ -307,6 +307,23 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-24T00:00:00Z"
+        },
+        {
+          "home_team": "Atl\u00e9tico Mineiro",
+          "away_team": "Corinthians",
+          "date": "2026-11-25",
+          "home_goals": 1,
+          "away_goals": 1,
+          "home_xg": 1.55,
+          "away_xg": 1.64,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-25T23:00:00Z"
         }
       ]
     },
@@ -483,6 +500,23 @@
           "kickoff_at": "2026-11-22T23:07:00Z"
         },
         {
+          "home_team": "Monterrey",
+          "away_team": "Am\u00e9rica",
+          "date": "2026-11-26",
+          "home_goals": 0,
+          "away_goals": 0,
+          "home_xg": 0.56,
+          "away_xg": 1.24,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-26T03:10:00Z"
+        },
+        {
           "home_team": "Pumas UNAM",
           "away_team": "Monterrey",
           "date": "2026-11-22",
@@ -532,23 +566,6 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-22T03:00:00Z"
-        },
-        {
-          "home_team": "Monterrey",
-          "away_team": "Am\u00e9rica",
-          "date": "2026-11-26",
-          "home_goals": 0,
-          "away_goals": 0,
-          "home_xg": 0.56,
-          "away_xg": 1.24,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-26T03:10:00Z"
         },
         {
           "home_team": "Toluca",
@@ -949,6 +966,23 @@
           "kickoff_at": "2026-11-22T21:00:00Z"
         },
         {
+          "home_team": "SJ Earthquakes",
+          "away_team": "Houston Dynamo",
+          "date": "2026-11-25",
+          "home_goals": 2,
+          "away_goals": 1,
+          "home_xg": 1.42,
+          "away_xg": 0.57,
+          "home_expected_xg": null,
+          "away_expected_xg": null,
+          "combined_expected_xg": null,
+          "home_expected_goals": null,
+          "away_expected_goals": null,
+          "combined_expected_goals": null,
+          "status": "FINISHED",
+          "kickoff_at": "2026-11-25T03:00:00Z"
+        },
+        {
           "home_team": "St. Louis City",
           "away_team": "Los Angeles FC",
           "date": "2026-11-24",
@@ -981,23 +1015,6 @@
           "combined_expected_goals": null,
           "status": "FINISHED",
           "kickoff_at": "2026-11-23T01:30:00Z"
-        },
-        {
-          "home_team": "SJ Earthquakes",
-          "away_team": "Houston Dynamo",
-          "date": "2026-11-25",
-          "home_goals": 2,
-          "away_goals": 1,
-          "home_xg": 1.42,
-          "away_xg": 0.57,
-          "home_expected_xg": null,
-          "away_expected_xg": null,
-          "combined_expected_xg": null,
-          "home_expected_goals": null,
-          "away_expected_goals": null,
-          "combined_expected_goals": null,
-          "status": "FINISHED",
-          "kickoff_at": "2026-11-25T03:00:00Z"
         }
       ]
     }
